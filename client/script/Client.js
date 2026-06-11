@@ -167,7 +167,9 @@ class Client extends EventEmitter {
         for (var i = 0; i < transmission.length; i++) {
           var msg = transmission[i];
           for (const [key, value] of Object.entries(msg)) {
-            if (bannedIds.includes(key) || bannedIds.includes(value)) delete msg[key];
+            if (key !== "m" && value !== 'a') continue;
+            if (bannedIds.includes(key) || bannedIds.includes(value))
+              return; // ignore messages from banned participants
           }
           self.emit(msg.m, msg);
         }
