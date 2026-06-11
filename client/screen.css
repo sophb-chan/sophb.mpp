@@ -23,7 +23,7 @@ html {
     "DejaVu Sans",
     sans-serif;
   color: #fff;
-  text-shadow: #444 1px 1px;
+  text-shadow: #222 0px 0px 2px;
 }
 
 body {
@@ -49,26 +49,33 @@ body {
       var(--color) 0%,
       var(--color2) 100%);
   transition:
-    --color 1000ms,
-    --color2 1000ms;
+    --color 1s,
+    --color2 1s;
 }
 
 a,
 .spoiler:hover a {
   cursor: pointer;
-  color: #f46;
-  transition: color 0.25s;
+  color: #0cf;
+  text-decoration-style: dashed;
+  text-underline-offset: 1px;
+  transition: text-underline-offset .25s, color .25s;
 }
 
 a:hover,
 .spoiler:hover a:hover {
-  color: #e05;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: #2ff;
 }
 
 .link {
   text-decoration: underline;
   cursor: pointer;
   color: #fe0;
+}
+.link:hover {
+  color: #ff2;
 }
 
 table {
@@ -79,13 +86,17 @@ table {
 
 #names {
   position: fixed;
-  top: 4px;
-  left: 4px;
+  padding: 5px;
+  top: 0px;
+  left: 0px;
   font-size: 12px;
   width: 90%;
   width: -webkit-calc(100% - 110px);
   width: -moz-calc(100% - 110px);
   width: calc(100% - 110px);
+  backdrop-filter: blur(4px);
+  background: #0008;
+  border-radius: 0px 5px 5px 5px
 }
 
 #names .name {
@@ -93,23 +104,39 @@ table {
   position: relative;
   padding: 4px;
   margin: 2px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
+  --border-radius: 4px;
+  border-radius: var(--border-radius);
+  -webkit-border-radius: var(--border-radius);
+  -moz-border-radius: var(--border-radius);
   min-width: 50px;
   text-align: center;
   cursor: pointer;
   min-height: 15px;
   line-height: 15px;
   max-width: 100%;
+  transform: translateY(0px);
+  box-shadow: #000 0px 0px 3px;
+  transition: transform .5s ease-in, box-shadow .5s ease-in;
+}
+#names .name.play {
+  transition: none;
+  transform: translateY(-4px);
+  -webkit-transform: translateY(-4px);
+}
+#names .name:hover {
+  transform: translateY(-3px);
+  box-shadow: #000 0px 3px 5px;
+  transition: transform .1s ease-out, box-shadow .1s ease-out;
 }
 
 #names .name.me:after {
-  content: "Me";
+  content: "You";
   position: absolute;
-  top: -4px;
-  right: 50%;
+  top: -30%;
+  left: 50%;
+  font-style: italic;
   font-size: 10px;
+  transform: translateX(-50%);
 }
 
 #names .name.owner:before {
@@ -119,33 +146,28 @@ table {
   left: 4px;
 }
 
-#names .name.play {
-  transform: translateY(-4px);
-  -webkit-transform: translateY(-4px);
-}
-
-#names .name.muted-notes {
+#names .name.muted-notes, #names .name.muted-chat {
   color: #f88;
+}
+#names .name.muted-notes:after, #names .name.muted-chat:after {
+  color: #f88;
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  font-weight: bold;
+  white-space: nowrap;
+  transform: translate(-50%);
+  font-size: 8px;
 }
 
 #names .name.muted-notes:after {
-  content: "MUTE";
-  position: absolute;
-  top: -4px;
-  right: 50%;
-  font-size: 8px;
+  content: "Muted Notes";
 }
-
-#names .name.muted-chat {
-  color: #f88;
-}
-
 #names .name.muted-chat:after {
-  content: "MUTE";
-  position: absolute;
-  top: -4px;
-  right: 50%;
-  font-size: 8px;
+  content: "Muted Chat";
+}
+#names .name.muted-notes.muted-chat:after {
+  content: "Muted Completely";
 }
 
 .nametag {
@@ -153,9 +175,9 @@ table {
   position: relative;
   padding: 4px;
   margin-right: 5px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
   text-align: center;
   cursor: pointer;
   font-size: 10px;
@@ -176,6 +198,7 @@ table {
 
 input[type="range"] {
   -webkit-appearance: none;
+  appearance: none;
   /* Remove Safari default */
   outline: none;
   width: 210px;
@@ -193,6 +216,7 @@ input[type="range"] {
       color-stop(1, hsl(200, 80%, 45%)));
 
   -webkit-background-clip: padding-box;
+  background-clip: padding-box;
   border: 0;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   cursor: ew-resize;
@@ -246,6 +270,9 @@ input[type="range"]:hover {
       color-stop(0.92, hsl(200, 80%, 15%)),
       color-stop(1, hsl(200, 80%, 45%)));
 
+  box-shadow:
+    inset #000 1px 1px 1px,
+    inset #000 -1px -1px 1px;
   -webkit-box-shadow:
     inset #000 1px 1px 1px,
     inset #000 -1px -1px 1px;
@@ -303,6 +330,7 @@ input[type="range"]:hover {
   transform: translateY(1%);
   -webkit-transform: translateY(1%);
   -webkit-box-shadow: 0 1px 2px #000;
+  box-shadow: 0 1px 2px #000;
 }
 
 .ease-out {
@@ -398,6 +426,12 @@ input[type="range"]:hover {
     left 0.1s;
 }
 
+#cursors {
+  transition: opacity .5s ease;
+}
+body:has(#names:hover) #cursors {
+  opacity: 25%;
+}
 #cursors[smooth-cursors] .cursor {
   top: 0;
   left: 0;
@@ -703,6 +737,7 @@ input[type="range"]:hover {
   background: url(/volume2.png) no-repeat;
   background-position: 50% 50%;
   -webkit-appearance: none;
+  appearance: none;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
