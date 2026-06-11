@@ -156,9 +156,6 @@ class Client extends EventEmitter {
       self.emit("status", "Joining channel...");
     });
     this.ws.addEventListener("message", async function (evt) {
-      const bannedIds = [
-        '3944ea1c816f9cad63ab1cc1'
-      ]
       if (evt.data instanceof ArrayBuffer) {
         const { meta, binary } = self.decodeBinaryMessage(evt.data);
         self.emit(meta.m, {...meta, binary});
@@ -166,11 +163,6 @@ class Client extends EventEmitter {
         var transmission = JSON.parse(evt.data);
         for (var i = 0; i < transmission.length; i++) {
           var msg = transmission[i];
-          for (const [key, value] of Object.entries(msg)) {
-            if (key !== "m" && value !== 'a') continue;
-            if (bannedIds.includes(key) || bannedIds.includes(value))
-              return; // ignore messages from banned participants
-          }
           self.emit(msg.m, msg);
         }
       }
