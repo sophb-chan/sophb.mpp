@@ -814,7 +814,7 @@ $(function () {
       name: "MPP Classic",
       keys: Object.keys(this.piano.keys),
       ext: ".mp3",
-      url: "../sounds/mppclassic/",
+      url: "/sounds/mppclassic/",
     });
   }
 
@@ -1054,28 +1054,28 @@ $(function () {
 
   var gSoundSelector = new SoundSelector(gPiano);
   gSoundSelector.addPacks([
-    "../sounds/Emotional/",
-    "../sounds/Emotional_2.0/",
-    "../sounds/GreatAndSoftPiano/",
-    "../sounds/HardAndToughPiano/",
-    "../sounds/HardPiano/",
-    "../sounds/Harp/",
-    "../sounds/Harpsicord/",
-    "../sounds/LoudAndProudPiano/",
-    "../sounds/MLG/",
-    "../sounds/Music_Box/",
-    "../sounds/NewPiano/",
-    "../sounds/Orchestra/",
-    "../sounds/Piano2/",
-    "../sounds/PianoSounds/",
-    "../sounds/Rhodes_MK1/",
-    "../sounds/SoftPiano/",
-    "../sounds/Steinway_Grand/",
-    "../sounds/Untitled/",
-    "../sounds/Vintage_Upright/",
-    "../sounds/Vintage_Upright_Soft/",
+    "/sounds/Emotional/",
+    "/sounds/Emotional_2.0/",
+    "/sounds/GreatAndSoftPiano/",
+    "/sounds/HardAndToughPiano/",
+    "/sounds/HardPiano/",
+    "/sounds/Harp/",
+    "/sounds/Harpsicord/",
+    "/sounds/LoudAndProudPiano/",
+    "/sounds/MLG/",
+    "/sounds/Music_Box/",
+    "/sounds/NewPiano/",
+    "/sounds/Orchestra/",
+    "/sounds/Piano2/",
+    "/sounds/PianoSounds/",
+    "/sounds/Rhodes_MK1/",
+    "/sounds/SoftPiano/",
+    "/sounds/Steinway_Grand/",
+    "/sounds/Untitled/",
+    "/sounds/Vintage_Upright/",
+    "/sounds/Vintage_Upright_Soft/",
   ]);
-  //gSoundSelector.addPacks(["../sounds/Emotional_2.0/", "../sounds/Harp/", "../sounds/Music_Box/", "../sounds/Vintage_Upright/", "../sounds/Steinway_Grand/", "../sounds/Emotional/", "../sounds/Untitled/"]);
+  //gSoundSelector.addPacks(["/sounds/Emotional_2.0/", "/sounds/Harp/", "/sounds/Music_Box/", "/sounds/Vintage_Upright/", "/sounds/Steinway_Grand/", "/sounds/Emotional/", "/sounds/Untitled/"]);
   gSoundSelector.init();
 
   var gAutoSustain = false;

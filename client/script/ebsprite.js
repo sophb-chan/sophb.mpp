@@ -2785,7 +2785,7 @@ class EBSprite {
     function SpriteProvider(sprites, cb) {
       var urls = new Array(sprites.length);
       for (var i in sprites) {
-        urls[i] = `../ebsprite/${sprites[i]}.png`;
+        urls[i] = `/ebsprite/${sprites[i]}.png`;
       }
       downloadImages(
         urls,
