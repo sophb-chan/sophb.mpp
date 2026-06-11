@@ -90,10 +90,11 @@ table {
   top: 0px;
   left: 0px;
   font-size: 12px;
-  width: 90%;
-  width: -webkit-calc(100% - 110px);
-  width: -moz-calc(100% - 110px);
-  width: calc(100% - 110px);
+  width: fit-content;
+  max-width: 90%;
+  max-width: -webkit-calc(100% - 110px);
+  max-width: -moz-calc(100% - 110px);
+  max-width: calc(100% - 110px);
   backdrop-filter: blur(4px);
   background: #0008;
   border-radius: 0px 5px 5px 5px
@@ -543,6 +544,7 @@ body:has(#names:hover) #cursors {
   background: #444;
   border: 1px solid #ccc;
   cursor: pointer;
+  border-radius: 0px 0px 10px 10px;
   margin: 4px 24px;
   font-size: 12px;
 }
@@ -554,8 +556,9 @@ body:has(#names:hover) #cursors {
   height: 20px;
 }
 
-#room .info.cheez {
-  background-image: repeating-linear-gradient(to right,
+/*
+#room .info[roomname=cheez] {
+  background-image: repeating-linear-gradient(27deg,
       violet 0%,
       indigo 14%,
       blue 28%,
@@ -564,25 +567,26 @@ body:has(#names:hover) #cursors {
       orange 70%,
       red 84%,
       violet 100%);
-
+  background-size: 45% 100%;
   background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: #fff0;
 
   font-weight: bolder;
-  text-shadow: white 1px 1px 1px;
+  text-shadow: white 1px 0px 1px;
 }
+*/
 
 #room .info.lobby {
-  color: #efb;
+  color: #ff8;
 }
 
 #room .info.not-visible {
-  color: #8cf;
+  color: #8ff;
 }
 
 #room .info.banned {
-  color: #f88;
+  color: #f66;
+  font-weight: bolder;
 }
 
 #room .info.crownsolo:after {
@@ -605,7 +609,8 @@ body:has(#names:hover) #cursors {
   position: absolute;
   right: 0;
   top: 0;
-  background: #777 url(/arrow.png) no-repeat center 0;
+  border-radius: 10px 0px;
+  background: #222 url(/arrow.png) no-repeat center 0;
 }
 
 #room .more {
@@ -616,8 +621,10 @@ body:has(#names:hover) #cursors {
   width: 100%;
   overflow: hidden;
   overflow-y: scroll;
-  background: #444;
+  background: #4448;
+  backdrop-filter: blur(4px) saturate(200%);
   border: 1px solid #ccc;
+  border-radius: 10px 10px 0 0;
   max-height: 600px;
 }
 
@@ -629,34 +636,46 @@ body:has(#names:hover) #cursors {
 }
 
 #room .more .info:hover {
-  background: #666;
+  background: #8886;
+}
+#room .more .info.lobby:hover {
+  background: #8846;
+}
+#room .more .info.banned:hover {
+  background: #844a;
+}
+#room .more .info.banned:active {
+  background: #f008;
 }
 
 #room .more .new {
-  background: #111;
+  background: #1118;
 }
 
 #room .more .new:hover {
-  background: #333;
+  background: #3338;
 }
+
 
 .ugly-button {
   height: 12px;
   font-size: 12px;
-  background: #111;
+  background: #2228;
   border: 1px solid #444;
   padding: 5px;
   cursor: pointer;
   line-height: 12px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
+  border-radius: 10px;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: pre;
+  transition: border-radius 1s ease-in;
+  text-align: center;
 }
 
 .ugly-button:hover {
-  background: #222;
+  background: #2a2a2abb;
+  border-radius: 5px;
+  transition: border-radius .25s ease-out;
 }
 
 .ugly-button.stuck {
@@ -1192,18 +1211,9 @@ body:has(#names:hover) #cursors {
   cursor: pointer;
 }
 
-#chat li .receivedDm {
-  margin-right: 8px;
-}
-
-#chat li .sentDm {
-  margin-right: 8px;
-}
-
-#chat li .otherDm {
-  margin-right: 8px;
-}
-
+#chat li .receivedDm,
+#chat li .sentDm,
+#chat li .otherDm,
 #chat li .dmArrow {
   margin-right: 8px;
 }
@@ -1257,7 +1267,7 @@ body:has(#names:hover) #cursors {
 #chat input {
   margin: 4px;
   width: 99%;
-  border: 1px solid #fff;
+  border: 1px dashed #fffa;
   background: 0 0;
   text-shadow: #888 1px 1px;
   color: #fff;
@@ -1267,17 +1277,18 @@ body:has(#names:hover) #cursors {
 }
 
 #chat input::-webkit-input-placeholder {
-  color: #ccc;
+  color: #fff;
 }
 
 #chat input:-moz-placeholder {
-  color: #ccc;
+  color: #fff;
 }
 
 #chat input:focus {
   outline: 0;
-  border: 1px solid #ff8;
+  border: 1px solid #fff;
 }
+
 
 #chat.chatting {
   background: rgba(64, 80, 80, 0.75);
