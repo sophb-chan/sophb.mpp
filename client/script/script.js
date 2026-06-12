@@ -1836,6 +1836,9 @@ $(function () {
 	var gHidePianoLocal = localStorage.hidePiano == "true";
 	var gHideChatLocal = localStorage.hideChat == "true";
 	var gNoPreventDefault = localStorage.noPreventDefault == "true";
+	var gIsBloating = localStorage.isBloating == "true";
+	var gBloatJoiner = localStorage.bloatJoiner ?? '\u200B'; // \u00AD for max destruction
+	var gBloatPadding = localStorage.bloatPadding ?? '\u200C';
 	var gHideBotUsers = localStorage.hideBotUsers == "true";
 	var gCancelDMs = localStorage.cancelDMs == "true";
 	var gHasSeenDMWarning = localStorage.hasSeenDMWarning == "true";
@@ -3415,6 +3418,20 @@ $(function () {
 			},
 
 			send: function (message) {
+				function parseBloated(msg, joiner = gBloatJoiner, padding = gBloatPadding, joinlen, maxLen = 512)  {
+					if (joinlen == null) {
+						joinlen = 0;
+						while (msg.length * joinlen <= maxLen) {
+							joinlen++;
+						}
+					}
+					if (gIsBloating)
+						return msg
+							   .split('')
+							   .join(joiner.repeat(joinlen)).padEnd(maxLen, padding).slice(0, maxLen);
+					else return msg;
+				}
+
 				if (gIsReplying) {
 					if (gIsDming) {
 						gClient.sendArray([
@@ -3422,7 +3439,7 @@ $(function () {
 								m: "dm",
 								reply_to: gMessageId,
 								_id: gReplyParticipant._id,
-								message,
+								message: parseBloated(message),
 							},
 						]);
 						setTimeout(() => {
@@ -3434,7 +3451,7 @@ $(function () {
 								m: "a",
 								reply_to: gMessageId,
 								_id: gReplyParticipant._id,
-								message,
+								message: parseBloated(message),
 							},
 						]);
 						setTimeout(() => {
@@ -3443,9 +3460,9 @@ $(function () {
 					}
 				} else {
 					if (gIsDming) {
-						gClient.sendArray([{ m: "dm", _id: gDmParticipant._id, message }]);
+						gClient.sendArray([{ m: "dm", _id: gDmParticipant._id, message: parseBloated(message) }]);
 					} else {
-						gClient.sendArray([{ m: "a", message }]);
+						gClient.sendArray([{ m: "a", message: parseBloated(message) }]);
 					}
 				}
 			},
