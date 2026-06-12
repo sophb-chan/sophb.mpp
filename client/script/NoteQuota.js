@@ -10,8 +10,8 @@ var exports = (function() {
 	NoteQuota.PARAMS_LOBBY = {allowance: 200, max: 600};
 	NoteQuota.PARAMS_NORMAL = {allowance: 400, max: 1200};
 	NoteQuota.PARAMS_RIDICULOUS = {allowance: 600, max: 1800};
-    NoteQuota.PARAMS_OFFLINE = {allowance: 8000, max: 24000, maxHistLen: 3};
-    NoteQuota.PARAMS_UNLIMITED = {allowance: 1000000, max: 3000000, maxHistLen: 3};
+	NoteQuota.PARAMS_OFFLINE = {allowance: 8000, max: 24000, maxHistLen: 3};
+	NoteQuota.PARAMS_UNLIMITED = {allowance: 1000000, max: 3000000, maxHistLen: 3};
 
 	NoteQuota.prototype.getParams = function() {
 		return {

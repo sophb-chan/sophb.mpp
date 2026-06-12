@@ -5,58 +5,58 @@ This protocol has been recreated in [protocol.js](https://github.com/mppnet/fron
 
 ## Navigation
 - [Websocket Information](#websocket-information)
-  - [Connecting](#connecting)
-  - [Messages](#messages)
-  - [Close Reasons](#close-reasons)
+	- [Connecting](#connecting)
+	- [Messages](#messages)
+	- [Close Reasons](#close-reasons)
 - [Important Concepts](#important-concepts)
-  - [Colors](#colors)
-  - [Times](#times)
-  - [String validation](#string-validation)
-  - [Participant info](#participant-info)
-  - [Channel info](#channel-info)
-  - [Channel settings](#channel-settings)
-  - [Crown](#crown)
-  - [Target](#target)
-  - [Note](#note)
-  - [Tag](#tag)
-  - [Login](#login)
-  - [Account Info](#account-info)
+	- [Colors](#colors)
+	- [Times](#times)
+	- [String validation](#string-validation)
+	- [Participant info](#participant-info)
+	- [Channel info](#channel-info)
+	- [Channel settings](#channel-settings)
+	- [Crown](#crown)
+	- [Target](#target)
+	- [Note](#note)
+	- [Tag](#tag)
+	- [Login](#login)
+	- [Account Info](#account-info)
 - [Client -> Server Messages](#client---server-messages)
-  - [a](#a-server-bound)
-  - [bye](#bye-server-bound)
-  - [ch](#ch-server-bound)
-  - [chown](#chown)
-  - [chset](#chset)
-  - [custom](#custom-server-bound)
-  - [devices](#devices)
-  - [dm](#dm-server-bound)
-  - [hi](#hi-server-bound)
-  - [kickban](#kickban)
-  - [m](#m-server-bound)
-  - [-custom](#-custom)
-  - [-ls](#-ls)
-  - [n](#n-server-bound)
-  - [+custom](#custom)
-  - [+ls](#ls)
-  - [t](#t-server-bound)
-  - [unban](#unban)
-  - [userset](#userset)
+	- [a](#a-server-bound)
+	- [bye](#bye-server-bound)
+	- [ch](#ch-server-bound)
+	- [chown](#chown)
+	- [chset](#chset)
+	- [custom](#custom-server-bound)
+	- [devices](#devices)
+	- [dm](#dm-server-bound)
+	- [hi](#hi-server-bound)
+	- [kickban](#kickban)
+	- [m](#m-server-bound)
+	- [-custom](#-custom)
+	- [-ls](#-ls)
+	- [n](#n-server-bound)
+	- [+custom](#custom)
+	- [+ls](#ls)
+	- [t](#t-server-bound)
+	- [unban](#unban)
+	- [userset](#userset)
 - [Server -> Client Messages](#server---client-messages)
-  - [a](#a-client-bound)
-  - [b](#b)
-  - [bye](#bye-client-bound)
-  - [c](#c)
-  - [ch](#ch-client-bound)
-  - [custom](#custom-client-bound)
-  - [dm](#dm-client-bound)
-  - [hi](#hi-client-bound)
-  - [ls](#ls-1)
-  - [m](#m-client-bound)
-  - [n](#n-client-bound)
-  - [notification](#notification)
-  - [nq](#nq)
-  - [p](#p)
-  - [t](#t-client-bound)
+	- [a](#a-client-bound)
+	- [b](#b)
+	- [bye](#bye-client-bound)
+	- [c](#c)
+	- [ch](#ch-client-bound)
+	- [custom](#custom-client-bound)
+	- [dm](#dm-client-bound)
+	- [hi](#hi-client-bound)
+	- [ls](#ls-1)
+	- [m](#m-client-bound)
+	- [n](#n-client-bound)
+	- [notification](#notification)
+	- [nq](#nq)
+	- [p](#p)
+	- [t](#t-client-bound)
 
 ## Websocket Information
 ### Connecting
@@ -127,17 +127,17 @@ In some messages, the server will send a participant info object instead of an i
 #### Example
 ```json
 {
-  "_id":"514df042c61528f566530313",
-  "id":"514df042c61528f566530313",
-  "name":"Lapis",
-  "color":"#ff8ff9",
-  "tag":{
-    "text":"OWNER",
-    "color":"#a00"
-  },
-  "x":50,
-  "y":50,
-  "afk": false
+	"_id":"514df042c61528f566530313",
+	"id":"514df042c61528f566530313",
+	"name":"Lapis",
+	"color":"#ff8ff9",
+	"tag":{
+	"text":"OWNER",
+	"color":"#a00"
+	},
+	"x":50,
+	"y":50,
+	"afk": false
 }
 ```
 
@@ -154,32 +154,32 @@ Contains information about a channel.
 #### Example
 ```json
 {
-  "settings": {
-    "chat": true,
-    "color": "#440c09",
-    "visible": true,
-    "limit": "50",
-    "crownsolo": false,
-    "no cussing": false,
-    "minOnlineTime": 3600000,
-    "color2": "#000000"
-  },
-  "_id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
-  "id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
-  "count": 16,
-  "crown": {
-    "endPos": {
-      "x": 90,
-      "y": 74.7223883077421
-    },
-    "startPos": {
-      "x": 200,
-      "y": 100
-    },
-    "userId": "b40df99cc2ca6f503fba77cb",
-    "time": 1627974260906,
-    "participantId": "b40df99cc2ca6f503fba77cb"
-  }
+	"settings": {
+	"chat": true,
+	"color": "#440c09",
+	"visible": true,
+	"limit": "50",
+	"crownsolo": false,
+	"no cussing": false,
+	"minOnlineTime": 3600000,
+	"color2": "#000000"
+	},
+	"_id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
+	"id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
+	"count": 16,
+	"crown": {
+	"endPos": {
+			"x": 90,
+			"y": 74.7223883077421
+	},
+	"startPos": {
+			"x": 200,
+			"y": 100
+	},
+	"userId": "b40df99cc2ca6f503fba77cb",
+	"time": 1627974260906,
+	"participantId": "b40df99cc2ca6f503fba77cb"
+	}
 }
 ```
 
@@ -200,15 +200,15 @@ Channel settings are an object with properties for each setting.
 #### Example
 ```json
 {
-  "lobby":true,
-  "limit":20,
-  "color":"#73b3cc",
-  "color2":"#273546",
-  "visible":true,
-  "noindex":false,
-  "allowBots": true,
-  "chat":true,
-  "crownsolo":false
+	"lobby":true,
+	"limit":20,
+	"color":"#73b3cc",
+	"color2":"#273546",
+	"visible":true,
+	"noindex":false,
+	"allowBots": true,
+	"chat":true,
+	"crownsolo":false
 }
 ```
 
@@ -223,16 +223,16 @@ This is an object containing information about the crown in that channel.
 #### Example
 ```json
 {
-  "userId":"b40df99cc2ca6f503fba77cb",
-  "time":1627968456997,
-  "startPos":{
-    "x":75.8,
-    "y":30.6
-  },
-  "endPos":{
-    "x":75.8,
-    "y":82.3
-  }
+	"userId":"b40df99cc2ca6f503fba77cb",
+	"time":1627968456997,
+	"startPos":{
+	"x":75.8,
+	"y":30.6
+	},
+	"endPos":{
+	"x":75.8,
+	"y":82.3
+	}
 }
 ```
 
@@ -246,11 +246,11 @@ This is an object describing who something should be sent to. Currently this is 
 #### Example
 ```json
 {
-  "mode":"ids",
-  "ids":[
-    "4d354eaddf02eedc6211034c",
-    "fd4365210b7f25b6cb0ed683"
-  ]
+	"mode":"ids",
+	"ids":[
+	"4d354eaddf02eedc6211034c",
+	"fd4365210b7f25b6cb0ed683"
+	]
 }
 ```
 
@@ -264,9 +264,9 @@ Notes can either be a note start, or a note stop. Note starts have a "v" propert
 #### Example
 ```json
 {
-  "n":"b2",
-  "d":150,
-  "v":0.32
+	"n":"b2",
+	"d":150,
+	"v":0.32
 }
 ```
 
@@ -278,8 +278,8 @@ Tags are official and identify either approved bots or server staff. They have t
 #### Example
 ```json
 {
-  "text":"BOT",
-  "color":"#55f"
+	"text":"BOT",
+	"color":"#55f"
 }
 ```
 
@@ -291,8 +291,8 @@ To login to an account, a user can send a login object in "hi". The server will 
 #### Example
 ```json
 {
-  "type":"discord",
-  "code":"abcdefghijklmnopqrstuvwxyz"
+	"type":"discord",
+	"code":"abcdefghijklmnopqrstuvwxyz"
 }
 ```
 
@@ -306,10 +306,10 @@ Information about a user's account. This is displayed in clients so they can see
 #### Example
 ```json
 {
-  "type":"discord",
-  "username":"NotARealUser",
-  "discriminator":"0001",
-  "avatar":"https://cdn.discordapp.com/avatars/926633278100877393/82dd16b896d6fce421532b0e8a4244f9.png"
+	"type":"discord",
+	"username":"NotARealUser",
+	"discriminator":"0001",
+	"avatar":"https://cdn.discordapp.com/avatars/926633278100877393/82dd16b896d6fce421532b0e8a4244f9.png"
 }
 ```
 
@@ -323,9 +323,9 @@ Information about a user's account. This is displayed in clients so they can see
 #### Example
 ```json
 {
-  "m":"a",
-  "message":"Hello :D",
-  "reply_to":"9ad74fe6"
+	"m":"a",
+	"message":"Hello :D",
+	"reply_to":"9ad74fe6"
 }
 ```
 ### bye (server-bound)
@@ -333,7 +333,7 @@ A "bye" message can be sent to close the client's socket. No more messages will 
 #### Example
 ```json
 {
-  "m":"bye"
+	"m":"bye"
 }
 ```
 ### ch (server-bound)
@@ -344,11 +344,11 @@ A "ch" message can be sent to attempt to change the client's channel. If the spe
 #### Example
 ```json
 {
-  "m":"ch",
-  "_id":"My new room",
-  "set":{
-    "visible":false
-  }
+	"m":"ch",
+	"_id":"My new room",
+	"set":{
+	"visible":false
+	}
 }
 ```
 ### chown
@@ -358,8 +358,8 @@ Clients can send chown messages to drop the crown or give it to someone else.
 #### Example
 ```json
 {
-  "m":"chown",
-  "id":"f46132453478f0a8679e1584"
+	"m":"chown",
+	"id":"f46132453478f0a8679e1584"
 }
 ```
 ### chset
@@ -369,12 +369,12 @@ Clients can send this to change a channel's settings if they have the crown.
 #### Example
 ```json
 {
-  "m":"chset",
-  "set":{
-    "color":"#0066ff",
-    "color2":"#ff9900",
-    "chat":"false"
-  }
+	"m":"chset",
+	"set":{
+	"color":"#0066ff",
+	"color2":"#ff9900",
+	"chat":"false"
+	}
 }
 ```
 ### custom (server-bound)
@@ -385,25 +385,25 @@ Clients can send custom data using this message. This is meant for developers to
 #### Example
 ```json
 {
-  "m":"custom",
-  "data":{
-    "xyz":"abc",
-    "def":"ghi",
-    "jkl":[
-      "mno",
-      123,
-      456,
-      null,
-      "hi",
-      {
-        "idk":"lol"
-      },
-      true
-    ]
-  },
-  "target": {
-    "mode":"subscribed"
-  }
+	"m":"custom",
+	"data":{
+	"xyz":"abc",
+	"def":"ghi",
+	"jkl":[
+			"mno",
+			123,
+			456,
+			null,
+			"hi",
+			{
+		"idk":"lol"
+			},
+			true
+	]
+	},
+	"target": {
+	"mode":"subscribed"
+	}
 }
 ```
 The binary protocol for sending custom data works slightly differently. Due to JSON stringification, binary cannot be efficiently sent. So, there is an alternative version specifically for that.
@@ -427,24 +427,24 @@ Browser clients send a list of connected midi inputs and outputs with this when 
 #### Example
 ```json
 {
-  "m":"devices",
-  "list":[
-    {
-      "type": "input",
-      "manufacturer": "",
-      "name": "loopMIDI Port",
-      "version": "1.0",
-      "enabled": true,
-      "volume": 1
-    },
-    {
-      "type": "output",
-      "manufacturer": "",
-      "name": "OmniMIDI",
-      "version": "14.5.1",
-      "volume": 1
-    }
-  ]
+	"m":"devices",
+	"list":[
+	{
+			"type": "input",
+			"manufacturer": "",
+			"name": "loopMIDI Port",
+			"version": "1.0",
+			"enabled": true,
+			"volume": 1
+	},
+	{
+			"type": "output",
+			"manufacturer": "",
+			"name": "OmniMIDI",
+			"version": "14.5.1",
+			"volume": 1
+	}
+	]
 }
 ```
 
@@ -457,10 +457,10 @@ Browser clients send a list of connected midi inputs and outputs with this when 
 #### Example
 ```json
 {
-  "m":"dm",
-  "message":"hi there",
-  "_id":"a8c86bb6e74c9ec8900e061a",
-  "reply_to":"e20fcbe9"
+	"m":"dm",
+	"message":"hi there",
+	"_id":"a8c86bb6e74c9ec8900e061a",
+	"reply_to":"e20fcbe9"
 }
 ```
 
@@ -473,12 +473,12 @@ A "hi" message is sent when the client connects to the server. This must be sent
 #### Example
 ```json
 {
-  "m":"hi",
-  "token":"this is not a valid token",
-  "login": {
-    "type":"discord",
-    "code":"abcdefghijklmnopqrstuvwxyz"
-  }
+	"m":"hi",
+	"token":"this is not a valid token",
+	"login": {
+	"type":"discord",
+	"code":"abcdefghijklmnopqrstuvwxyz"
+	}
 }
 ```
 
@@ -490,9 +490,9 @@ This is sent to ban a user from the channel.
 #### Example
 ```json
 {
-  "m":"kickban",
-  "_id":"a4ea42f1d9770e671f938e8c",
-  "ms":300000
+	"m":"kickban",
+	"_id":"a4ea42f1d9770e671f938e8c",
+	"ms":300000
 }
 ```
 
@@ -504,9 +504,9 @@ This is sent to move the participant's mouse. The normal screen range is between
 #### Example
 ```json
 {
-  "m":"m",
-  "x":25,
-  "y":63.5
+	"m":"m",
+	"x":25,
+	"y":63.5
 }
 ```
 
@@ -515,7 +515,7 @@ This is sent to unsubscribe from custom messages sent with the "subscribed" targ
 #### Example
 ```json
 {
-  "m":"-custom"
+	"m":"-custom"
 }
 ```
 
@@ -524,7 +524,7 @@ This is sent to unsubscribe from channel list updates.
 #### Example
 ```json
 {
-  "m":"-ls"
+	"m":"-ls"
 }
 ```
 
@@ -536,19 +536,19 @@ This sends notes to other clients in the channel.
 #### Example
 ```json
 {
-  "m":"n",
-  "t":1627971516894,
-  "n":[
-    {
-      "n":"c3",
-      "v":0.75
-    },
-    {
-      "n":"c3",
-      "d":100,
-      "s":1
-    }
-  ]
+	"m":"n",
+	"t":1627971516894,
+	"n":[
+	{
+			"n":"c3",
+			"v":0.75
+	},
+	{
+			"n":"c3",
+			"d":100,
+			"s":1
+	}
+	]
 }
 ```
 
@@ -557,7 +557,7 @@ This is sent to subscribe to custom messages sent with the "subscribed" target.
 #### Example
 ```json
 {
-  "m":"+custom"
+	"m":"+custom"
 }
 ```
 
@@ -566,7 +566,7 @@ This is sent to subscribe to channel list updates.
 #### Example
 ```json
 {
-  "m":"+ls"
+	"m":"+ls"
 }
 ```
 
@@ -577,8 +577,8 @@ This is sent to subscribe to channel list updates.
 #### Example
 ```json
 {
-  "m":"t",
-  "e":1627972519126
+	"m":"t",
+	"e":1627972519126
 }
 ```
 
@@ -589,8 +589,8 @@ This is sent to subscribe to channel list updates.
 #### Example
 ```json
 {
-  "m":"unban",
-  "_id":"0c49bea6c2a328101eee40b7"
+	"m":"unban",
+	"_id":"0c49bea6c2a328101eee40b7"
 }
 ```
 
@@ -601,11 +601,11 @@ This is sent to subscribe to channel list updates.
 #### Example
 ```json
 {
-  "m":"userset",
-  "set":{
-    "name":"Lapis",
-    "color":"#ff8ff9"
-  }
+	"m":"userset",
+	"set":{
+	"name":"Lapis",
+	"color":"#ff8ff9"
+	}
 }
 ```
 
@@ -622,21 +622,21 @@ This is sent to subscribe to channel list updates.
 #### Example
 ```json
 {
-  "m":"a",
-  "id": "51d200f4",
-  "t":1628015260531,
-  "a":"test",
-  "p":{
-    "_id":"514df042c61528f566530313",
-    "name":"Lapis",
-    "color":"#ff8ff9",
-    "tag":{
-      "text":"OWNER",
-      "color":"#a00"
-    },
-    "id":"514df042c61528f566530313"
-  },
-  "r": "35090d22"
+	"m":"a",
+	"id": "51d200f4",
+	"t":1628015260531,
+	"a":"test",
+	"p":{
+	"_id":"514df042c61528f566530313",
+	"name":"Lapis",
+	"color":"#ff8ff9",
+	"tag":{
+			"text":"OWNER",
+			"color":"#a00"
+	},
+	"id":"514df042c61528f566530313"
+	},
+	"r": "35090d22"
 }
 ```
 
@@ -647,8 +647,8 @@ A "b" message is sent immediately when a connection opens. It's used by the anti
 #### Example
 ```json
 {
-  "m":"b",
-  "code":"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	"m":"b",
+	"code":"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 }
 ```
 
@@ -659,8 +659,8 @@ A "bye" message is usually sent when a participant is removed from the client's 
 #### Example
 ```json
 {
-  "m":"bye",
-  "p":"64578b5417566bcd4fa2fdbb"
+	"m":"bye",
+	"p":"64578b5417566bcd4fa2fdbb"
 }
 ```
 
@@ -671,74 +671,74 @@ A "c" message is sent whenever a client joins a channel, or when chat is cleared
 #### Example
 ```json
 {
-  "m": "c",
-  "c": [
-    {
-      "m": "a",
-      "id": "d7fbcaec",
-      "t": 1628017539781,
-      "a": "Anonygold#9668: add stealwatches in k44 now",
-      "p": {
-        "_id": "141777bd0f408111c5fc7ad9",
-        "name": "[discord.gg/k44Eqha]",
-        "color": "#f140ae",
-        "tag": {
-          "text": "BOT",
-          "color": "#55f"
-        },
-        "id": "141777bd0f408111c5fc7ad9"
-      }
-    },
-    {
-      "m": "a",
-      "id": "2ddedee1",
-      "t": 1628017546207,
-      "a": "Retroplateau#1995: and deathwatches",
-      "p": {
-        "_id": "141777bd0f408111c5fc7ad9",
-        "name": "[discord.gg/k44Eqha]",
-        "color": "#f140ae",
-        "tag": {
-          "text": "BOT",
-          "color": "#55f"
-        },
-        "id": "141777bd0f408111c5fc7ad9"
-      }
-    },
-    {
-      "m": "a",
-      "id": "787d65d8",
-      "t": 1628017551011,
-      "a": "Retroplateau#1995: and annoywatches",
-      "p": {
-        "_id": "141777bd0f408111c5fc7ad9",
-        "name": "[discord.gg/k44Eqha]",
-        "color": "#f140ae",
-        "tag": {
-          "text": "BOT",
-          "color": "#55f"
-        },
-        "id": "141777bd0f408111c5fc7ad9"
-      }
-    },
-    {
-      "m": "a",
-      "id": "e2854db3",
-      "t": 1628017555817,
-      "a": "Anonygold#9668: add anonywatches",
-      "p": {
-        "_id": "141777bd0f408111c5fc7ad9",
-        "name": "[discord.gg/k44Eqha]",
-        "color": "#f140ae",
-        "tag": {
-          "text": "BOT",
-          "color": "#55f"
-        },
-        "id": "141777bd0f408111c5fc7ad9"
-      },
-      "r": "787d65d8"
-    }
-  ]
+	"m": "c",
+	"c": [
+	{
+			"m": "a",
+			"id": "d7fbcaec",
+			"t": 1628017539781,
+			"a": "Anonygold#9668: add stealwatches in k44 now",
+			"p": {
+		"_id": "141777bd0f408111c5fc7ad9",
+		"name": "[discord.gg/k44Eqha]",
+		"color": "#f140ae",
+		"tag": {
+					"text": "BOT",
+					"color": "#55f"
+		},
+		"id": "141777bd0f408111c5fc7ad9"
+			}
+	},
+	{
+			"m": "a",
+			"id": "2ddedee1",
+			"t": 1628017546207,
+			"a": "Retroplateau#1995: and deathwatches",
+			"p": {
+		"_id": "141777bd0f408111c5fc7ad9",
+		"name": "[discord.gg/k44Eqha]",
+		"color": "#f140ae",
+		"tag": {
+					"text": "BOT",
+					"color": "#55f"
+		},
+		"id": "141777bd0f408111c5fc7ad9"
+			}
+	},
+	{
+			"m": "a",
+			"id": "787d65d8",
+			"t": 1628017551011,
+			"a": "Retroplateau#1995: and annoywatches",
+			"p": {
+		"_id": "141777bd0f408111c5fc7ad9",
+		"name": "[discord.gg/k44Eqha]",
+		"color": "#f140ae",
+		"tag": {
+					"text": "BOT",
+					"color": "#55f"
+		},
+		"id": "141777bd0f408111c5fc7ad9"
+			}
+	},
+	{
+			"m": "a",
+			"id": "e2854db3",
+			"t": 1628017555817,
+			"a": "Anonygold#9668: add anonywatches",
+			"p": {
+		"_id": "141777bd0f408111c5fc7ad9",
+		"name": "[discord.gg/k44Eqha]",
+		"color": "#f140ae",
+		"tag": {
+					"text": "BOT",
+					"color": "#55f"
+		},
+		"id": "141777bd0f408111c5fc7ad9"
+			},
+			"r": "787d65d8"
+	}
+	]
 }
 ```
 
@@ -751,74 +751,74 @@ This is sent with all the information about a channel. It's broadcasted to every
 #### Example
 ```json
 {
-  "m": "ch",
-  "ch": {
-    "settings": {
-      "chat": true,
-      "color": "#440c09",
-      "visible": true,
-      "limit": "50",
-      "crownsolo": false,
-      "no cussing": false,
-      "minOnlineTime": 3600000,
-      "color2": "#000000"
-    },
-    "_id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
-    "id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
-    "count": 16,
-    "crown": {
-      "endPos": {
-        "x": 90,
-        "y": 74.7223883077421
-      },
-      "startPos": {
-        "x": 200,
-        "y": 100
-      },
-      "userId": "b40df99cc2ca6f503fba77cb",
-      "time": 1627974260906,
-      "participantId": "b40df99cc2ca6f503fba77cb"
-    }
-  },
-  "ppl": [
-    {
-      "_id": "b40df99cc2ca6f503fba77cb",
-      "name": "Bouncer [//help]",
-      "color": "#2524a5",
-      "tag": {
-        "text": "BOT",
-        "color": "#55f"
-      },
-      "id": "b40df99cc2ca6f503fba77cb",
-      "x": 200,
-      "y": 100
-    },
-    {
-      "_id": "78a11a25c966d62d0231a135",
-      "name": "Yoshino ( y!help )",
-      "color": "#f97d87",
-      "tag": {
-        "text": "BOT",
-        "color": "#55f"
-      },
-      "id": "78a11a25c966d62d0231a135",
-      "x": 200,
-      "y": 100
-    },
-    {
-      "_id": "4d354eaddf02eedc6211034c",
-      "name": "Theta [=help]",
-      "color": "#e51c8d",
-      "tag": {
-        "text": "BOT",
-        "color": "#55f"
-      },
-      "id": "4d354eaddf02eedc6211034c",
-      "x": "86.20",
-      "y": "76.40"
-    }
-  ],
-  "p": "514df042c61528f566530313"
+	"m": "ch",
+	"ch": {
+	"settings": {
+			"chat": true,
+			"color": "#440c09",
+			"visible": true,
+			"limit": "50",
+			"crownsolo": false,
+			"no cussing": false,
+			"minOnlineTime": 3600000,
+			"color2": "#000000"
+	},
+	"_id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
+	"id": "✧𝓓𝓔𝓥 𝓡𝓸𝓸𝓶✧",
+	"count": 16,
+	"crown": {
+			"endPos": {
+		"x": 90,
+		"y": 74.7223883077421
+			},
+			"startPos": {
+		"x": 200,
+		"y": 100
+			},
+			"userId": "b40df99cc2ca6f503fba77cb",
+			"time": 1627974260906,
+			"participantId": "b40df99cc2ca6f503fba77cb"
+	}
+	},
+	"ppl": [
+	{
+			"_id": "b40df99cc2ca6f503fba77cb",
+			"name": "Bouncer [//help]",
+			"color": "#2524a5",
+			"tag": {
+		"text": "BOT",
+		"color": "#55f"
+			},
+			"id": "b40df99cc2ca6f503fba77cb",
+			"x": 200,
+			"y": 100
+	},
+	{
+			"_id": "78a11a25c966d62d0231a135",
+			"name": "Yoshino ( y!help )",
+			"color": "#f97d87",
+			"tag": {
+		"text": "BOT",
+		"color": "#55f"
+			},
+			"id": "78a11a25c966d62d0231a135",
+			"x": 200,
+			"y": 100
+	},
+	{
+			"_id": "4d354eaddf02eedc6211034c",
+			"name": "Theta [=help]",
+			"color": "#e51c8d",
+			"tag": {
+		"text": "BOT",
+		"color": "#55f"
+			},
+			"id": "4d354eaddf02eedc6211034c",
+			"x": "86.20",
+			"y": "76.40"
+	}
+	],
+	"p": "514df042c61528f566530313"
 }
 ```
 
@@ -832,20 +832,20 @@ This is sent when a client sends a [custom](#custom-server-bound) message.
 #### Example
 ```json
 {
-  "m":"custom",
-  "data":[
-    "hi",
-    "hello",
-    "how are you"
-  ],
-  "p":"e597eb458dd0da2b05edb1b1",
-  "u":{
-    "afk": false,
-    "color": "#4ac0e8",
-    "name": "cheezburger0",
-    "_id": "e597eb458dd0da2b05edb1b1"
-  },
-  "binary": ArrayBuffer
+	"m":"custom",
+	"data":[
+	"hi",
+	"hello",
+	"how are you"
+	],
+	"p":"e597eb458dd0da2b05edb1b1",
+	"u":{
+	"afk": false,
+	"color": "#4ac0e8",
+	"name": "cheezburger0",
+	"_id": "e597eb458dd0da2b05edb1b1"
+	},
+	"binary": ArrayBuffer
 }
 ```
 When listening to the WebSocket, if one uses the binary custom message protocol, the data is similar to how it is sent.
@@ -874,26 +874,26 @@ This is sent to the recipient when a client direct messages another participant.
 #### Example
 ```json
 {
-  "m": "dm",
-  "id": "9fa65b3b",
-  "t": 1628019628643,
-  "a": "this direct message is going in the protocol documentation as an example",
-  "sender": {
-    "_id": "514df042c61528f566530313",
-    "name": "Lapis",
-    "color": "#ff8ff9",
-    "tag": {
-      "text": "OWNER",
-      "color": "#a00"
-    },
-    "id": "514df042c61528f566530313"
-  },
-  "recipient": {
-    "_id": "fd4365210b7f25b6cb0ed683",
-    "name": "͏͏͏͏A͏͏͏n͏͏͏o͏͏n͏y͏͏͏͏g͏͏͏͏͏o͏l͏d͏͏",
-    "color": "#ffd700",
-    "id": "fd4365210b7f25b6cb0ed683"
-  }
+	"m": "dm",
+	"id": "9fa65b3b",
+	"t": 1628019628643,
+	"a": "this direct message is going in the protocol documentation as an example",
+	"sender": {
+	"_id": "514df042c61528f566530313",
+	"name": "Lapis",
+	"color": "#ff8ff9",
+	"tag": {
+			"text": "OWNER",
+			"color": "#a00"
+	},
+	"id": "514df042c61528f566530313"
+	},
+	"recipient": {
+	"_id": "fd4365210b7f25b6cb0ed683",
+	"name": "͏͏͏͏A͏͏͏n͏͏͏o͏͏n͏y͏͏͏͏g͏͏͏͏͏o͏l͏d͏͏",
+	"color": "#ffd700",
+	"id": "fd4365210b7f25b6cb0ed683"
+	}
 }
 ```
 
@@ -909,26 +909,26 @@ This is sent as a response when the client first sends `"hi"`.
 #### Example
 ```json
 {
-  "m": "hi",
-  "t": 1628019780663,
-  "u": {
-    "_id": "514df042c61528f566530313",
-    "name": "Lapis",
-    "color": "#ff8ff9",
-    "tag": {
-      "text": "OWNER",
-      "color": "#a00"
-    }
-  },
-  "token": "514df042c61528f566530313.9d26e1c7-1161-4621-8dc7-3f2c74fc661b",
-  "permissions": {},
-  "motd": "Trivia: Having the crown in a room increases your note quota.",
-  "accountInfo": {
-    "type":"discord",
-    "username":"Lapis",
-    "discriminator":"7110",
-    "avatar":"https://cdn.discordapp.com/avatars/454060101104435200/f20a18fca27dd87eced3658117c530e9.png"
-  }
+	"m": "hi",
+	"t": 1628019780663,
+	"u": {
+	"_id": "514df042c61528f566530313",
+	"name": "Lapis",
+	"color": "#ff8ff9",
+	"tag": {
+			"text": "OWNER",
+			"color": "#a00"
+	}
+	},
+	"token": "514df042c61528f566530313.9d26e1c7-1161-4621-8dc7-3f2c74fc661b",
+	"permissions": {},
+	"motd": "Trivia: Having the crown in a room increases your note quota.",
+	"accountInfo": {
+	"type":"discord",
+	"username":"Lapis",
+	"discriminator":"7110",
+	"avatar":"https://cdn.discordapp.com/avatars/454060101104435200/f20a18fca27dd87eced3658117c530e9.png"
+	}
 }
 ```
 
@@ -940,37 +940,37 @@ This is sent when a client subscribes to the channel list, or when a channel upd
 #### Example
 ```json
 {
-  "m": "ls",
-  "c": false,
-  "u": [
-    {
-      "settings": {
-        "chat": true,
-        "color": "#800080",
-        "color2": "#000000",
-        "visible": true,
-        "limit": 50,
-        "crownsolo": false,
-        "no cussing": false
-      },
-      "_id": "The Roleplay Room",
-      "id": "The Roleplay Room",
-      "count": 16,
-      "crown": {
-        "endPos": {
-          "x": 90,
-          "y": 82.31281739206041
-        },
-        "startPos": {
-          "x": "99.95",
-          "y": "0.70"
-        },
-        "userId": "b40df99cc2ca6f503fba77cb",
-        "time": 1627974260906,
-        "participantId": "b40df99cc2ca6f503fba77cb"
-      }
-    }
-  ]
+	"m": "ls",
+	"c": false,
+	"u": [
+	{
+			"settings": {
+		"chat": true,
+		"color": "#800080",
+		"color2": "#000000",
+		"visible": true,
+		"limit": 50,
+		"crownsolo": false,
+		"no cussing": false
+			},
+			"_id": "The Roleplay Room",
+			"id": "The Roleplay Room",
+			"count": 16,
+			"crown": {
+		"endPos": {
+					"x": 90,
+					"y": 82.31281739206041
+		},
+		"startPos": {
+					"x": "99.95",
+					"y": "0.70"
+		},
+		"userId": "b40df99cc2ca6f503fba77cb",
+		"time": 1627974260906,
+		"participantId": "b40df99cc2ca6f503fba77cb"
+			}
+	}
+	]
 }
 ```
 
@@ -983,10 +983,10 @@ This is broadcasted to every other client in a channel when a client sends a [mo
 #### Example
 ```json
 {
-  "m": "m",
-  "x": "50.30",
-  "y": "26.49",
-  "id": "c649910153f09f5087685ba2"
+	"m": "m",
+	"x": "50.30",
+	"y": "26.49",
+	"id": "c649910153f09f5087685ba2"
 }
 ```
 
@@ -999,30 +999,30 @@ This is broadcasted to every other client in a channel when a client sends notes
 #### Example
 ```json
 {
-  "m": "n",
-  "t": 1628020489306.2944,
-  "n": [
-    {
-      "n": "a1",
-      "s": 1
-    },
-    {
-      "n": "e1",
-      "s": 1,
-      "d": 0
-    },
-    {
-      "n": "a0",
-      "s": 1,
-      "d": 0
-    },
-    {
-      "n": "a1",
-      "v": 0.7874015748031497,
-      "d": 0
-    },
-  ],
-  "p": "514df042c61528f566530313"
+	"m": "n",
+	"t": 1628020489306.2944,
+	"n": [
+	{
+			"n": "a1",
+			"s": 1
+	},
+	{
+			"n": "e1",
+			"s": 1,
+			"d": 0
+	},
+	{
+			"n": "a0",
+			"s": 1,
+			"d": 0
+	},
+	{
+			"n": "a1",
+			"v": 0.7874015748031497,
+			"d": 0
+	},
+	],
+	"p": "514df042c61528f566530313"
 }
 ```
 
@@ -1039,11 +1039,11 @@ Notification messages are sent when someone gets kickbanned from the channel you
 #### Example
 ```json
 {
-  "m": "notification",
-  "duration": 15000,
-  "title": "Notice",
-  "target": "#room",
-  "text": "You already have the maximum amount of clients connected. Your id: 846e6d0900d96642bf8cb927"
+	"m": "notification",
+	"duration": 15000,
+	"title": "Notice",
+	"target": "#room",
+	"text": "You already have the maximum amount of clients connected. Your id: 846e6d0900d96642bf8cb927"
 }
 ```
 
@@ -1056,10 +1056,10 @@ This is sent when a client joins a channel or when their note quota changes. Thi
 #### Example
 ```json
 {
-    "m": "nq",
-    "maxHistLen": 3,
-    "max": 1200,
-    "allowance": 400
+	"m": "nq",
+	"maxHistLen": 3,
+	"max": 1200,
+	"allowance": 400
 }
 ```
 
@@ -1070,13 +1070,13 @@ All of the properties for that user's [participant info](#participant-info).
 #### Example
 ```json
 {
-  "m": "p",
-  "_id": "f05631ee009fce4d53fb0c79",
-  "name": "Anonymous",
-  "color": "#c50116",
-  "id": "f05631ee009fce4d53fb0c79",
-  "x": 200,
-  "y": 100
+	"m": "p",
+	"_id": "f05631ee009fce4d53fb0c79",
+	"name": "Anonymous",
+	"color": "#c50116",
+	"id": "f05631ee009fce4d53fb0c79",
+	"x": 200,
+	"y": 100
 }
 ```
 
@@ -1088,8 +1088,8 @@ This is sent in response to a client's ping message.
 #### Example
 ```json
 {
-    "m": "t",
-    "t": 1628020444326,
-    "e": 1628020443009
+	"m": "t",
+	"t": 1628020444326,
+	"e": 1628020443009
 }
 ```
