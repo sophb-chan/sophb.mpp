@@ -1677,6 +1677,7 @@ code {
 
 .snowflakes {
 	z-index: 1;
+	visibility: hidden;
 	position: absolute;
 }
 

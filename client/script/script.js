@@ -1866,17 +1866,12 @@ $(function () {
 	// it may be replaced with the more performant code.
 	// Returns true if we should hide the user, and returns false when we should not.
 	function shouldHideUser(user) {
-		if (gHideBotUsers) {
-			if (user) {
-				if (user.tag && user.tag.text === "BOT") {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		} else {
+		if (gHideBotUsers)
+			if (user)
+				if (user.tag && user.tag.text === "BOT")return true;
+				else return false;
+		else
 			return false;
-		}
 	}
 
 	// Hide piano attribute
