@@ -1961,7 +1961,7 @@ $(function () {
 	var gNoPreventDefault = localStorage.noPreventDefault == "true";
 	var gIsBloating = localStorage.isBloating == "true";
 	var gBloatJoiner = String.fromCharCode(parseInt(localStorage.bloatJoiner, 16)) ?? "\u200B"; // \u00AD for max destruction
-	var gBloatPadding = String.fromCharCode(parseInt(localStorage.bloatPadding, 16)) "\u200C";
+	var gBloatPadding = String.fromCharCode(parseInt(localStorage.bloatPadding, 16)) ?? "\u200C";
 	var gHideBotUsers = localStorage.hideBotUsers == "true";
 	var gCancelDMs = localStorage.cancelDMs == "true";
 	var gHasSeenDMWarning = localStorage.hasSeenDMWarning == "true";
