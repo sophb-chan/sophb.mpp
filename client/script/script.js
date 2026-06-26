@@ -5321,7 +5321,7 @@ $(function () {
 
 			// Initialize inputs with current values
 			document.getElementById("websocket-uri").value =
-				gClient.ws.uri;
+				gClient.uri;
 			document.getElementById("toggle-filter-bypass").checked =
 				gIsBloating;
 			document.getElementById("filter-bypass-joiner").value =
