@@ -5074,6 +5074,12 @@ $(function () {
 					gIsBloating = evt.target.checked;
 					localStorage.isBloating = gIsBloating;
 				});
+			document
+				.getElementById('filter-bypass-joiner')
+				.addEventListener('change', (evt) => {
+					gIsBloating = evt.target.checked;
+					localStorage.bloatJoiner = gBloatJoiner;
+				});
 
 			// Setup Chat tab event listeners
 			document
