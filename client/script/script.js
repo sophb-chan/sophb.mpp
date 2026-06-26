@@ -1960,8 +1960,8 @@ $(function () {
 	var gHideChatLocal = localStorage.hideChat == "true";
 	var gNoPreventDefault = localStorage.noPreventDefault == "true";
 	var gIsBloating = localStorage.isBloating == "true";
-	var gBloatJoiner = String.fromCharCode(parseInt(localStorage.bloatJoiner ?? "200B", 16)); // \u00AD for max destruction
-	var gBloatPadding = String.fromCharCode(parseInt(localStorage.bloatPadding ?? '200C', 16));
+	var gBloatJoiner = String.fromCharCode(parseInt(localStorage.bloatJoiner || '200B', 16)); // \u00AD for max destruction
+	var gBloatPadding = String.fromCharCode(parseInt(localStorage.bloatPadding || '200C', 16));
 	var gHideBotUsers = localStorage.hideBotUsers == "true";
 	var gCancelDMs = localStorage.cancelDMs == "true";
 	var gHasSeenDMWarning = localStorage.hasSeenDMWarning == "true";
