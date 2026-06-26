@@ -285,7 +285,7 @@
 					<div class="client-settings-tab" data-name="Client">
 						<p>
 							<span data-i18n="WebSocket URI:">WebSocket URI:</span>
-							<input type="text" id="websocket-uri" class="setting">
+							<input type="text" id="websocket-uri" class="setting" disabled>
 						</p>
 						<p>
 							<span data-i18n="Enable filter bypass?">Enable filter bypass?</span>
@@ -297,6 +297,7 @@
 							pattern="^[0-9a-fA-F]{4}$" 
     						title="Please enter a valid hexadecimal unicode index (0-9, A-F)" 
     						required
+							size="4"
 							id="filter-bypass-joiner" class="setting">
 						</p>
 					</div>
