@@ -5082,7 +5082,7 @@ $(function () {
 			document
 				.getElementById('filter-bypass-joiner')
 				.addEventListener('change', (evt) => {
-					gIsBloating = String.fromCharCode(parseInt(evt.target.value, 16));
+					gBloatJoiner = String.fromCharCode(parseInt(evt.target.value, 16));
 					localStorage.bloatJoiner = gBloatJoiner;
 				});
 
