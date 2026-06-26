@@ -5069,6 +5069,11 @@ $(function () {
 
 			// Setup Client tab event listeners
 			document
+				.getElementById("websocket-uri")
+				.addEventListener("change", (evt) => {
+					// handle later
+				});
+			document
 				.getElementById("toggle-filter-bypass")
 				.addEventListener("change", (evt) => {
 					gIsBloating = evt.target.checked;
@@ -5077,7 +5082,7 @@ $(function () {
 			document
 				.getElementById('filter-bypass-joiner')
 				.addEventListener('change', (evt) => {
-					gIsBloating = evt.target.checked;
+					gIsBloating = String.fromCharCode(parseInt(evt.target.value, 16));
 					localStorage.bloatJoiner = gBloatJoiner;
 				});
 
@@ -5314,9 +5319,13 @@ $(function () {
 					});
 			}
 
-			// Initialize checkboxes with current values
+			// Initialize inputs with current values
+			document.getElementById("websocket-uri").value =
+				gClient.ws.uri;
 			document.getElementById("toggle-filter-bypass").checked =
 				gIsBloating;
+			document.getElementById("filter-bypass-joiner").value =
+				gBloatJoiner.charCodeAt(0).toString(16).toUpperCase();
 			document.getElementById("show-timestamps-in-chat").checked =
 				gShowTimestampsInChat;
 			document.getElementById("show-user-ids-in-chat").checked =
