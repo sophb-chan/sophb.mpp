@@ -5084,6 +5084,8 @@ $(function () {
 				.addEventListener('change', (evt) => {
 					gBloatJoiner = String.fromCharCode(parseInt(evt.target.value, 16));
 					localStorage.bloatJoiner = gBloatJoiner.charCodeAt(0).toString(16).toUpperCase();
+					console.log(gBloatJoiner);
+					console.log(gBloatPadding);
 				});
 
 			// Setup Chat tab event listeners
