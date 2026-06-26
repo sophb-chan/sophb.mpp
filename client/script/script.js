@@ -1951,10 +1951,10 @@ $(function () {
 	var gShowPianoNotes = localStorage.showPianoNotes == "true";
 	var gHighlightScaleNotes = localStorage.highlightScaleNotes;
 	var gCursorHides = (
-		localStorage.cursorHides ? localStorage.cursorHides : ""
+		localStorage.cursorHides || ''
 	)
 		.split(",")
-		.filter((v) => v);
+		.filter(v => v);
 	var gHideAllCursors = localStorage.hideAllCursors == "true";
 	var gHidePianoLocal = localStorage.hidePiano == "true";
 	var gHideChatLocal = localStorage.hideChat == "true";
