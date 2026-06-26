@@ -101,31 +101,76 @@ $(function () {
 		"Notes in G Major": ["G", "A", "B", "C", "D", "E", "G♭", "G"],
 		"Notes in A Major": ["A", "B", "D♭", "D", "E", "G♭", "A♭", "A"],
 		"Notes in B Major": ["B", "D♭", "E♭", "E", "G♭", "A♭", "B♭", "B"],
-		"Notes in C# / Db Major": ["D♭", "E♭", "F", "G♭", "A♭", "B♭", "C", "D♭"],
+		"Notes in C# / Db Major": [
+			"D♭",
+			"E♭",
+			"F",
+			"G♭",
+			"A♭",
+			"B♭",
+			"C",
+			"D♭",
+		],
 		"Notes in D# / Eb Major": ["E♭", "F", "G", "A♭", "B♭", "C", "D", "E♭"],
-		"Notes in F# / Gb Major": ["G♭", "A♭", "B♭", "B", "D♭", "E♭", "F", "G♭"],
+		"Notes in F# / Gb Major": [
+			"G♭",
+			"A♭",
+			"B♭",
+			"B",
+			"D♭",
+			"E♭",
+			"F",
+			"G♭",
+		],
 		"Notes in G# / Ab Major": ["A♭", "B♭", "C", "D♭", "E♭", "F", "G", "A♭"],
 		"Notes in A# / Bb Major": ["B♭", "C", "D", "E♭", "F", "G", "A", "B♭"],
 		// natural minor keys
 		"Notes in A Minor": ["A", "B", "C", "D", "E", "F", "G", "A"],
-		"Notes in A# / Bb Minor": ["B♭", "C", "D♭", "E♭", "F", "G♭", "A♭", "B♭"],
+		"Notes in A# / Bb Minor": [
+			"B♭",
+			"C",
+			"D♭",
+			"E♭",
+			"F",
+			"G♭",
+			"A♭",
+			"B♭",
+		],
 		"Notes in B Minor": ["B", "D♭", "D", "E", "G♭", "G", "A", "B"],
 		"Notes in C Minor": ["C", "D", "E♭", "F", "G", "A♭", "B♭", "C"],
 		"Notes in C# / Db Minor": ["D♭", "E♭", "E", "G♭", "A♭", "A", "B", "D♭"],
 		"Notes in D Minor": ["D", "E", "F", "G", "A", "B♭", "C", "D"],
-		"Notes in D# / Eb Minor": ["E♭", "F", "G♭", "A♭", "B♭", "B", "D♭", "E♭"],
+		"Notes in D# / Eb Minor": [
+			"E♭",
+			"F",
+			"G♭",
+			"A♭",
+			"B♭",
+			"B",
+			"D♭",
+			"E♭",
+		],
 		"Notes in E Minor": ["E", "G♭", "G", "A", "B", "C", "D", "E"],
 		"Notes in F Minor": ["F", "G", "A♭", "B♭", "C", "D♭", "E♭", "F"],
 		"Notes in F# / Gb Minor": ["G♭", "A♭", "A", "B", "D♭", "D", "E", "G♭"],
 		"Notes in G Minor": ["G", "A", "B♭", "C", "D", "E♭", "F", "G"],
-		"Notes in G# / Ab Minor": ["A♭", "B♭", "B", "D♭", "E♭", "E", "G♭", "A♭"],
+		"Notes in G# / Ab Minor": [
+			"A♭",
+			"B♭",
+			"B",
+			"D♭",
+			"E♭",
+			"E",
+			"G♭",
+			"A♭",
+		],
 	};
 
 	// AudioEngine classes
 
 	////////////////////////////////////////////////////////////////
 
-	var AudioEngine = function () { };
+	var AudioEngine = function () {};
 
 	AudioEngine.prototype.init = function (cb) {
 		this.volume = 0.6;
@@ -134,11 +179,11 @@ $(function () {
 		return this;
 	};
 
-	AudioEngine.prototype.load = function (id, url, cb) { };
+	AudioEngine.prototype.load = function (id, url, cb) {};
 
-	AudioEngine.prototype.play = function () { };
+	AudioEngine.prototype.play = function () {};
 
-	AudioEngine.prototype.stop = function () { };
+	AudioEngine.prototype.stop = function () {};
 
 	AudioEngine.prototype.setVolume = function (vol) {
 		this.volume = vol;
@@ -336,7 +381,7 @@ $(function () {
 
 	////////////////////////////////////////////////////////////////
 
-	var Renderer = function () { };
+	var Renderer = function () {};
 
 	Renderer.prototype.init = function (piano) {
 		this.piano = piano;
@@ -345,7 +390,8 @@ $(function () {
 	};
 
 	Renderer.prototype.resize = function (width, height) {
-		if (typeof width == "undefined") width = $(this.piano.rootElement).width();
+		if (typeof width == "undefined")
+			width = $(this.piano.rootElement).width();
 		if (typeof height == "undefined") height = Math.floor(width * 0.2);
 		$(this.piano.rootElement).css({
 			height: height + "px",
@@ -355,7 +401,7 @@ $(function () {
 		this.height = height * window.devicePixelRatio;
 	};
 
-	Renderer.prototype.visualize = function (key, color) { };
+	Renderer.prototype.visualize = function (key, color) {};
 
 	var CanvasRenderer = function () {
 		Renderer.call(this);
@@ -400,7 +446,9 @@ $(function () {
 				//event.stopPropagation();
 				if (!gNoPreventDefault) event.preventDefault();
 				for (var i in event.changedTouches) {
-					var pos = CanvasRenderer.translateMouseEvent(event.changedTouches[i]);
+					var pos = CanvasRenderer.translateMouseEvent(
+						event.changedTouches[i],
+					);
 					var hit = self.getHit(pos.x, pos.y);
 					if (hit) {
 						press(hit.key.note, hit.v);
@@ -474,7 +522,12 @@ $(function () {
 		this.whiteKeyRender.height = this.height + 10;
 		var ctx = this.whiteKeyRender.getContext("2d");
 		if (ctx.createLinearGradient) {
-			var gradient = ctx.createLinearGradient(0, 0, 0, this.whiteKeyHeight);
+			var gradient = ctx.createLinearGradient(
+				0,
+				0,
+				0,
+				this.whiteKeyHeight,
+			);
 			gradient.addColorStop(0, "#eee");
 			gradient.addColorStop(0.75, "#fff");
 			gradient.addColorStop(1, "#dad4d4");
@@ -506,7 +559,12 @@ $(function () {
 		this.blackKeyRender.height = this.blackKeyHeight + 10;
 		var ctx = this.blackKeyRender.getContext("2d");
 		if (ctx.createLinearGradient) {
-			var gradient = ctx.createLinearGradient(0, 0, 0, this.blackKeyHeight);
+			var gradient = ctx.createLinearGradient(
+				0,
+				0,
+				0,
+				this.blackKeyHeight,
+			);
 			gradient.addColorStop(0, "#000");
 			gradient.addColorStop(1, "#444");
 			ctx.fillStyle = gradient;
@@ -561,8 +619,8 @@ $(function () {
 				if (key.sharp) {
 					ctx.fillRect(
 						this.blackKeyOffset +
-						this.whiteKeyWidth * key.spatial +
-						ctx.lineWidth / 2,
+							this.whiteKeyWidth * key.spatial +
+							ctx.lineWidth / 2,
 						y + ctx.lineWidth / 2,
 						this.blackKeyWidth - ctx.lineWidth,
 						this.blackKeyHeight - ctx.lineWidth,
@@ -626,7 +684,8 @@ $(function () {
 				if (!key.loaded) {
 					this.ctx.globalAlpha = 0.2;
 				} else if (key.timeLoaded > timeLoadedEnd) {
-					this.ctx.globalAlpha = ((now - key.timeLoaded) / 1000) * 0.8 + 0.2;
+					this.ctx.globalAlpha =
+						((now - key.timeLoaded) / 1000) * 0.8 + 0.2;
 				} else {
 					this.ctx.globalAlpha = 1.0;
 				}
@@ -634,7 +693,7 @@ $(function () {
 				if (key.timePlayed > timePlayedEnd) {
 					y = Math.floor(
 						this.keyMovement -
-						((now - key.timePlayed) / 100) * this.keyMovement,
+							((now - key.timePlayed) / 100) * this.keyMovement,
 					);
 				}
 				var x = Math.floor(
@@ -642,7 +701,9 @@ $(function () {
 						? this.blackKeyOffset + this.whiteKeyWidth * key.spatial
 						: this.whiteKeyWidth * key.spatial,
 				);
-				var image = key.sharp ? this.blackKeyRender : this.whiteKeyRender;
+				var image = key.sharp
+					? this.blackKeyRender
+					: this.whiteKeyRender;
 				this.ctx.drawImage(image, x, y);
 
 				var keyName = key.baseNote[0].toUpperCase();
@@ -650,8 +711,10 @@ $(function () {
 				keyName += key.octave + 1;
 
 				if (gShowPianoNotes) {
-					this.ctx.font = `${(key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2
-						}px Arial`;
+					this.ctx.font = `${
+						(key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) /
+						2
+					}px Arial`;
 					this.ctx.fillStyle = key.sharp ? "white" : "black";
 					this.ctx.textAlign = "center";
 
@@ -659,11 +722,17 @@ $(function () {
 					if (keyName.includes("#")) {
 						this.ctx.fillText(
 							keyName,
-							x + (key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2,
+							x +
+								(key.sharp
+									? this.blackKeyWidth
+									: this.whiteKeyWidth) /
+									2,
 							y +
-							(key.sharp ? this.blackKeyHeight : this.whiteKeyHeight) -
-							30 -
-							this.ctx.lineWidth,
+								(key.sharp
+									? this.blackKeyHeight
+									: this.whiteKeyHeight) -
+								30 -
+								this.ctx.lineWidth,
 						);
 					}
 
@@ -675,11 +744,17 @@ $(function () {
 
 					this.ctx.fillText(
 						keyName,
-						x + (key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2,
+						x +
+							(key.sharp
+								? this.blackKeyWidth
+								: this.whiteKeyWidth) /
+								2,
 						y +
-						(key.sharp ? this.blackKeyHeight : this.whiteKeyHeight) -
-						10 -
-						this.ctx.lineWidth,
+							(key.sharp
+								? this.blackKeyHeight
+								: this.whiteKeyHeight) -
+							10 -
+							this.ctx.lineWidth,
 					);
 				}
 
@@ -696,9 +771,19 @@ $(function () {
 						this.ctx.globalAlpha = 0.3;
 						this.ctx.fillStyle = "#0f0";
 						if (key.sharp) {
-							this.ctx.fillRect(x, y, this.blackKeyWidth, this.blackKeyHeight);
+							this.ctx.fillRect(
+								x,
+								y,
+								this.blackKeyWidth,
+								this.blackKeyHeight,
+							);
 						} else {
-							this.ctx.fillRect(x, y, this.whiteKeyWidth, this.whiteKeyHeight);
+							this.ctx.fillRect(
+								x,
+								y,
+								this.whiteKeyWidth,
+								this.whiteKeyHeight,
+							);
 						}
 						this.ctx.globalAlpha = prev;
 					}
@@ -723,7 +808,8 @@ $(function () {
 						var blip = key.blips[b];
 						if (blip.time > timeBlipEnd) {
 							this.ctx.fillStyle = blip.color;
-							this.ctx.globalAlpha = alpha - ((now - blip.time) / 1000) * alpha;
+							this.ctx.globalAlpha =
+								alpha - ((now - blip.time) / 1000) * alpha;
 							this.ctx.fillRect(x, y, w, h);
 						} else {
 							key.blips.splice(b, 1);
@@ -746,7 +832,8 @@ $(function () {
 			var lyric_y = this.whiteKeyHeight + 1;
 			this.ctx.fillStyle = key.lyric.color;
 			var alpha = this.ctx.globalAlpha;
-			this.ctx.globalAlpha = alpha - ((now - key.lyric.time) / 1000) * alpha;
+			this.ctx.globalAlpha =
+				alpha - ((now - key.lyric.time) / 1000) * alpha;
 			this.ctx.fillRect(x, y, 10, 10);
 		}
 	};
@@ -759,7 +846,9 @@ $(function () {
 				var key = this.piano.keys[i];
 				if (key.sharp != sharp) continue;
 				if (key.rect.contains(x, y)) {
-					var v = y / (key.sharp ? this.blackKeyHeight : this.whiteKeyHeight);
+					var v =
+						y /
+						(key.sharp ? this.blackKeyHeight : this.whiteKeyHeight);
 					v += 0.25;
 					v *= DEFAULT_VELOCITY;
 					if (v > 1.0) v = 1.0;
@@ -832,7 +921,8 @@ $(function () {
 
 			if (added) return console.warn("Sounds already added!!"); //no adding soundpacks twice D:<
 
-			if (obj.url.substr(obj.url.length - 1) != "/") obj.url = obj.url + "/";
+			if (obj.url.substr(obj.url.length - 1) != "/")
+				obj.url = obj.url + "/";
 			var html = document.createElement("li");
 			html.classList = "pack";
 			html.innerText = obj.name + " (" + obj.keys.length + " keys)";
@@ -854,12 +944,12 @@ $(function () {
 		if (typeof pack == "string") {
 			let useDomain = true;
 			if (pack.match(/^(http|https):\/\//i)) useDomain = false;
-			$.getJSON((useDomain ? soundDomain : "") + pack + "/info.json").done(
-				function (json) {
-					json.url = pack;
-					add(json);
-				},
-			);
+			$.getJSON(
+				(useDomain ? soundDomain : "") + pack + "/info.json",
+			).done(function (json) {
+				json.url = pack;
+				add(json);
+			});
 		} else add(pack); //validate packs??
 	};
 
@@ -935,7 +1025,10 @@ $(function () {
 				if (pack.url.match(/^(http|https):\/\//i)) useDomain = false;
 				self.piano.audio.load(
 					key.note,
-					(useDomain ? soundDomain : "") + pack.url + key.note + pack.ext,
+					(useDomain ? soundDomain : "") +
+						pack.url +
+						key.note +
+						pack.ext,
 					function () {
 						key.loaded = true;
 						key.timeLoaded = Date.now();
@@ -953,7 +1046,8 @@ $(function () {
 			var pack = this.packs[i];
 			if (pack.name == name) {
 				this.packs.splice(i, 1);
-				if (pack.name == this.soundSelection) this.loadPack(this.packs[0].name); //add mpp default if none?
+				if (pack.name == this.soundSelection)
+					this.loadPack(this.packs[0].name); //add mpp default if none?
 				break;
 			}
 		}
@@ -1027,7 +1121,8 @@ $(function () {
 	Piano.prototype.play = function (note, vol, participant, delay_ms, lyric) {
 		if (!this.keys.hasOwnProperty(note) || !participant) return;
 		var key = this.keys[note];
-		if (key.loaded) this.audio.play(key.note, vol, delay_ms, participant.id);
+		if (key.loaded)
+			this.audio.play(key.note, vol, delay_ms, participant.id);
 		if (gMidiOutTest)
 			gMidiOutTest(key.note, vol * 100, delay_ms, participant.id);
 		var self = this;
@@ -1236,9 +1331,11 @@ $(function () {
 			if (count > 0) {
 				$("#status").html(
 					'<span class="number" translated>' +
-					count +
-					"</span> " +
-					window.i18nextify.i18next.t("people are playing", { count }),
+						count +
+						"</span> " +
+						window.i18nextify.i18next.t("people are playing", {
+							count,
+						}),
 				);
 				if (!tabIsActive) {
 					if (youreMentioned || youreReplied) {
@@ -1258,7 +1355,7 @@ $(function () {
 		gClient.on("hi", function (msg) {
 			if (receivedHi) return;
 			receivedHi = true;
-			if (!msg.motd){
+			if (!msg.motd) {
 				msg.motd =
 					"This site makes a lot of sound! You may want to adjust the volume before continuing.";
 				gClient.motd = msg.motd;
@@ -1268,9 +1365,10 @@ $(function () {
 			$(document).on("keydown", modalHandleEsc);
 			var user_interact = function (evt) {
 				if (
-					(evt.path || (evt.composedPath && evt.composedPath())).includes(
-						document.getElementById("motd"),
-					) ||
+					(
+						evt.path ||
+						(evt.composedPath && evt.composedPath())
+					).includes(document.getElementById("motd")) ||
 					evt.target === document.getElementById("motd")
 				) {
 					closeModal();
@@ -1318,12 +1416,15 @@ $(function () {
 				part.nameDiv = nameDiv;
 			}
 			nameDiv.style.backgroundColor = part.color || "#777";
-			var tagText = typeof part.tag === "object" ? part.tag.text : part.tag;
+			var tagText =
+				typeof part.tag === "object" ? part.tag.text : part.tag;
 			if (tagText === "BOT") nameDiv.title = "This is an authorized bot.";
 			if (tagText === "MOD")
-				nameDiv.title = "This user is an official moderator of the site.";
+				nameDiv.title =
+					"This user is an official moderator of the site.";
 			if (tagText === "ADMIN")
-				nameDiv.title = "This user is an official administrator of the site.";
+				nameDiv.title =
+					"This user is an official administrator of the site.";
 			if (tagText === "OWNER")
 				nameDiv.title = "This user is the owner of the site.";
 			if (tagText === "MEDIA")
@@ -1387,7 +1488,8 @@ $(function () {
 
 			part.displayX = 150;
 			part.displayY = 50;
-			var tagText = typeof part.tag === "object" ? part.tag.text : part.tag;
+			var tagText =
+				typeof part.tag === "object" ? part.tag.text : part.tag;
 
 			// add nameDiv
 			setupParticipantDivs(part);
@@ -1521,7 +1623,9 @@ $(function () {
 
 	// Handle changes to crown
 	(function () {
-		var jqcrown = $('<div id="crown"></div>').appendTo(document.body).hide();
+		var jqcrown = $('<div id="crown"></div>')
+			.appendTo(document.body)
+			.hide();
 		var jqcountdown = $("<span></span>").appendTo(jqcrown);
 		var countdown_interval;
 		jqcrown.click(function () {
@@ -1531,8 +1635,10 @@ $(function () {
 			if (msg.ch.crown) {
 				var crown = msg.ch.crown;
 				if (!crown.participantId || !gClient.ppl[crown.participantId]) {
-					var land_time = crown.time + 2000 - gClient.serverTimeOffset;
-					var avail_time = crown.time + 15000 - gClient.serverTimeOffset;
+					var land_time =
+						crown.time + 2000 - gClient.serverTimeOffset;
+					var avail_time =
+						crown.time + 15000 - gClient.serverTimeOffset;
 					jqcountdown.text("");
 					jqcrown.show();
 					if (land_time - Date.now() <= 0) {
@@ -1605,7 +1711,9 @@ $(function () {
 				gPiano.stop(note.n, participant, ms);
 			} else {
 				var vel =
-					typeof note.v !== "undefined" ? parseFloat(note.v) : DEFAULT_VELOCITY;
+					typeof note.v !== "undefined"
+						? parseFloat(note.v)
+						: DEFAULT_VELOCITY;
 				if (!vel) vel = 0;
 				else if (vel < 0) vel = 0;
 				else if (vel > 1) vel = 1;
@@ -1705,14 +1813,22 @@ $(function () {
 		});
 		$("#room-settings .submit").click(function () {
 			var settings = {
-				visible: $("#room-settings .checkbox[name=visible]").is(":checked"),
+				visible: $("#room-settings .checkbox[name=visible]").is(
+					":checked",
+				),
 				chat: $("#room-settings .checkbox[name=chat]").is(":checked"),
-				crownsolo: $("#room-settings .checkbox[name=crownsolo]").is(":checked"),
+				crownsolo: $("#room-settings .checkbox[name=crownsolo]").is(
+					":checked",
+				),
 				"no cussing": $("#room-settings .checkbox[name=nocussing]").is(
 					":checked",
 				),
-				noindex: $("#room-settings .checkbox[name=noindex]").is(":checked"),
-				allowBots: $("#room-settings .checkbox[name=allowBots]").is(":checked"),
+				noindex: $("#room-settings .checkbox[name=noindex]").is(
+					":checked",
+				),
+				allowBots: $("#room-settings .checkbox[name=allowBots]").is(
+					":checked",
+				),
 				color: $("#room-settings input[name=color]").val(),
 				color2: $("#room-settings input[name=color2]").val(),
 				limit: $("#room-settings input[name=limit]").val(),
@@ -1735,7 +1851,9 @@ $(function () {
 
 	// Get crown button
 	$("#getcrown-btn").click(function (evt) {
-		gClient.sendArray([{ m: "chown", id: MPP.client.getOwnParticipant().id }]);
+		gClient.sendArray([
+			{ m: "chown", id: MPP.client.getOwnParticipant().id },
+		]);
 	});
 
 	// Vanish or unvanish button
@@ -1832,7 +1950,9 @@ $(function () {
 	var gShowChatTooltips = localStorage.showChatTooltips == "true";
 	var gShowPianoNotes = localStorage.showPianoNotes == "true";
 	var gHighlightScaleNotes = localStorage.highlightScaleNotes;
-	var gCursorHides = (localStorage.cursorHides ? localStorage.cursorHides : "")
+	var gCursorHides = (
+		localStorage.cursorHides ? localStorage.cursorHides : ""
+	)
 		.split(",")
 		.filter((v) => v);
 	var gHideAllCursors = localStorage.hideAllCursors == "true";
@@ -1840,8 +1960,8 @@ $(function () {
 	var gHideChatLocal = localStorage.hideChat == "true";
 	var gNoPreventDefault = localStorage.noPreventDefault == "true";
 	var gIsBloating = localStorage.isBloating == "true";
-	var gBloatJoiner = localStorage.bloatJoiner ?? '\u200B'; // \u00AD for max destruction
-	var gBloatPadding = localStorage.bloatPadding ?? '\u200C';
+	var gBloatJoiner = localStorage.bloatJoiner ?? "\u200B"; // \u00AD for max destruction
+	var gBloatPadding = localStorage.bloatPadding ?? "\u200C";
 	var gHideBotUsers = localStorage.hideBotUsers == "true";
 	var gCancelDMs = localStorage.cancelDMs == "true";
 	var gHasSeenDMWarning = localStorage.hasSeenDMWarning == "true";
@@ -1870,10 +1990,9 @@ $(function () {
 	function shouldHideUser(user) {
 		if (gHideBotUsers)
 			if (user)
-				if (user.tag && user.tag.text === "BOT")return true;
+				if (user.tag && user.tag.text === "BOT") return true;
 				else return false;
-		else
-			return false;
+			else return false;
 	}
 
 	// Hide piano attribute
@@ -2232,9 +2351,11 @@ $(function () {
 			if (rat <= last_rat)
 				nqjq.stop(true, true).css("width", rat.toFixed(0) + "%");
 			else
-				nqjq
-					.stop(true, true)
-					.animate({ width: rat.toFixed(0) + "%" }, 2000, "linear");
+				nqjq.stop(true, true).animate(
+					{ width: rat.toFixed(0) + "%" },
+					2000,
+					"linear",
+				);
 			last_rat = rat;
 		});
 	})();
@@ -2379,7 +2500,8 @@ $(function () {
 					.appendTo(menu)
 					.on("mousedown touchstart", function (evt) {
 						gPianoMutes.push(part._id);
-						if (localStorage) localStorage.pianoMutes = gPianoMutes.join(",");
+						if (localStorage)
+							localStorage.pianoMutes = gPianoMutes.join(",");
 						$(part.nameDiv).addClass("muted-notes");
 					});
 			} else {
@@ -2393,7 +2515,8 @@ $(function () {
 						var i;
 						while ((i = gPianoMutes.indexOf(part._id)) != -1)
 							gPianoMutes.splice(i, 1);
-						if (localStorage) localStorage.pianoMutes = gPianoMutes.join(",");
+						if (localStorage)
+							localStorage.pianoMutes = gPianoMutes.join(",");
 						$(part.nameDiv).removeClass("muted-notes");
 					});
 			}
@@ -2406,7 +2529,8 @@ $(function () {
 					.appendTo(menu)
 					.on("mousedown touchstart", function (evt) {
 						gChatMutes.push(part._id);
-						if (localStorage) localStorage.chatMutes = gChatMutes.join(",");
+						if (localStorage)
+							localStorage.chatMutes = gChatMutes.join(",");
 						$(part.nameDiv).addClass("muted-chat");
 					});
 			} else {
@@ -2420,7 +2544,8 @@ $(function () {
 						var i;
 						while ((i = gChatMutes.indexOf(part._id)) != -1)
 							gChatMutes.splice(i, 1);
-						if (localStorage) localStorage.chatMutes = gChatMutes.join(",");
+						if (localStorage)
+							localStorage.chatMutes = gChatMutes.join(",");
 						$(part.nameDiv).removeClass("muted-chat");
 					});
 			}
@@ -2436,9 +2561,11 @@ $(function () {
 					.appendTo(menu)
 					.on("mousedown touchstart", function (evt) {
 						gPianoMutes.push(part._id);
-						if (localStorage) localStorage.pianoMutes = gPianoMutes.join(",");
+						if (localStorage)
+							localStorage.pianoMutes = gPianoMutes.join(",");
 						gChatMutes.push(part._id);
-						if (localStorage) localStorage.chatMutes = gChatMutes.join(",");
+						if (localStorage)
+							localStorage.chatMutes = gChatMutes.join(",");
 						$(part.nameDiv).addClass("muted-notes");
 						$(part.nameDiv).addClass("muted-chat");
 					});
@@ -2459,8 +2586,10 @@ $(function () {
 							gPianoMutes.splice(i, 1);
 						while ((i = gChatMutes.indexOf(part._id)) != -1)
 							gChatMutes.splice(i, 1);
-						if (localStorage) localStorage.pianoMutes = gPianoMutes.join(",");
-						if (localStorage) localStorage.chatMutes = gChatMutes.join(",");
+						if (localStorage)
+							localStorage.pianoMutes = gPianoMutes.join(",");
+						if (localStorage)
+							localStorage.chatMutes = gChatMutes.join(",");
 						$(part.nameDiv).removeClass("muted-notes");
 						$(part.nameDiv).removeClass("muted-chat");
 					});
@@ -2507,7 +2636,8 @@ $(function () {
 					.appendTo(menu)
 					.on("mousedown touchstart", function (evt) {
 						gCursorHides.push(part._id);
-						if (localStorage) localStorage.cursorHides = gCursorHides.join(",");
+						if (localStorage)
+							localStorage.cursorHides = gCursorHides.join(",");
 						$(part.cursorDiv).hide();
 					});
 			} else {
@@ -2521,7 +2651,8 @@ $(function () {
 						var i;
 						while ((i = gCursorHides.indexOf(part._id)) != -1)
 							gCursorHides.splice(i, 1);
-						if (localStorage) localStorage.cursorHides = gCursorHides.join(",");
+						if (localStorage)
+							localStorage.cursorHides = gCursorHides.join(",");
 						$(part.cursorDiv).show();
 					});
 			}
@@ -2548,8 +2679,14 @@ $(function () {
 					)
 						.appendTo(menu)
 						.on("mousedown touchstart", function (evt) {
-							if (confirm("Give room ownership to " + part.name + "?"))
-								gClient.sendArray([{ m: "chown", id: part.id }]);
+							if (
+								confirm(
+									"Give room ownership to " + part.name + "?",
+								)
+							)
+								gClient.sendArray([
+									{ m: "chown", id: part.id },
+								]);
 						});
 				}
 				$(
@@ -2563,7 +2700,9 @@ $(function () {
 						if (minutes === null) return;
 						minutes = parseFloat(minutes) || 0;
 						var ms = minutes * 60 * 1000;
-						gClient.sendArray([{ m: "kickban", _id: part._id, ms: ms }]);
+						gClient.sendArray([
+							{ m: "kickban", _id: part._id, ms: ms },
+						]);
 					});
 			}
 			if (gClient.permissions.siteBan) {
@@ -2580,13 +2719,21 @@ $(function () {
 							$("#siteban input[name=reasonText]").val(
 								"Discrimination against others",
 							);
-							$("#siteban input[name=reasonText]").attr("disabled", true);
+							$("#siteban input[name=reasonText]").attr(
+								"disabled",
+								true,
+							);
 							$("#siteban select[name=reasonSelect]").val(
 								"Discrimination against others",
 							);
 							$("#siteban input[name=durationNumber]").val(5);
-							$("#siteban input[name=durationNumber]").attr("disabled", false);
-							$("#siteban select[name=durationUnit]").val("hours");
+							$("#siteban input[name=durationNumber]").attr(
+								"disabled",
+								false,
+							);
+							$("#siteban select[name=durationUnit]").val(
+								"hours",
+							);
 							$("#siteban textarea[name=note]").val("");
 							$("#siteban p[name=errorText]").text("");
 							if (gClient.permissions.siteBanAnyReason) {
@@ -2611,7 +2758,9 @@ $(function () {
 					.on("mousedown touchstart", function (evt) {
 						var color = prompt("What color?", part.color);
 						if (color === null) return;
-						gClient.sendArray([{ m: "setcolor", _id: part._id, color: color }]);
+						gClient.sendArray([
+							{ m: "setcolor", _id: part._id, color: color },
+						]);
 					});
 			}
 			if (gClient.permissions.usersetOthers) {
@@ -2624,7 +2773,9 @@ $(function () {
 					.on("mousedown touchstart", function (evt) {
 						var name = prompt("What name?", part.name);
 						if (name === null) return;
-						gClient.sendArray([{ m: "setname", _id: part._id, name: name }]);
+						gClient.sendArray([
+							{ m: "setname", _id: part._id, name: name },
+						]);
 					});
 			}
 			menu.fadeIn(100);
@@ -2656,7 +2807,7 @@ $(function () {
 		}
 		this.domElement = $(
 			'<div class="notification"><div class="notification-body"><div class="title"></div>' +
-			'<div class="text"></div></div><div class="x" translated>X</div></div>',
+				'<div class="text"></div></div><div class="x" translated>X</div></div>',
 		);
 		this.domElement[0].id = this.id;
 		this.domElement.addClass(this["class"]);
@@ -2694,7 +2845,8 @@ $(function () {
 
 	Notification.prototype.position = function () {
 		var pos = this.target.offset();
-		var x = pos.left - this.domElement.width() / 2 + this.target.width() / 4;
+		var x =
+			pos.left - this.domElement.width() / 2 + this.target.width() / 4;
 		var y = pos.top - this.domElement.height() - 8;
 		var width = this.domElement.width();
 		if (x + width > $("body").width()) {
@@ -2741,9 +2893,9 @@ $(function () {
 			gPiano.audio.setVolume(localStorage.volume);
 			$("#volume-label").html(
 				window.i18nextify.i18next.t("Volume") +
-				"<span translated>: " +
-				Math.floor(gPiano.audio.volume * 100) +
-				"%</span>",
+					"<span translated>: " +
+					Math.floor(gPiano.audio.volume * 100) +
+					"%</span>",
 			);
 		} else localStorage.volume = gPiano.audio.volume;
 
@@ -2784,8 +2936,10 @@ $(function () {
 			var room = ls.u[i];
 			var info = $(
 				'#room .info[roomid="' +
-				(room.id + "").replace(/[\\"']/g, "\\$&").replace(/\u0000/g, "\\0") +
-				'"]',
+					(room.id + "")
+						.replace(/[\\"']/g, "\\$&")
+						.replace(/\u0000/g, "\\0") +
+					'"]',
 			);
 
 			if (info.length == 0) {
@@ -2799,10 +2953,10 @@ $(function () {
 
 			info.text(
 				room.count +
-				"/" +
-				("limit" in room.settings ? room.settings.limit : 20) +
-				" " +
-				room._id,
+					"/" +
+					("limit" in room.settings ? room.settings.limit : 20) +
+					" " +
+					room._id,
 			);
 			if (room.settings.lobby) info.addClass("lobby");
 			else info.removeClass("lobby");
@@ -2884,7 +3038,10 @@ $(function () {
 		if (gClient.accountInfo) {
 			$("#account #account-info").show();
 			if (gClient.accountInfo.type === "discord") {
-				$("#account #avatar-image").prop("src", gClient.accountInfo.avatar);
+				$("#account #avatar-image").prop(
+					"src",
+					gClient.accountInfo.avatar,
+				);
 				$("#account #logged-in-user-text").text(
 					`@${gClient.accountInfo.username}`,
 				);
@@ -3122,7 +3279,8 @@ $(function () {
 						break;
 				}
 				var duration =
-					factor * parseFloat($("#siteban input[name=durationNumber]").val());
+					factor *
+					parseFloat($("#siteban input[name=durationNumber]").val());
 				if (duration < 0) {
 					$("#siteban p[name=errorText]").text("Invalid duration.");
 					return;
@@ -3143,7 +3301,9 @@ $(function () {
 			if ($("#siteban select[name=reasonSelect]").val() === "custom") {
 				reason = $("#siteban .text[name=reasonText]").val();
 				if (reason.length === 0) {
-					$("#siteban p[name=errorText]").text("Please provide a reason.");
+					$("#siteban p[name=errorText]").text(
+						"Please provide a reason.",
+					);
 					return;
 				}
 			} else {
@@ -3175,7 +3335,10 @@ $(function () {
 			if (this.value === "permanent") {
 				$("#siteban .text[name=durationNumber]").attr("disabled", true);
 			} else {
-				$("#siteban .text[name=durationNumber]").attr("disabled", false);
+				$("#siteban .text[name=durationNumber]").attr(
+					"disabled",
+					false,
+				);
 			}
 		});
 		$("#siteban .text[name=id]").keypress(textKeypressEvent);
@@ -3229,7 +3392,7 @@ $(function () {
 				chat.hide();
 			}
 		});
-		gClient.on("disconnect", function (msg) { });
+		gClient.on("disconnect", function (msg) {});
 		gClient.on("c", function (msg) {
 			chat.clear();
 			if (msg.c) {
@@ -3342,7 +3505,8 @@ $(function () {
 			startDM: function (part) {
 				gIsDming = true;
 				gDmParticipant = part;
-				$("#chat-input")[0].placeholder = "Direct messaging " + part.name + ".";
+				$("#chat-input")[0].placeholder =
+					"Direct messaging " + part.name + ".";
 			},
 
 			endDM: function () {
@@ -3373,7 +3537,8 @@ $(function () {
 				gMessageId = id;
 				gReplyParticipant = part;
 				gDmParticipant = part;
-				$("#chat-input")[0].placeholder = `Replying to ${part.name} in a DM.`;
+				$("#chat-input")[0].placeholder =
+					`Replying to ${part.name} in a DM.`;
 			},
 
 			cancelReply: function (part) {
@@ -3416,19 +3581,28 @@ $(function () {
 			},
 
 			send: function (message) {
-				function parseBloated(msg, joiner = gBloatJoiner, padding = gBloatPadding, joinlen, maxLen = 512)  {
+				function parseBloated(
+					msg,
+					joiner = gBloatJoiner,
+					padding = gBloatPadding,
+					joinlen,
+					maxLen = 512,
+				) {
+					if (typeof msg !== "string") msg = msg.toString();
+					if (!gIsBloating) return msg;
+					const computemsg = () =>
+						msg
+							.split("")
+							.join(joiner.repeat(joinlen))
+							.padEnd(maxLen, padding);
+
 					if (joinlen == null) {
 						joinlen = 0;
-						while (msg.length * joinlen <= maxLen) {
+						while (computemsg().length * joinlen <= maxLen) {
 							joinlen++;
 						}
 					}
-					if (gIsBloating)
-						return msg
-							   .split('')
-							   .join(joiner.repeat(joinlen))
-							   .padEnd(maxLen, padding).slice(0, maxLen);
-					else return msg;
+					return computemsg().slice(0, maxLen);
 				}
 
 				if (gIsReplying) {
@@ -3459,9 +3633,17 @@ $(function () {
 					}
 				} else {
 					if (gIsDming) {
-						gClient.sendArray([{ m: "dm", _id: gDmParticipant._id, message: parseBloated(message) }]);
+						gClient.sendArray([
+							{
+								m: "dm",
+								_id: gDmParticipant._id,
+								message: parseBloated(message),
+							},
+						]);
 					} else {
-						gClient.sendArray([{ m: "a", message: parseBloated(message) }]);
+						gClient.sendArray([
+							{ m: "a", message: parseBloated(message) },
+						]);
 					}
 				}
 			},
@@ -3490,7 +3672,8 @@ $(function () {
 					liString += `<span class="reply"/>`;
 				}
 
-				if (gShowTimestampsInChat) liString += '<span class="timestamp"/>';
+				if (gShowTimestampsInChat)
+					liString += '<span class="timestamp"/>';
 
 				if (msg.m === "dm") {
 					if (msg.sender._id === gClient.user._id) {
@@ -3531,16 +3714,18 @@ $(function () {
 					}
 					if (repliedMsg) {
 						li.find(".replyLink").text(
-							`➥ ${repliedMsg.m === "dm"
-								? repliedMsg.sender.name
-								: repliedMsg.p.name
+							`➥ ${
+								repliedMsg.m === "dm"
+									? repliedMsg.sender.name
+									: repliedMsg.p.name
 							}`,
 						);
 						li.find(".replyLink").css({
-							background: `${(repliedMsg?.m === "dm"
+							background: `${
+								(repliedMsg?.m === "dm"
 									? repliedMsg?.sender?.color
 									: repliedMsg?.p?.color) ?? "gray"
-								}`,
+							}`,
 						});
 						li.find(".replyLink").on("click", (evt) => {
 							$("#chat-input").focus();
@@ -3548,14 +3733,16 @@ $(function () {
 								.getElementById(`msg-${repliedMsg?.id}`)
 								.scrollIntoView({ behavior: "smooth" });
 							$(`#msg-${repliedMsg?.id}`).css({
-								border: `1px solid ${repliedMsg?.m === "dm"
+								border: `1px solid ${
+									repliedMsg?.m === "dm"
 										? repliedMsg.sender?.color
 										: repliedMsg.p?.color
-									}80`,
-								"background-color": `${repliedMsg?.m === "dm"
+								}80`,
+								"background-color": `${
+									repliedMsg?.m === "dm"
 										? repliedMsg.sender?.color
 										: repliedMsg.p?.color
-									}20`,
+								}20`,
 							});
 							setTimeout(() => {
 								$(`#msg-${repliedMsg?.id}`).css({
@@ -3591,37 +3778,44 @@ $(function () {
 				}
 
 				if (gShowTimestampsInChat) {
-					li.find(".timestamp").text(new Date(msg.t).toLocaleTimeString());
+					li.find(".timestamp").text(
+						new Date(msg.t).toLocaleTimeString(),
+					);
 				}
 
-				const message = parseMarkdown(parseContent(msg.a), parseUrl).replace(
-					/@([\da-f]{24})/g,
-					(match, id) => {
-						const user = gClient.ppl[id];
-						if (user) {
-							const nick = parseContent(user.name);
-							if (user.id === gClient.getOwnParticipant().id) {
-								if (!tabIsActive) {
-									youreMentioned = true;
-									document.title = window.i18nextify.i18next.t(
-										"You were mentioned!",
-									);
-								}
-								return `<span class="mention" style="background-color: ${user.color};">${nick}</span>`;
-							} else return `@${nick}`;
-						} else return match;
-					},
-				);
+				const message = parseMarkdown(
+					parseContent(msg.a),
+					parseUrl,
+				).replace(/@([\da-f]{24})/g, (match, id) => {
+					const user = gClient.ppl[id];
+					if (user) {
+						const nick = parseContent(user.name);
+						if (user.id === gClient.getOwnParticipant().id) {
+							if (!tabIsActive) {
+								youreMentioned = true;
+								document.title = window.i18nextify.i18next.t(
+									"You were mentioned!",
+								);
+							}
+							return `<span class="mention" style="background-color: ${user.color};">${nick}</span>`;
+						} else return `@${nick}`;
+					} else return match;
+				});
 
 				//apply names, colors, ids
 				li.find(".message").html(message);
 
 				if (msg.m === "dm") {
 					if (!gNoChatColors)
-						li.find(".message").css("color", msg.sender.color || "white");
+						li.find(".message").css(
+							"color",
+							msg.sender.color || "white",
+						);
 					if (gShowIdsInChat) {
 						if (msg.sender._id === gClient.user._id) {
-							li.find(".id").text(msg.recipient._id.substring(0, 6));
+							li.find(".id").text(
+								msg.recipient._id.substring(0, 6),
+							);
 						} else {
 							li.find(".id").text(msg.sender._id.substring(0, 6));
 						}
@@ -3630,43 +3824,64 @@ $(function () {
 					if (msg.sender._id === gClient.user._id) {
 						//sent dm
 						if (!gNoChatColors)
-							li.find(".name").css("color", msg.recipient.color || "white");
+							li.find(".name").css(
+								"color",
+								msg.recipient.color || "white",
+							);
 						li.find(".name").text(msg.recipient.name + ":");
 						if (gShowChatTooltips) li[0].title = msg.recipient._id;
 					} else if (msg.recipient._id === gClient.user._id) {
 						//received dm
 						if (!gNoChatColors)
-							li.find(".name").css("color", msg.sender.color || "white");
+							li.find(".name").css(
+								"color",
+								msg.sender.color || "white",
+							);
 						li.find(".name").text(msg.sender.name + ":");
 
 						if (gShowChatTooltips) li[0].title = msg.sender._id;
 					} else {
 						//someone else's dm
 						if (!gNoChatColors)
-							li.find(".name").css("color", msg.sender.color || "white");
+							li.find(".name").css(
+								"color",
+								msg.sender.color || "white",
+							);
 						if (!gNoChatColors)
-							li.find(".name2").css("color", msg.recipient.color || "white");
+							li.find(".name2").css(
+								"color",
+								msg.recipient.color || "white",
+							);
 						li.find(".name").text(msg.sender.name);
 						li.find(".name2").text(msg.recipient.name + ":");
 
 						if (gShowIdsInChat)
 							li.find(".id").text(msg.sender._id.substring(0, 6));
 						if (gShowIdsInChat)
-							li.find(".id2").text(msg.recipient._id.substring(0, 6));
+							li.find(".id2").text(
+								msg.recipient._id.substring(0, 6),
+							);
 
 						if (gShowChatTooltips) li[0].title = msg.sender._id;
 					}
 				} else {
 					if (!gNoChatColors)
-						li.find(".message").css("color", msg.p.color || "white");
+						li.find(".message").css(
+							"color",
+							msg.p.color || "white",
+						);
 					if (!gNoChatColors)
 						li.find(".name").css("color", msg.p.color || "white");
 
 					li.find(".name").text(msg.p.name + ":");
 
 					if (!gNoChatColors)
-						li.find(".message").css("color", msg.p.color || "white");
-					if (gShowIdsInChat) li.find(".id").text(msg.p._id.substring(0, 6));
+						li.find(".message").css(
+							"color",
+							msg.p.color || "white",
+						);
+					if (gShowIdsInChat)
+						li.find(".id").text(msg.p._id.substring(0, 6));
 
 					if (gShowChatTooltips) li[0].title = msg.p._id;
 				}
@@ -3710,10 +3925,16 @@ $(function () {
 						MPP.chat.startReply(msg.p, msg.id, msg.a);
 						setTimeout(() => {
 							$(`#msg-${msg.id}`).css({
-								border: `1px solid ${msg?.m === "dm" ? msg.sender?.color : msg.p?.color
-									}80`,
-								"background-color": `${msg?.m === "dm" ? msg.sender?.color : msg.p?.color
-									}20`,
+								border: `1px solid ${
+									msg?.m === "dm"
+										? msg.sender?.color
+										: msg.p?.color
+								}80`,
+								"background-color": `${
+									msg?.m === "dm"
+										? msg.sender?.color
+										: msg.p?.color
+								}20`,
 							});
 						}, 100);
 						setTimeout(() => {
@@ -3729,10 +3950,16 @@ $(function () {
 								MPP.chat.startDmReply(replyingTo, msg.id);
 								setTimeout(() => {
 									$(`#msg-${msg.id}`).css({
-										border: `1px solid ${msg?.m === "dm" ? msg.sender?.color : msg.p?.color
-											}80`,
-										"background-color": `${msg?.m === "dm" ? msg.sender?.color : msg.p?.color
-											}20`,
+										border: `1px solid ${
+											msg?.m === "dm"
+												? msg.sender?.color
+												: msg.p?.color
+										}80`,
+										"background-color": `${
+											msg?.m === "dm"
+												? msg.sender?.color
+												: msg.p?.color
+										}20`,
 									});
 								}, 100);
 								setTimeout(() => {
@@ -3771,7 +3998,10 @@ $(function () {
 					chat.scrollToBottom();
 				} else {
 					var ele = $("#chat ul").get(0);
-					if (ele.scrollTop > ele.scrollHeight - ele.offsetHeight - 50)
+					if (
+						ele.scrollTop >
+						ele.scrollHeight - ele.offsetHeight - 50
+					)
 						chat.scrollToBottom();
 				}
 			},
@@ -3837,23 +4067,24 @@ $(function () {
 							// NOTE_OFF
 							release(
 								MIDI_KEY_NAMES[
-								note_number -
-								9 +
-								MIDI_TRANSPOSE +
-								transpose +
-								pitchBends[channel]
+									note_number -
+										9 +
+										MIDI_TRANSPOSE +
+										transpose +
+										pitchBends[channel]
 								],
 							);
 						} else if (cmd == 9) {
 							// NOTE_ON
-							if (evt.target.volume !== undefined) vel *= evt.target.volume;
+							if (evt.target.volume !== undefined)
+								vel *= evt.target.volume;
 							press(
 								MIDI_KEY_NAMES[
-								note_number -
-								9 +
-								MIDI_TRANSPOSE +
-								transpose +
-								pitchBends[channel]
+									note_number -
+										9 +
+										MIDI_TRANSPOSE +
+										transpose +
+										pitchBends[channel]
 								],
 								vel / 127,
 							);
@@ -3869,7 +4100,8 @@ $(function () {
 								}
 							}
 						} else if (cmd == 14) {
-							var pitchMod = evt.data[1] + (evt.data[2] << 7) - 0x2000;
+							var pitchMod =
+								evt.data[1] + (evt.data[2] << 7) - 0x2000;
 							pitchMod = Math.round(pitchMod / 1000);
 							pitchBends[channel] = pitchMod;
 						}
@@ -3961,9 +4193,13 @@ $(function () {
 								delay_ms,
 								participantId,
 							) {
-								if (!gOutputOwnNotes && participantId === gClient.participantId)
+								if (
+									!gOutputOwnNotes &&
+									participantId === gClient.participantId
+								)
 									return;
-								var note_number = MIDI_KEY_NAMES.indexOf(note_name);
+								var note_number =
+									MIDI_KEY_NAMES.indexOf(note_name);
 								if (note_number == -1) return;
 								note_number = note_number + 9 - MIDI_TRANSPOSE;
 								var outputs = midi.outputs.values();
@@ -3975,7 +4211,8 @@ $(function () {
 									var output = output_it.value;
 									if (output.enabled) {
 										var v = vel;
-										if (output.volume !== undefined) v *= output.volume;
+										if (output.volume !== undefined)
+											v *= output.volume;
 										output.send(
 											[0x90, note_number, v],
 											window.performance.now() + delay_ms,
@@ -4023,9 +4260,13 @@ $(function () {
 										input_it = inputs.next()
 									) {
 										var input = input_it.value;
-										if (input.id === evt.target.connectionId) {
+										if (
+											input.id === evt.target.connectionId
+										) {
 											input.enabled = !input.enabled;
-											evt.target.classList.toggle("enabled");
+											evt.target.classList.toggle(
+												"enabled",
+											);
 											//console.log("click", input);
 											updateDevices();
 											return;
@@ -4040,7 +4281,14 @@ $(function () {
 										className: "knob",
 									});
 									li.appendChild(knob);
-									knob = new Knob(knob, 0, 2, 0.01, input.volume, "volume");
+									knob = new Knob(
+										knob,
+										0,
+										2,
+										0.01,
+										input.volume,
+										"volume",
+									);
 									knob.canvas.style.width = "16px";
 									knob.canvas.style.height = "16px";
 									knob.canvas.style.float = "right";
@@ -4076,9 +4324,14 @@ $(function () {
 										output_it = outputs.next()
 									) {
 										var output = output_it.value;
-										if (output.id === evt.target.connectionId) {
+										if (
+											output.id ===
+											evt.target.connectionId
+										) {
 											output.enabled = !output.enabled;
-											evt.target.classList.toggle("enabled");
+											evt.target.classList.toggle(
+												"enabled",
+											);
 											//console.log("click", output);
 											updateDevices();
 											return;
@@ -4093,7 +4346,14 @@ $(function () {
 										className: "knob",
 									});
 									li.appendChild(knob);
-									knob = new Knob(knob, 0, 2, 0.01, output.volume, "volume");
+									knob = new Knob(
+										knob,
+										0,
+										2,
+										0.01,
+										output.volume,
+										"volume",
+									);
 									knob.canvas.style.width = "16px";
 									knob.canvas.style.height = "16px";
 									knob.canvas.style.float = "right";
@@ -4132,7 +4392,11 @@ $(function () {
 					document
 						.getElementById("midi-btn")
 						.addEventListener("click", function (evt) {
-							if (!document.getElementById("Notification-MIDI-Connections"))
+							if (
+								!document.getElementById(
+									"Notification-MIDI-Connections",
+								)
+							)
 								showConnections(true);
 							else {
 								connectionsNotification.close();
@@ -4305,7 +4569,9 @@ $(function () {
 				});
 				button.addEventListener("click", function (evt) {
 					enableSynth = !enableSynth;
-					button.className = enableSynth ? "switched-on" : "switched-off";
+					button.className = enableSynth
+						? "switched-on"
+						: "switched-off";
 					if (!enableSynth) {
 						// stop all
 						for (var i in audio.playings) {
@@ -4345,10 +4611,13 @@ $(function () {
 				var button = document.createElement("input");
 				mixin(button, {
 					type: "button",
-					value: window.i18nextify.i18next.t(osc_types[osc_type_index]),
+					value: window.i18nextify.i18next.t(
+						osc_types[osc_type_index],
+					),
 				});
 				button.addEventListener("click", function (evt) {
-					if (++osc_type_index >= osc_types.length) osc_type_index = 0;
+					if (++osc_type_index >= osc_types.length)
+						osc_type_index = 0;
 					osc1_type = osc_types[osc_type_index];
 					button.value = window.i18nextify.i18next.t(osc1_type);
 				});
@@ -4394,7 +4663,15 @@ $(function () {
 				className: "knob",
 			});
 			html.appendChild(knob);
-			knob = new Knob(knob, 0, 1, 0.001, osc1_sustain, "osc1 sustain", "x");
+			knob = new Knob(
+				knob,
+				0,
+				1,
+				0.001,
+				osc1_sustain,
+				"osc1 sustain",
+				"x",
+			);
 			knob.canvas.style.width = "32px";
 			knob.canvas.style.height = "32px";
 			knob.on("change", function (k) {
@@ -4410,7 +4687,15 @@ $(function () {
 				className: "knob",
 			});
 			html.appendChild(knob);
-			knob = new Knob(knob, 0, 2, 0.001, osc1_release, "osc1 release", "s");
+			knob = new Knob(
+				knob,
+				0,
+				2,
+				0.001,
+				osc1_release,
+				"osc1 release",
+				"s",
+			);
 			knob.canvas.style.width = "32px";
 			knob.canvas.style.height = "32px";
 			knob.on("change", function (k) {
@@ -4464,7 +4749,8 @@ $(function () {
 					}
 					setting.onclick = function () {
 						setting.classList.toggle("enabled");
-						localStorage.showIdsInChat = setting.classList.contains("enabled");
+						localStorage.showIdsInChat =
+							setting.classList.contains("enabled");
 						gShowIdsInChat = setting.classList.contains("enabled");
 					};
 					html.appendChild(setting);
@@ -4482,7 +4768,8 @@ $(function () {
 						setting.classList.toggle("enabled");
 						localStorage.showTimestampsInChat =
 							setting.classList.contains("enabled");
-						gShowTimestampsInChat = setting.classList.contains("enabled");
+						gShowTimestampsInChat =
+							setting.classList.contains("enabled");
 					};
 					html.appendChild(setting);
 				})();
@@ -4497,7 +4784,8 @@ $(function () {
 					}
 					setting.onclick = function () {
 						setting.classList.toggle("enabled");
-						localStorage.noChatColors = setting.classList.contains("enabled");
+						localStorage.noChatColors =
+							setting.classList.contains("enabled");
 						gNoChatColors = setting.classList.contains("enabled");
 					};
 					html.appendChild(setting);
@@ -4515,8 +4803,12 @@ $(function () {
 						setting.classList.toggle("enabled");
 						localStorage.noBackgroundColor =
 							setting.classList.contains("enabled");
-						gNoBackgroundColor = setting.classList.contains("enabled");
-						if (gClient.channel.settings.color && !gNoBackgroundColor) {
+						gNoBackgroundColor =
+							setting.classList.contains("enabled");
+						if (
+							gClient.channel.settings.color &&
+							!gNoBackgroundColor
+						) {
 							setBackgroundColor(
 								gClient.channel.settings.color,
 								gClient.channel.settings.color2,
@@ -4538,7 +4830,8 @@ $(function () {
 					}
 					setting.onclick = function () {
 						setting.classList.toggle("enabled");
-						localStorage.outputOwnNotes = setting.classList.contains("enabled");
+						localStorage.outputOwnNotes =
+							setting.classList.contains("enabled");
 						gOutputOwnNotes = setting.classList.contains("enabled");
 					};
 					html.appendChild(setting);
@@ -4556,8 +4849,11 @@ $(function () {
 						setting.classList.toggle("enabled");
 						localStorage.virtualPianoLayout =
 							setting.classList.contains("enabled");
-						gVirtualPianoLayout = setting.classList.contains("enabled");
-						key_binding = gVirtualPianoLayout ? layouts.VP : layouts.MPP;
+						gVirtualPianoLayout =
+							setting.classList.contains("enabled");
+						key_binding = gVirtualPianoLayout
+							? layouts.VP
+							: layouts.MPP;
 					};
 					html.appendChild(setting);
 				})();
@@ -4575,7 +4871,8 @@ $(function () {
 						setting.classList.toggle("enabled");
 						localStorage.showChatTooltips =
 							setting.classList.contains("enabled");
-						gShowChatTooltips = setting.classList.contains("enabled");
+						gShowChatTooltips =
+							setting.classList.contains("enabled");
 					};
 					html.appendChild(setting);
 				})();
@@ -4589,7 +4886,8 @@ $(function () {
 					}
 					setting.onclick = function () {
 						setting.classList.toggle("enabled");
-						localStorage.showPianoNotes = setting.classList.contains("enabled");
+						localStorage.showPianoNotes =
+							setting.classList.contains("enabled");
 						gShowPianoNotes = setting.classList.contains("enabled");
 					};
 					html.appendChild(setting);
@@ -4605,7 +4903,8 @@ $(function () {
 					}
 					setting.onclick = function () {
 						setting.classList.toggle("enabled");
-						localStorage.smoothCursor = setting.classList.contains("enabled");
+						localStorage.smoothCursor =
+							setting.classList.contains("enabled");
 						gSmoothCursor = setting.classList.contains("enabled");
 						if (gSmoothCursor) {
 							$("#cursors").attr("smooth-cursors", "");
@@ -4613,26 +4912,33 @@ $(function () {
 							$("#cursors").removeAttr("smooth-cursors");
 						}
 						if (gSmoothCursor) {
-							Object.values(gClient.ppl).forEach(function (participant) {
-								if (participant.cursorDiv) {
-									participant.cursorDiv.style.left = "";
-									participant.cursorDiv.style.top = "";
-									participant.cursorDiv.style.transform =
-										"translate3d(" +
-										participant.x +
-										"vw, " +
-										participant.y +
-										"vh, 0)";
-								}
-							});
+							Object.values(gClient.ppl).forEach(
+								function (participant) {
+									if (participant.cursorDiv) {
+										participant.cursorDiv.style.left = "";
+										participant.cursorDiv.style.top = "";
+										participant.cursorDiv.style.transform =
+											"translate3d(" +
+											participant.x +
+											"vw, " +
+											participant.y +
+											"vh, 0)";
+									}
+								},
+							);
 						} else {
-							Object.values(gClient.ppl).forEach(function (participant) {
-								if (participant.cursorDiv) {
-									participant.cursorDiv.style.left = participant.x + "%";
-									participant.cursorDiv.style.top = participant.y + "%";
-									participant.cursorDiv.style.transform = "";
-								}
-							});
+							Object.values(gClient.ppl).forEach(
+								function (participant) {
+									if (participant.cursorDiv) {
+										participant.cursorDiv.style.left =
+											participant.x + "%";
+										participant.cursorDiv.style.top =
+											participant.y + "%";
+										participant.cursorDiv.style.transform =
+											"";
+									}
+								},
+							);
 						}
 					};
 					html.appendChild(setting);
@@ -4678,7 +4984,8 @@ $(function () {
 					}
 					setting.onclick = function () {
 						setting.classList.toggle("enabled");
-						localStorage.hideAllCursors = setting.classList.contains("enabled");
+						localStorage.hideAllCursors =
+							setting.classList.contains("enabled");
 						gHideAllCursors = setting.classList.contains("enabled");
 						if (gHideAllCursors) {
 							$("#cursors").hide();
@@ -4726,7 +5033,9 @@ $(function () {
 		} else {
 			var button = document.getElementById("client-settings-btn");
 			var content = document.getElementById("client-settings-content");
-			var tablinks = document.querySelectorAll(".client-settings-tablink");
+			var tablinks = document.querySelectorAll(
+				".client-settings-tablink",
+			);
 			var okButton = document.getElementById("client-settings-ok-btn");
 
 			button.addEventListener("click", (evt) => {
@@ -4760,12 +5069,12 @@ $(function () {
 
 			// Setup Client tab event listeners
 			document
-				.getElementById('toggle-filter-bypass')
-				.addEventListener('change', (evt) => {
+				.getElementById("toggle-filter-bypass")
+				.addEventListener("change", (evt) => {
 					gIsBloating = evt.target.checked;
 					localStorage.isBloating = gIsBloating;
 				});
-			
+
 			// Setup Chat tab event listeners
 			document
 				.getElementById("show-timestamps-in-chat")
@@ -4795,13 +5104,15 @@ $(function () {
 					localStorage.noChatColors = gNoChatColors;
 				});
 
-			document.getElementById("hide-chat").addEventListener("change", (evt) => {
-				gHideChatLocal = evt.target.checked;
-				localStorage.hideChat = gHideChatLocal;
+			document
+				.getElementById("hide-chat")
+				.addEventListener("change", (evt) => {
+					gHideChatLocal = evt.target.checked;
+					localStorage.hideChat = gHideChatLocal;
 
-				if (gHideChatLocal) $("#chat").hide();
-				else $("#chat").show();
-			});
+					if (gHideChatLocal) $("#chat").hide();
+					else $("#chat").show();
+				});
 
 			document
 				.getElementById("cancel-dms")
@@ -4822,7 +5133,8 @@ $(function () {
 				.getElementById("disable-midi-drum-channel")
 				.addEventListener("change", (evt) => {
 					gDisableMIDIDrumChannel = evt.target.checked;
-					localStorage.disableMIDIDrumChannel = gDisableMIDIDrumChannel;
+					localStorage.disableMIDIDrumChannel =
+						gDisableMIDIDrumChannel;
 				});
 
 			// Setup Piano tab event listeners
@@ -4831,7 +5143,9 @@ $(function () {
 				.addEventListener("change", (evt) => {
 					gVirtualPianoLayout = evt.target.checked;
 					localStorage.virtualPianoLayout = gVirtualPianoLayout;
-					key_binding = gVirtualPianoLayout ? layouts.VP : layouts.MPP;
+					key_binding = gVirtualPianoLayout
+						? layouts.VP
+						: layouts.MPP;
 				});
 
 			document
@@ -4918,27 +5232,33 @@ $(function () {
 					localStorage.smoothCursor = gSmoothCursor;
 					if (gSmoothCursor) {
 						$("#cursors").attr("smooth-cursors", "");
-						Object.values(gClient.ppl).forEach(function (participant) {
-							if (participant.cursorDiv) {
-								participant.cursorDiv.style.left = "";
-								participant.cursorDiv.style.top = "";
-								participant.cursorDiv.style.transform =
-									"translate3d(" +
-									participant.x +
-									"vw, " +
-									participant.y +
-									"vh, 0)";
-							}
-						});
+						Object.values(gClient.ppl).forEach(
+							function (participant) {
+								if (participant.cursorDiv) {
+									participant.cursorDiv.style.left = "";
+									participant.cursorDiv.style.top = "";
+									participant.cursorDiv.style.transform =
+										"translate3d(" +
+										participant.x +
+										"vw, " +
+										participant.y +
+										"vh, 0)";
+								}
+							},
+						);
 					} else {
 						$("#cursors").removeAttr("smooth-cursors");
-						Object.values(gClient.ppl).forEach(function (participant) {
-							if (participant.cursorDiv) {
-								participant.cursorDiv.style.left = participant.x + "%";
-								participant.cursorDiv.style.top = participant.y + "%";
-								participant.cursorDiv.style.transform = "";
-							}
-						});
+						Object.values(gClient.ppl).forEach(
+							function (participant) {
+								if (participant.cursorDiv) {
+									participant.cursorDiv.style.left =
+										participant.x + "%";
+									participant.cursorDiv.style.top =
+										participant.y + "%";
+									participant.cursorDiv.style.transform = "";
+								}
+							},
+						);
 					}
 				});
 
@@ -4989,11 +5309,14 @@ $(function () {
 			}
 
 			// Initialize checkboxes with current values
-			document.getElementById("toggle-filter-bypass").checked = gIsBloating;
+			document.getElementById("toggle-filter-bypass").checked =
+				gIsBloating;
 			document.getElementById("show-timestamps-in-chat").checked =
 				gShowTimestampsInChat;
-			document.getElementById("show-user-ids-in-chat").checked = gShowIdsInChat;
-			document.getElementById("show-id-tooltips").checked = gShowChatTooltips;
+			document.getElementById("show-user-ids-in-chat").checked =
+				gShowIdsInChat;
+			document.getElementById("show-id-tooltips").checked =
+				gShowChatTooltips;
 			document.getElementById("no-chat-colors").checked = gNoChatColors;
 			document.getElementById("hide-chat").checked = gHideChatLocal;
 			document.getElementById("cancel-dms").checked = gCancelDMs;
@@ -5003,14 +5326,17 @@ $(function () {
 				gDisableMIDIDrumChannel;
 			document.getElementById("virtual-piano-layout").checked =
 				gVirtualPianoLayout;
-			document.getElementById("show-piano-notes").checked = gShowPianoNotes;
+			document.getElementById("show-piano-notes").checked =
+				gShowPianoNotes;
 			document.getElementById("hide-piano").checked = gHidePianoLocal;
 			document.getElementById("dont-use-prevent-default").checked =
 				gNoPreventDefault;
 			document.getElementById("force-dark-background").checked =
 				gNoBackgroundColor;
-			document.getElementById("enable-smooth-cursors").checked = gSmoothCursor;
-			document.getElementById("hide-all-cursors").checked = gHideAllCursors;
+			document.getElementById("enable-smooth-cursors").checked =
+				gSmoothCursor;
+			document.getElementById("hide-all-cursors").checked =
+				gHideAllCursors;
 			document.getElementById("hide-bot-users").checked = gHideBotUsers;
 			if (new Date().getMonth() === 11) {
 				document.getElementById("snowflakes").checked = gSnowflakes;
@@ -5084,7 +5410,7 @@ $(function () {
 					window.oRequestAnimationFrame ||
 					window.msRequestAnimationFrame ||
 					function (callback) {
-						return window.setTimeout(callback, 1e3/60);
+						return window.setTimeout(callback, 1e3 / 60);
 					}
 				);
 			})();
@@ -5114,7 +5440,12 @@ $(function () {
 			streamingConfetti = true;
 			if (animationTimer === null) {
 				(function runAnimation() {
-					context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+					context.clearRect(
+						0,
+						0,
+						window.innerWidth,
+						window.innerHeight,
+					);
 					if (particles.length === 0) animationTimer = null;
 					else {
 						updateParticles();
@@ -5153,7 +5484,10 @@ $(function () {
 				context.shadowOffsetX = 0;
 				x = particle.x + particle.tilt;
 				context.moveTo(x + particle.diameter / 2, particle.y);
-				context.lineTo(x, particle.y + particle.tilt + particle.diameter / 2);
+				context.lineTo(
+					x,
+					particle.y + particle.tilt + particle.diameter / 2,
+				);
 				context.stroke();
 			}
 		}
@@ -5165,12 +5499,16 @@ $(function () {
 			waveAngle += 0.01;
 			for (var i = 0; i < particles.length; i++) {
 				particle = particles[i];
-				if (!streamingConfetti && particle.y < -15) particle.y = height + 100;
+				if (!streamingConfetti && particle.y < -15)
+					particle.y = height + 100;
 				else {
 					particle.tiltAngle += particle.tiltAngleIncrement;
 					particle.x += Math.sin(waveAngle);
 					particle.y +=
-						(Math.cos(waveAngle) + particle.diameter + particleSpeed) * 0.5;
+						(Math.cos(waveAngle) +
+							particle.diameter +
+							particleSpeed) *
+						0.5;
 					particle.tilt = Math.sin(particle.tiltAngle) * 15;
 				}
 				if (
@@ -5178,7 +5516,10 @@ $(function () {
 					particle.x < -20 ||
 					particle.y > height
 				) {
-					if (streamingConfetti && particles.length <= maxParticleCount)
+					if (
+						streamingConfetti &&
+						particles.length <= maxParticleCount
+					)
 						resetParticle(particle, width, height);
 					else {
 						particles.splice(i, 1);
@@ -5230,7 +5571,8 @@ $(function () {
 			.querySelector("#language > button")
 			.addEventListener("click", async (e) => {
 				await i18nextify.i18next.changeLanguage(
-					document.querySelector("#languages").selectedOptions[0].value,
+					document.querySelector("#languages").selectedOptions[0]
+						.value,
 				);
 				i18nextify.forceRerender();
 				closeModal();
