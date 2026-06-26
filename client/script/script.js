@@ -4989,6 +4989,7 @@ $(function () {
 			}
 
 			// Initialize checkboxes with current values
+			document.getElementById("toggle-filter-bypass").checked = gIsBloating;
 			document.getElementById("show-timestamps-in-chat").checked =
 				gShowTimestampsInChat;
 			document.getElementById("show-user-ids-in-chat").checked = gShowIdsInChat;
