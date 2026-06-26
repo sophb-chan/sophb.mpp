@@ -1004,10 +1004,10 @@ $(function () {
 			addKey("a", -1);
 			addKey("as", -1);
 			addKey("b", -1);
-			var notes = "c cs d ds e f fs g gs a as b".split(" ");
-			for (var oct = 0; oct < 7; oct++) {
-				for (var i in notes) {
-					addKey(notes[i], oct);
+			const notes = "c cs d ds e f fs g gs a as b".split(" ");
+			for (let octave = 0; octave < 7; octave++) {
+				for (const note of notes) {
+					addKey(note, octave);
 				}
 			}
 			addKey("c", 7);
