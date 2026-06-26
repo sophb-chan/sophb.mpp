@@ -79,17 +79,19 @@ $(function () {
 
 	////////////////////////////////////////////////////////////////
 
-	var Rect = function (x, y, w, h) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-		this.x2 = x + w;
-		this.y2 = y + h;
-	};
-	Rect.prototype.contains = function (x, y) {
-		return x >= this.x && x <= this.x2 && y >= this.y && y <= this.y2;
-	};
+	class Rect {
+		constructor(x, y, w, h) {
+			this.x = x;
+			this.y = y;
+			this.w = w;
+			this.h = h;
+			this.x2 = x + w;
+			this.y2 = y + h;
+		}
+		contains(x, y) {
+			return x >= this.x && x <= this.x2 && y >= this.y && y <= this.y2;
+		}
+	}
 
 	const BASIC_PIANO_SCALES = {
 		// ty https://www.pianoscales.org/
@@ -125,28 +127,30 @@ $(function () {
 
 	////////////////////////////////////////////////////////////////
 
-	var AudioEngine = function () { };
+	class AudioEngine {
+		constructor() { }
+		init(cb) {
+			this.volume = 0.6;
+			this.sounds = {};
+			this.paused = true;
+			return this;
+		}
+		load(id, url, cb) { }
+		play() { }
+		stop() { }
+		setVolume(vol) {
+			this.volume = vol;
+		}
+		resume() {
+			this.paused = false;
+		}
+	}
 
-	AudioEngine.prototype.init = function (cb) {
-		this.volume = 0.6;
-		this.sounds = {};
-		this.paused = true;
-		return this;
-	};
 
-	AudioEngine.prototype.load = function (id, url, cb) { };
 
-	AudioEngine.prototype.play = function () { };
 
-	AudioEngine.prototype.stop = function () { };
 
-	AudioEngine.prototype.setVolume = function (vol) {
-		this.volume = vol;
-	};
 
-	AudioEngine.prototype.resume = function () {
-		this.paused = false;
-	};
 
 	AudioEngineWeb = function () {
 		this.threshold = 0;
@@ -336,459 +340,462 @@ $(function () {
 
 	////////////////////////////////////////////////////////////////
 
-	var Renderer = function () { };
+	class Renderer {
+		constructor() { }
+		init(piano) {
+			this.piano = piano;
+			this.resize();
+			return this;
+		}
+		resize(width, height) {
+			if (typeof width == "undefined") width = $(this.piano.rootElement).width();
+			if (typeof height == "undefined") height = Math.floor(width * 0.2);
+			$(this.piano.rootElement).css({
+				height: height + "px",
+				marginTop: Math.floor($(window).height() / 2 - height / 2) + "px",
+			});
+			this.width = width * window.devicePixelRatio;
+			this.height = height * window.devicePixelRatio;
+		}
+		visualize(key, color) { }
+	}
 
-	Renderer.prototype.init = function (piano) {
-		this.piano = piano;
-		this.resize();
-		return this;
-	};
 
-	Renderer.prototype.resize = function (width, height) {
-		if (typeof width == "undefined") width = $(this.piano.rootElement).width();
-		if (typeof height == "undefined") height = Math.floor(width * 0.2);
-		$(this.piano.rootElement).css({
-			height: height + "px",
-			marginTop: Math.floor($(window).height() / 2 - height / 2) + "px",
-		});
-		this.width = width * window.devicePixelRatio;
-		this.height = height * window.devicePixelRatio;
-	};
 
-	Renderer.prototype.visualize = function (key, color) { };
 
-	var CanvasRenderer = function () {
-		Renderer.call(this);
-	};
+	class CanvasRenderer {
+		constructor() {
+			Renderer.call(this);
+		}
+		static isSupported() {
+			var canvas = document.createElement("canvas");
+			return !!(canvas.getContext && canvas.getContext("2d"));
+		}
+		static translateMouseEvent(evt) {
+			var element = evt.target;
+			var offx = 0;
+			var offy = 0;
+			do {
+				if (!element) break; // wtf, wtf?
+				offx += element.offsetLeft;
+				offy += element.offsetTop;
+			} while ((element = element.offsetParent));
+			return {
+				x: (evt.pageX - offx) * window.devicePixelRatio,
+				y: (evt.pageY - offy) * window.devicePixelRatio,
+			};
+		}
+		init(piano) {
+			this.canvas = document.createElement("canvas");
+			this.ctx = this.canvas.getContext("2d");
+			piano.rootElement.appendChild(this.canvas);
 
-	CanvasRenderer.prototype = new Renderer();
+			Renderer.prototype.init.call(this, piano); // calls resize()
 
-	CanvasRenderer.prototype.init = function (piano) {
-		this.canvas = document.createElement("canvas");
-		this.ctx = this.canvas.getContext("2d");
-		piano.rootElement.appendChild(this.canvas);
 
-		Renderer.prototype.init.call(this, piano); // calls resize()
-
-		// create render loop
-		var self = this;
-		var render = function () {
-			self.redraw();
+			// create render loop
+			var self = this;
+			var render = function () {
+				self.redraw();
+				requestAnimationFrame(render);
+			};
 			requestAnimationFrame(render);
-		};
-		requestAnimationFrame(render);
 
-		// add event listeners
-		var mouse_down = false;
-		var last_key = null;
-		$(piano.rootElement).mousedown(function (event) {
-			mouse_down = true;
-			//event.stopPropagation();
-			if (!gNoPreventDefault) event.preventDefault();
-
-			var pos = CanvasRenderer.translateMouseEvent(event);
-			var hit = self.getHit(pos.x, pos.y);
-			if (hit) {
-				press(hit.key.note, hit.v);
-				last_key = hit.key;
-			}
-		});
-		piano.rootElement.addEventListener(
-			"touchstart",
-			function (event) {
+			// add event listeners
+			var mouse_down = false;
+			var last_key = null;
+			$(piano.rootElement).mousedown(function (event) {
 				mouse_down = true;
 				//event.stopPropagation();
 				if (!gNoPreventDefault) event.preventDefault();
-				for (var i in event.changedTouches) {
-					var pos = CanvasRenderer.translateMouseEvent(event.changedTouches[i]);
-					var hit = self.getHit(pos.x, pos.y);
-					if (hit) {
-						press(hit.key.note, hit.v);
-						last_key = hit.key;
-					}
+
+				var pos = CanvasRenderer.translateMouseEvent(event);
+				var hit = self.getHit(pos.x, pos.y);
+				if (hit) {
+					press(hit.key.note, hit.v);
+					last_key = hit.key;
 				}
-			},
-			false,
-		);
-		$(window).mouseup(function (event) {
-			if (last_key) {
-				release(last_key.note);
+			});
+			piano.rootElement.addEventListener(
+				"touchstart",
+				function (event) {
+					mouse_down = true;
+					//event.stopPropagation();
+					if (!gNoPreventDefault) event.preventDefault();
+					for (var i in event.changedTouches) {
+						var pos = CanvasRenderer.translateMouseEvent(event.changedTouches[i]);
+						var hit = self.getHit(pos.x, pos.y);
+						if (hit) {
+							press(hit.key.note, hit.v);
+							last_key = hit.key;
+						}
+					}
+				},
+				false
+			);
+			$(window).mouseup(function (event) {
+				if (last_key) {
+					release(last_key.note);
+				}
+				mouse_down = false;
+				last_key = null;
+			});
+			/*$(piano.rootElement).mousemove(function(event) {
+			  if(!mouse_down) return;
+			  var pos = CanvasRenderer.translateMouseEvent(event);
+			  var hit = self.getHit(pos.x, pos.y);
+			  if(hit && hit.key != last_key) {
+				press(hit.key.note, hit.v);
+				last_key = hit.key;
+			  }
+			});*/
+			return this;
+		}
+		resize(width, height) {
+			Renderer.prototype.resize.call(this, width, height);
+			if (this.width < 52 * 2) this.width = 52 * 2;
+			if (this.height < this.width * 0.2)
+				this.height = Math.floor(this.width * 0.2);
+			this.canvas.width = this.width;
+			this.canvas.height = this.height;
+			this.canvas.style.width = this.width / window.devicePixelRatio + "px";
+			this.canvas.style.height = this.height / window.devicePixelRatio + "px";
+
+			// calculate key sizes
+			this.whiteKeyWidth = Math.floor(this.width / 52);
+			this.whiteKeyHeight = Math.floor(this.height * 0.9);
+			this.blackKeyWidth = Math.floor(this.whiteKeyWidth * 0.75);
+			this.blackKeyHeight = Math.floor(this.height * 0.5);
+
+			this.blackKeyOffset = Math.floor(
+				this.whiteKeyWidth - this.blackKeyWidth / 2
+			);
+			this.keyMovement = Math.floor(this.whiteKeyHeight * 0.015);
+
+			this.whiteBlipWidth = Math.floor(this.whiteKeyWidth * 0.7);
+			this.whiteBlipHeight = Math.floor(this.whiteBlipWidth * 0.8);
+			this.whiteBlipX = Math.floor(
+				(this.whiteKeyWidth - this.whiteBlipWidth) / 2
+			);
+			this.whiteBlipY = Math.floor(
+				this.whiteKeyHeight - this.whiteBlipHeight * 1.2
+			);
+			this.blackBlipWidth = Math.floor(this.blackKeyWidth * 0.7);
+			this.blackBlipHeight = Math.floor(this.blackBlipWidth * 0.8);
+			this.blackBlipY = Math.floor(
+				this.blackKeyHeight - this.blackBlipHeight * 1.2
+			);
+			this.blackBlipX = Math.floor(
+				(this.blackKeyWidth - this.blackBlipWidth) / 2
+			);
+
+			// prerender white key
+			this.whiteKeyRender = document.createElement("canvas");
+			this.whiteKeyRender.width = this.whiteKeyWidth;
+			this.whiteKeyRender.height = this.height + 10;
+			var ctx = this.whiteKeyRender.getContext("2d");
+			if (ctx.createLinearGradient) {
+				var gradient = ctx.createLinearGradient(0, 0, 0, this.whiteKeyHeight);
+				gradient.addColorStop(0, "#eee");
+				gradient.addColorStop(0.75, "#fff");
+				gradient.addColorStop(1, "#dad4d4");
+				ctx.fillStyle = gradient;
+			} else {
+				ctx.fillStyle = "#fff";
 			}
-			mouse_down = false;
-			last_key = null;
-		});
-		/*$(piano.rootElement).mousemove(function(event) {
-		  if(!mouse_down) return;
-		  var pos = CanvasRenderer.translateMouseEvent(event);
-		  var hit = self.getHit(pos.x, pos.y);
-		  if(hit && hit.key != last_key) {
-			press(hit.key.note, hit.v);
-			last_key = hit.key;
-		  }
-		});*/
-
-		return this;
-	};
-
-	CanvasRenderer.prototype.resize = function (width, height) {
-		Renderer.prototype.resize.call(this, width, height);
-		if (this.width < 52 * 2) this.width = 52 * 2;
-		if (this.height < this.width * 0.2)
-			this.height = Math.floor(this.width * 0.2);
-		this.canvas.width = this.width;
-		this.canvas.height = this.height;
-		this.canvas.style.width = this.width / window.devicePixelRatio + "px";
-		this.canvas.style.height = this.height / window.devicePixelRatio + "px";
-
-		// calculate key sizes
-		this.whiteKeyWidth = Math.floor(this.width / 52);
-		this.whiteKeyHeight = Math.floor(this.height * 0.9);
-		this.blackKeyWidth = Math.floor(this.whiteKeyWidth * 0.75);
-		this.blackKeyHeight = Math.floor(this.height * 0.5);
-
-		this.blackKeyOffset = Math.floor(
-			this.whiteKeyWidth - this.blackKeyWidth / 2,
-		);
-		this.keyMovement = Math.floor(this.whiteKeyHeight * 0.015);
-
-		this.whiteBlipWidth = Math.floor(this.whiteKeyWidth * 0.7);
-		this.whiteBlipHeight = Math.floor(this.whiteBlipWidth * 0.8);
-		this.whiteBlipX = Math.floor(
-			(this.whiteKeyWidth - this.whiteBlipWidth) / 2,
-		);
-		this.whiteBlipY = Math.floor(
-			this.whiteKeyHeight - this.whiteBlipHeight * 1.2,
-		);
-		this.blackBlipWidth = Math.floor(this.blackKeyWidth * 0.7);
-		this.blackBlipHeight = Math.floor(this.blackBlipWidth * 0.8);
-		this.blackBlipY = Math.floor(
-			this.blackKeyHeight - this.blackBlipHeight * 1.2,
-		);
-		this.blackBlipX = Math.floor(
-			(this.blackKeyWidth - this.blackBlipWidth) / 2,
-		);
-
-		// prerender white key
-		this.whiteKeyRender = document.createElement("canvas");
-		this.whiteKeyRender.width = this.whiteKeyWidth;
-		this.whiteKeyRender.height = this.height + 10;
-		var ctx = this.whiteKeyRender.getContext("2d");
-		if (ctx.createLinearGradient) {
-			var gradient = ctx.createLinearGradient(0, 0, 0, this.whiteKeyHeight);
-			gradient.addColorStop(0, "#eee");
-			gradient.addColorStop(0.75, "#fff");
-			gradient.addColorStop(1, "#dad4d4");
-			ctx.fillStyle = gradient;
-		} else {
-			ctx.fillStyle = "#fff";
-		}
-		ctx.strokeStyle = "#000";
-		ctx.lineJoin = "round";
-		ctx.lineCap = "round";
-		ctx.lineWidth = 10;
-		ctx.strokeRect(
-			ctx.lineWidth / 2,
-			ctx.lineWidth / 2,
-			this.whiteKeyWidth - ctx.lineWidth,
-			this.whiteKeyHeight - ctx.lineWidth,
-		);
-		ctx.lineWidth = 4;
-		ctx.fillRect(
-			ctx.lineWidth / 2,
-			ctx.lineWidth / 2,
-			this.whiteKeyWidth - ctx.lineWidth,
-			this.whiteKeyHeight - ctx.lineWidth,
-		);
-
-		// prerender black key
-		this.blackKeyRender = document.createElement("canvas");
-		this.blackKeyRender.width = this.blackKeyWidth + 10;
-		this.blackKeyRender.height = this.blackKeyHeight + 10;
-		var ctx = this.blackKeyRender.getContext("2d");
-		if (ctx.createLinearGradient) {
-			var gradient = ctx.createLinearGradient(0, 0, 0, this.blackKeyHeight);
-			gradient.addColorStop(0, "#000");
-			gradient.addColorStop(1, "#444");
-			ctx.fillStyle = gradient;
-		} else {
-			ctx.fillStyle = "#000";
-		}
-		ctx.strokeStyle = "#222";
-		ctx.lineJoin = "round";
-		ctx.lineCap = "round";
-		ctx.lineWidth = 8;
-		ctx.strokeRect(
-			ctx.lineWidth / 2,
-			ctx.lineWidth / 2,
-			this.blackKeyWidth - ctx.lineWidth,
-			this.blackKeyHeight - ctx.lineWidth,
-		);
-		ctx.lineWidth = 4;
-		ctx.fillRect(
-			ctx.lineWidth / 2,
-			ctx.lineWidth / 2,
-			this.blackKeyWidth - ctx.lineWidth,
-			this.blackKeyHeight - ctx.lineWidth,
-		);
-
-		// prerender shadows
-		this.shadowRender = [];
-		var y = -this.canvas.height * 2;
-		for (var j = 0; j < 2; j++) {
-			var canvas = document.createElement("canvas");
-			this.shadowRender[j] = canvas;
-			canvas.width = this.canvas.width;
-			canvas.height = this.canvas.height;
-			var ctx = canvas.getContext("2d");
-			var sharp = j ? true : false;
+			ctx.strokeStyle = "#000";
 			ctx.lineJoin = "round";
 			ctx.lineCap = "round";
-			ctx.lineWidth = 1;
-			ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
-			ctx.shadowBlur = this.keyMovement * 3;
-			ctx.shadowOffsetY = -y + this.keyMovement;
-			if (sharp) {
-				ctx.shadowOffsetX = this.keyMovement;
+			ctx.lineWidth = 10;
+			ctx.strokeRect(
+				ctx.lineWidth / 2,
+				ctx.lineWidth / 2,
+				this.whiteKeyWidth - ctx.lineWidth,
+				this.whiteKeyHeight - ctx.lineWidth
+			);
+			ctx.lineWidth = 4;
+			ctx.fillRect(
+				ctx.lineWidth / 2,
+				ctx.lineWidth / 2,
+				this.whiteKeyWidth - ctx.lineWidth,
+				this.whiteKeyHeight - ctx.lineWidth
+			);
+
+			// prerender black key
+			this.blackKeyRender = document.createElement("canvas");
+			this.blackKeyRender.width = this.blackKeyWidth + 10;
+			this.blackKeyRender.height = this.blackKeyHeight + 10;
+			var ctx = this.blackKeyRender.getContext("2d");
+			if (ctx.createLinearGradient) {
+				var gradient = ctx.createLinearGradient(0, 0, 0, this.blackKeyHeight);
+				gradient.addColorStop(0, "#000");
+				gradient.addColorStop(1, "#444");
+				ctx.fillStyle = gradient;
 			} else {
-				ctx.shadowOffsetX = 0;
+				ctx.fillStyle = "#000";
+			}
+			ctx.strokeStyle = "#222";
+			ctx.lineJoin = "round";
+			ctx.lineCap = "round";
+			ctx.lineWidth = 8;
+			ctx.strokeRect(
+				ctx.lineWidth / 2,
+				ctx.lineWidth / 2,
+				this.blackKeyWidth - ctx.lineWidth,
+				this.blackKeyHeight - ctx.lineWidth
+			);
+			ctx.lineWidth = 4;
+			ctx.fillRect(
+				ctx.lineWidth / 2,
+				ctx.lineWidth / 2,
+				this.blackKeyWidth - ctx.lineWidth,
+				this.blackKeyHeight - ctx.lineWidth
+			);
+
+			// prerender shadows
+			this.shadowRender = [];
+			var y = -this.canvas.height * 2;
+			for (var j = 0; j < 2; j++) {
+				var canvas = document.createElement("canvas");
+				this.shadowRender[j] = canvas;
+				canvas.width = this.canvas.width;
+				canvas.height = this.canvas.height;
+				var ctx = canvas.getContext("2d");
+				var sharp = j ? true : false;
+				ctx.lineJoin = "round";
+				ctx.lineCap = "round";
+				ctx.lineWidth = 1;
+				ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+				ctx.shadowBlur = this.keyMovement * 3;
 				ctx.shadowOffsetY = -y + this.keyMovement;
+				if (sharp) {
+					ctx.shadowOffsetX = this.keyMovement;
+				} else {
+					ctx.shadowOffsetX = 0;
+					ctx.shadowOffsetY = -y + this.keyMovement;
+				}
+				for (var i in this.piano.keys) {
+					if (!this.piano.keys.hasOwnProperty(i)) continue;
+					var key = this.piano.keys[i];
+					if (key.sharp != sharp) continue;
+
+					if (key.sharp) {
+						ctx.fillRect(
+							this.blackKeyOffset +
+							this.whiteKeyWidth * key.spatial +
+							ctx.lineWidth / 2,
+							y + ctx.lineWidth / 2,
+							this.blackKeyWidth - ctx.lineWidth,
+							this.blackKeyHeight - ctx.lineWidth
+						);
+					} else {
+						ctx.fillRect(
+							this.whiteKeyWidth * key.spatial + ctx.lineWidth / 2,
+							y + ctx.lineWidth / 2,
+							this.whiteKeyWidth - ctx.lineWidth,
+							this.whiteKeyHeight - ctx.lineWidth
+						);
+					}
+				}
 			}
+
+			// update key rects
 			for (var i in this.piano.keys) {
 				if (!this.piano.keys.hasOwnProperty(i)) continue;
 				var key = this.piano.keys[i];
-				if (key.sharp != sharp) continue;
-
 				if (key.sharp) {
-					ctx.fillRect(
-						this.blackKeyOffset +
-						this.whiteKeyWidth * key.spatial +
-						ctx.lineWidth / 2,
-						y + ctx.lineWidth / 2,
-						this.blackKeyWidth - ctx.lineWidth,
-						this.blackKeyHeight - ctx.lineWidth,
+					key.rect = new Rect(
+						this.blackKeyOffset + this.whiteKeyWidth * key.spatial,
+						0,
+						this.blackKeyWidth,
+						this.blackKeyHeight
 					);
 				} else {
-					ctx.fillRect(
-						this.whiteKeyWidth * key.spatial + ctx.lineWidth / 2,
-						y + ctx.lineWidth / 2,
-						this.whiteKeyWidth - ctx.lineWidth,
-						this.whiteKeyHeight - ctx.lineWidth,
+					key.rect = new Rect(
+						this.whiteKeyWidth * key.spatial,
+						0,
+						this.whiteKeyWidth,
+						this.whiteKeyHeight
 					);
 				}
 			}
 		}
-
-		// update key rects
-		for (var i in this.piano.keys) {
-			if (!this.piano.keys.hasOwnProperty(i)) continue;
-			var key = this.piano.keys[i];
-			if (key.sharp) {
-				key.rect = new Rect(
-					this.blackKeyOffset + this.whiteKeyWidth * key.spatial,
-					0,
-					this.blackKeyWidth,
-					this.blackKeyHeight,
-				);
-			} else {
-				key.rect = new Rect(
-					this.whiteKeyWidth * key.spatial,
-					0,
-					this.whiteKeyWidth,
-					this.whiteKeyHeight,
-				);
-			}
+		visualize(key, color) {
+			key.timePlayed = Date.now();
+			key.blips.push({ time: key.timePlayed, color: color });
 		}
-	};
+		redraw() {
+			var now = Date.now();
+			var timeLoadedEnd = now - 1000;
+			var timePlayedEnd = now - 100;
+			var timeBlipEnd = now - 1000;
 
-	CanvasRenderer.prototype.visualize = function (key, color) {
-		key.timePlayed = Date.now();
-		key.blips.push({ time: key.timePlayed, color: color });
-	};
+			this.ctx.save();
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			// draw all keys
+			for (var j = 0; j < 2; j++) {
+				this.ctx.globalAlpha = 1.0;
+				this.ctx.drawImage(this.shadowRender[j], 0, 0);
+				var sharp = j ? true : false;
+				for (var i in this.piano.keys) {
+					if (!this.piano.keys.hasOwnProperty(i)) continue;
+					var key = this.piano.keys[i];
+					if (key.sharp != sharp) continue;
 
-	CanvasRenderer.prototype.redraw = function () {
-		var now = Date.now();
-		var timeLoadedEnd = now - 1000;
-		var timePlayedEnd = now - 100;
-		var timeBlipEnd = now - 1000;
-
-		this.ctx.save();
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		// draw all keys
-		for (var j = 0; j < 2; j++) {
-			this.ctx.globalAlpha = 1.0;
-			this.ctx.drawImage(this.shadowRender[j], 0, 0);
-			var sharp = j ? true : false;
-			for (var i in this.piano.keys) {
-				if (!this.piano.keys.hasOwnProperty(i)) continue;
-				var key = this.piano.keys[i];
-				if (key.sharp != sharp) continue;
-
-				if (!key.loaded) {
-					this.ctx.globalAlpha = 0.2;
-				} else if (key.timeLoaded > timeLoadedEnd) {
-					this.ctx.globalAlpha = ((now - key.timeLoaded) / 1000) * 0.8 + 0.2;
-				} else {
-					this.ctx.globalAlpha = 1.0;
-				}
-				var y = 0;
-				if (key.timePlayed > timePlayedEnd) {
-					y = Math.floor(
-						this.keyMovement -
-						((now - key.timePlayed) / 100) * this.keyMovement,
+					if (!key.loaded) {
+						this.ctx.globalAlpha = 0.2;
+					} else if (key.timeLoaded > timeLoadedEnd) {
+						this.ctx.globalAlpha = ((now - key.timeLoaded) / 1000) * 0.8 + 0.2;
+					} else {
+						this.ctx.globalAlpha = 1.0;
+					}
+					var y = 0;
+					if (key.timePlayed > timePlayedEnd) {
+						y = Math.floor(
+							this.keyMovement -
+							((now - key.timePlayed) / 100) * this.keyMovement
+						);
+					}
+					var x = Math.floor(
+						key.sharp
+							? this.blackKeyOffset + this.whiteKeyWidth * key.spatial
+							: this.whiteKeyWidth * key.spatial
 					);
-				}
-				var x = Math.floor(
-					key.sharp
-						? this.blackKeyOffset + this.whiteKeyWidth * key.spatial
-						: this.whiteKeyWidth * key.spatial,
-				);
-				var image = key.sharp ? this.blackKeyRender : this.whiteKeyRender;
-				this.ctx.drawImage(image, x, y);
+					var image = key.sharp ? this.blackKeyRender : this.whiteKeyRender;
+					this.ctx.drawImage(image, x, y);
 
-				var keyName = key.baseNote[0].toUpperCase();
-				if (sharp) keyName += "#";
-				keyName += key.octave + 1;
+					var keyName = key.baseNote[0].toUpperCase();
+					if (sharp) keyName += "#";
+					keyName += key.octave + 1;
 
-				if (gShowPianoNotes) {
-					this.ctx.font = `${(key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2
-						}px Arial`;
-					this.ctx.fillStyle = key.sharp ? "white" : "black";
-					this.ctx.textAlign = "center";
+					if (gShowPianoNotes) {
+						this.ctx.font = `${(key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2}px Arial`;
+						this.ctx.fillStyle = key.sharp ? "white" : "black";
+						this.ctx.textAlign = "center";
 
-					// do two passes to render both sharps and flat names.
-					if (keyName.includes("#")) {
+						// do two passes to render both sharps and flat names.
+						if (keyName.includes("#")) {
+							this.ctx.fillText(
+								keyName,
+								x + (key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2,
+								y +
+								(key.sharp ? this.blackKeyHeight : this.whiteKeyHeight) -
+								30 -
+								this.ctx.lineWidth
+							);
+						}
+
+						keyName = keyName.replace("C#", "D♭");
+						keyName = keyName.replace("D#", "E♭");
+						keyName = keyName.replace("F#", "G♭");
+						keyName = keyName.replace("G#", "A♭");
+						keyName = keyName.replace("A#", "B♭");
+
 						this.ctx.fillText(
 							keyName,
 							x + (key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2,
 							y +
 							(key.sharp ? this.blackKeyHeight : this.whiteKeyHeight) -
-							30 -
-							this.ctx.lineWidth,
+							10 -
+							this.ctx.lineWidth
 						);
 					}
 
-					keyName = keyName.replace("C#", "D♭");
-					keyName = keyName.replace("D#", "E♭");
-					keyName = keyName.replace("F#", "G♭");
-					keyName = keyName.replace("G#", "A♭");
-					keyName = keyName.replace("A#", "B♭");
+					const highlightScale = BASIC_PIANO_SCALES[gHighlightScaleNotes];
+					if (highlightScale && key.loaded) {
+						keyName = keyName.replace("C#", "D♭");
+						keyName = keyName.replace("D#", "E♭");
+						keyName = keyName.replace("F#", "G♭");
+						keyName = keyName.replace("G#", "A♭");
+						keyName = keyName.replace("A#", "B♭");
+						const keynameNoOctave = keyName.slice(0, -1);
+						if (highlightScale.includes(keynameNoOctave)) {
+							const prev = this.ctx.globalAlpha;
+							this.ctx.globalAlpha = 0.3;
+							this.ctx.fillStyle = "#0f0";
+							if (key.sharp) {
+								this.ctx.fillRect(x, y, this.blackKeyWidth, this.blackKeyHeight);
+							} else {
+								this.ctx.fillRect(x, y, this.whiteKeyWidth, this.whiteKeyHeight);
+							}
+							this.ctx.globalAlpha = prev;
+						}
+					}
 
-					this.ctx.fillText(
-						keyName,
-						x + (key.sharp ? this.blackKeyWidth : this.whiteKeyWidth) / 2,
-						y +
-						(key.sharp ? this.blackKeyHeight : this.whiteKeyHeight) -
-						10 -
-						this.ctx.lineWidth,
-					);
-				}
-
-				const highlightScale = BASIC_PIANO_SCALES[gHighlightScaleNotes];
-				if (highlightScale && key.loaded) {
-					keyName = keyName.replace("C#", "D♭");
-					keyName = keyName.replace("D#", "E♭");
-					keyName = keyName.replace("F#", "G♭");
-					keyName = keyName.replace("G#", "A♭");
-					keyName = keyName.replace("A#", "B♭");
-					const keynameNoOctave = keyName.slice(0, -1);
-					if (highlightScale.includes(keynameNoOctave)) {
-						const prev = this.ctx.globalAlpha;
-						this.ctx.globalAlpha = 0.3;
-						this.ctx.fillStyle = "#0f0";
+					// render blips
+					if (key.blips.length) {
+						var alpha = this.ctx.globalAlpha;
+						var w, h;
 						if (key.sharp) {
-							this.ctx.fillRect(x, y, this.blackKeyWidth, this.blackKeyHeight);
+							x += this.blackBlipX;
+							y = this.blackBlipY;
+							w = this.blackBlipWidth;
+							h = this.blackBlipHeight;
 						} else {
-							this.ctx.fillRect(x, y, this.whiteKeyWidth, this.whiteKeyHeight);
+							x += this.whiteBlipX;
+							y = this.whiteBlipY;
+							w = this.whiteBlipWidth;
+							h = this.whiteBlipHeight;
 						}
-						this.ctx.globalAlpha = prev;
-					}
-				}
-
-				// render blips
-				if (key.blips.length) {
-					var alpha = this.ctx.globalAlpha;
-					var w, h;
-					if (key.sharp) {
-						x += this.blackBlipX;
-						y = this.blackBlipY;
-						w = this.blackBlipWidth;
-						h = this.blackBlipHeight;
-					} else {
-						x += this.whiteBlipX;
-						y = this.whiteBlipY;
-						w = this.whiteBlipWidth;
-						h = this.whiteBlipHeight;
-					}
-					for (var b = 0; b < key.blips.length; b++) {
-						var blip = key.blips[b];
-						if (blip.time > timeBlipEnd) {
-							this.ctx.fillStyle = blip.color;
-							this.ctx.globalAlpha = alpha - ((now - blip.time) / 1000) * alpha;
-							this.ctx.fillRect(x, y, w, h);
-						} else {
-							key.blips.splice(b, 1);
-							--b;
+						for (var b = 0; b < key.blips.length; b++) {
+							var blip = key.blips[b];
+							if (blip.time > timeBlipEnd) {
+								this.ctx.fillStyle = blip.color;
+								this.ctx.globalAlpha = alpha - ((now - blip.time) / 1000) * alpha;
+								this.ctx.fillRect(x, y, w, h);
+							} else {
+								key.blips.splice(b, 1);
+								--b;
+							}
+							y -= Math.floor(h * 1.1);
 						}
-						y -= Math.floor(h * 1.1);
 					}
 				}
 			}
+			this.ctx.restore();
 		}
-		this.ctx.restore();
-	};
-
-	CanvasRenderer.prototype.renderNoteLyrics = function () {
-		// render lyric
-		for (var part_id in this.noteLyrics) {
-			if (!this.noteLyrics.hasOwnProperty(i)) continue;
-			var lyric = this.noteLyrics[part_id];
-			var lyric_x = x;
-			var lyric_y = this.whiteKeyHeight + 1;
-			this.ctx.fillStyle = key.lyric.color;
-			var alpha = this.ctx.globalAlpha;
-			this.ctx.globalAlpha = alpha - ((now - key.lyric.time) / 1000) * alpha;
-			this.ctx.fillRect(x, y, 10, 10);
-		}
-	};
-
-	CanvasRenderer.prototype.getHit = function (x, y) {
-		for (var j = 0; j < 2; j++) {
-			var sharp = j ? false : true; // black keys first
-			for (var i in this.piano.keys) {
-				if (!this.piano.keys.hasOwnProperty(i)) continue;
-				var key = this.piano.keys[i];
-				if (key.sharp != sharp) continue;
-				if (key.rect.contains(x, y)) {
-					var v = y / (key.sharp ? this.blackKeyHeight : this.whiteKeyHeight);
-					v += 0.25;
-					v *= DEFAULT_VELOCITY;
-					if (v > 1.0) v = 1.0;
-					return { key: key, v: v };
-				}
+		renderNoteLyrics() {
+			// render lyric
+			for (var part_id in this.noteLyrics) {
+				if (!this.noteLyrics.hasOwnProperty(i)) continue;
+				var lyric = this.noteLyrics[part_id];
+				var lyric_x = x;
+				var lyric_y = this.whiteKeyHeight + 1;
+				this.ctx.fillStyle = key.lyric.color;
+				var alpha = this.ctx.globalAlpha;
+				this.ctx.globalAlpha = alpha - ((now - key.lyric.time) / 1000) * alpha;
+				this.ctx.fillRect(x, y, 10, 10);
 			}
 		}
-		return null;
-	};
+		getHit(x, y) {
+			for (var j = 0; j < 2; j++) {
+				var sharp = j ? false : true; // black keys first
+				for (var i in this.piano.keys) {
+					if (!this.piano.keys.hasOwnProperty(i)) continue;
+					var key = this.piano.keys[i];
+					if (key.sharp != sharp) continue;
+					if (key.rect.contains(x, y)) {
+						var v = y / (key.sharp ? this.blackKeyHeight : this.whiteKeyHeight);
+						v += 0.25;
+						v *= DEFAULT_VELOCITY;
+						if (v > 1.0) v = 1.0;
+						return { key: key, v: v };
+					}
+				}
+			}
+			return null;
+		}
+	}
 
-	CanvasRenderer.isSupported = function () {
-		var canvas = document.createElement("canvas");
-		return !!(canvas.getContext && canvas.getContext("2d"));
-	};
+	CanvasRenderer.prototype = new Renderer();
 
-	CanvasRenderer.translateMouseEvent = function (evt) {
-		var element = evt.target;
-		var offx = 0;
-		var offy = 0;
-		do {
-			if (!element) break; // wtf, wtf?
-			offx += element.offsetLeft;
-			offy += element.offsetTop;
-		} while ((element = element.offsetParent));
-		return {
-			x: (evt.pageX - offx) * window.devicePixelRatio,
-			y: (evt.pageY - offy) * window.devicePixelRatio,
-		};
-	};
+
+
+
+
+
+
+
 
 	// Soundpack Stuff by electrashave ♥
 
@@ -800,256 +807,261 @@ $(function () {
 		var soundDomain = "https://multiplayerpiano.net";
 	}
 
-	function SoundSelector(piano) {
-		this.initialized = false;
-		this.keys = piano.keys;
-		this.loading = {};
-		this.notification;
-		this.packs = [];
-		this.piano = piano;
-		this.soundSelection = localStorage.soundSelection
-			? localStorage.soundSelection
-			: "mppclassic";
-		this.addPack({
-			name: "MPP Classic",
-			keys: Object.keys(this.piano.keys),
-			ext: ".mp3",
-			url: "/sounds/mppclassic/",
-		});
-	}
+	class SoundSelector {
+		constructor(piano) {
+			this.initialized = false;
+			this.keys = piano.keys;
+			this.loading = {};
+			this.notification;
+			this.packs = [];
+			this.piano = piano;
+			this.soundSelection = localStorage.soundSelection
+				? localStorage.soundSelection
+				: "mppclassic";
+			this.addPack({
+				name: "MPP Classic",
+				keys: Object.keys(this.piano.keys),
+				ext: ".mp3",
+				url: "/sounds/mppclassic/",
+			});
+		}
+		addPack(pack, load) {
+			var self = this;
+			self.loading[pack.url || pack] = true;
+			function add(obj) {
+				var added = false;
+				for (var i = 0; self.packs.length > i; i++) {
+					if (obj.name == self.packs[i].name) {
+						added = true;
+						break;
+					}
+				}
 
-	SoundSelector.prototype.addPack = function (pack, load) {
-		var self = this;
-		self.loading[pack.url || pack] = true;
-		function add(obj) {
-			var added = false;
-			for (var i = 0; self.packs.length > i; i++) {
-				if (obj.name == self.packs[i].name) {
-					added = true;
+				if (added) return console.warn("Sounds already added!!"); //no adding soundpacks twice D:<
+
+				if (obj.url.substr(obj.url.length - 1) != "/") obj.url = obj.url + "/";
+				var html = document.createElement("li");
+				html.classList = "pack";
+				html.innerText = obj.name + " (" + obj.keys.length + " keys)";
+				html.onclick = function () {
+					self.loadPack(obj.name);
+					self.notification.close();
+				};
+				obj.html = html;
+				self.packs.push(obj);
+				self.packs.sort(function (a, b) {
+					if (a.name < b.name) return -1;
+					if (a.name > b.name) return 1;
+					return 0;
+				});
+				if (load) self.loadPack(obj.name);
+				delete self.loading[obj.url];
+			}
+
+			if (typeof pack == "string") {
+				let useDomain = true;
+				if (pack.match(/^(http|https):\/\//i)) useDomain = false;
+				$.getJSON((useDomain ? soundDomain : "") + pack + "/info.json").done(
+					function (json) {
+						json.url = pack;
+						add(json);
+					}
+				);
+			} else add(pack); //validate packs??
+		}
+		addPacks(packs) {
+			for (var i = 0; packs.length > i; i++) this.addPack(packs[i]);
+		}
+		init() {
+			var self = this;
+			if (self.initialized)
+				return console.warn("Sound selector already initialized!");
+
+			if (!!Object.keys(self.loading).length)
+				return setTimeout(function () {
+					self.init();
+				}, 250);
+
+			$("#sound-btn").on("click", function () {
+				if (document.getElementById("Notification-Sound-Selector") != null)
+					return self.notification.close();
+				var html = document.createElement("ul");
+				//$(html).append("<p>Current Sound: " + self.soundSelection + "</p>");
+				for (var i = 0; self.packs.length > i; i++) {
+					var pack = self.packs[i];
+					if (pack.name == self.soundSelection)
+						pack.html.classList = "pack enabled";
+					else pack.html.classList = "pack";
+					pack.html.setAttribute("translated", "");
+					html.appendChild(pack.html);
+				}
+
+				self.notification = new Notification({
+					title: "Sound Selector",
+					html: html,
+					id: "Sound-Selector",
+					duration: -1,
+					target: "#sound-btn",
+				});
+			});
+			self.initialized = true;
+			self.loadPack(self.soundSelection, true);
+		}
+		loadPack(pack, f) {
+			for (var i = 0; this.packs.length > i; i++) {
+				var p = this.packs[i];
+				if (p.name == pack) {
+					pack = p;
 					break;
 				}
 			}
-
-			if (added) return console.warn("Sounds already added!!"); //no adding soundpacks twice D:<
-
-			if (obj.url.substr(obj.url.length - 1) != "/") obj.url = obj.url + "/";
-			var html = document.createElement("li");
-			html.classList = "pack";
-			html.innerText = obj.name + " (" + obj.keys.length + " keys)";
-			html.onclick = function () {
-				self.loadPack(obj.name);
-				self.notification.close();
-			};
-			obj.html = html;
-			self.packs.push(obj);
-			self.packs.sort(function (a, b) {
-				if (a.name < b.name) return -1;
-				if (a.name > b.name) return 1;
-				return 0;
-			});
-			if (load) self.loadPack(obj.name);
-			delete self.loading[obj.url];
-		}
-
-		if (typeof pack == "string") {
-			let useDomain = true;
-			if (pack.match(/^(http|https):\/\//i)) useDomain = false;
-			$.getJSON((useDomain ? soundDomain : "") + pack + "/info.json").done(
-				function (json) {
-					json.url = pack;
-					add(json);
-				},
-			);
-		} else add(pack); //validate packs??
-	};
-
-	SoundSelector.prototype.addPacks = function (packs) {
-		for (var i = 0; packs.length > i; i++) this.addPack(packs[i]);
-	};
-
-	SoundSelector.prototype.init = function () {
-		var self = this;
-		if (self.initialized)
-			return console.warn("Sound selector already initialized!");
-
-		if (!!Object.keys(self.loading).length)
-			return setTimeout(function () {
-				self.init();
-			}, 250);
-
-		$("#sound-btn").on("click", function () {
-			if (document.getElementById("Notification-Sound-Selector") != null)
-				return self.notification.close();
-			var html = document.createElement("ul");
-			//$(html).append("<p>Current Sound: " + self.soundSelection + "</p>");
-
-			for (var i = 0; self.packs.length > i; i++) {
-				var pack = self.packs[i];
-				if (pack.name == self.soundSelection)
-					pack.html.classList = "pack enabled";
-				else pack.html.classList = "pack";
-				pack.html.setAttribute("translated", "");
-				html.appendChild(pack.html);
+			if (typeof pack == "string") {
+				console.warn("Sound pack does not exist! Loading default pack...");
+				return this.loadPack("MPP Classic");
 			}
 
-			self.notification = new Notification({
-				title: "Sound Selector",
-				html: html,
-				id: "Sound-Selector",
-				duration: -1,
-				target: "#sound-btn",
-			});
-		});
-		self.initialized = true;
-		self.loadPack(self.soundSelection, true);
-	};
-
-	SoundSelector.prototype.loadPack = function (pack, f) {
-		for (var i = 0; this.packs.length > i; i++) {
-			var p = this.packs[i];
-			if (p.name == pack) {
-				pack = p;
-				break;
+			if (pack.name == this.soundSelection && !f) return;
+			if (pack.keys.length != Object.keys(this.piano.keys).length) {
+				this.piano.keys = {};
+				for (var i = 0; pack.keys.length > i; i++)
+					this.piano.keys[pack.keys[i]] = this.keys[pack.keys[i]];
+				this.piano.renderer.resize();
 			}
-		}
-		if (typeof pack == "string") {
-			console.warn("Sound pack does not exist! Loading default pack...");
-			return this.loadPack("MPP Classic");
-		}
 
-		if (pack.name == this.soundSelection && !f) return;
-		if (pack.keys.length != Object.keys(this.piano.keys).length) {
-			this.piano.keys = {};
-			for (var i = 0; pack.keys.length > i; i++)
-				this.piano.keys[pack.keys[i]] = this.keys[pack.keys[i]];
-			this.piano.renderer.resize();
-		}
-
-		var self = this;
-		for (var i in this.piano.keys) {
-			if (!this.piano.keys.hasOwnProperty(i)) continue;
-			(function () {
-				var key = self.piano.keys[i];
-				key.loaded = false;
-				let useDomain = true;
-				if (pack.url.match(/^(http|https):\/\//i)) useDomain = false;
-				self.piano.audio.load(
-					key.note,
-					(useDomain ? soundDomain : "") + pack.url + key.note + pack.ext,
-					function () {
-						key.loaded = true;
-						key.timeLoaded = Date.now();
-					},
-				);
-			})();
-		}
-		if (localStorage) localStorage.soundSelection = pack.name;
-		this.soundSelection = pack.name;
-	};
-
-	SoundSelector.prototype.removePack = function (name) {
-		var found = false;
-		for (var i = 0; this.packs.length > i; i++) {
-			var pack = this.packs[i];
-			if (pack.name == name) {
-				this.packs.splice(i, 1);
-				if (pack.name == this.soundSelection) this.loadPack(this.packs[0].name); //add mpp default if none?
-				break;
+			var self = this;
+			for (var i in this.piano.keys) {
+				if (!this.piano.keys.hasOwnProperty(i)) continue;
+				(function () {
+					var key = self.piano.keys[i];
+					key.loaded = false;
+					let useDomain = true;
+					if (pack.url.match(/^(http|https):\/\//i)) useDomain = false;
+					self.piano.audio.load(
+						key.note,
+						(useDomain ? soundDomain : "") + pack.url + key.note + pack.ext,
+						function () {
+							key.loaded = true;
+							key.timeLoaded = Date.now();
+						}
+					);
+				})();
 			}
+			if (localStorage) localStorage.soundSelection = pack.name;
+			this.soundSelection = pack.name;
 		}
-		if (!found) console.warn("Sound pack not found!");
-	};
+		removePack(name) {
+			var found = false;
+			for (var i = 0; this.packs.length > i; i++) {
+				var pack = this.packs[i];
+				if (pack.name == name) {
+					this.packs.splice(i, 1);
+					if (pack.name == this.soundSelection) this.loadPack(this.packs[0].name); //add mpp default if none?
+					break;
+				}
+			}
+			if (!found) console.warn("Sound pack not found!");
+		}
+	}
+
+
+
+
+
 
 	// Pianoctor
 
 	////////////////////////////////////////////////////////////////
 
-	var PianoKey = function (note, octave) {
-		console.log(note);
-		this.note = note + octave;
-		this.baseNote = note;
-		this.octave = octave;
-		this.sharp = note.indexOf("s") != -1;
-		this.loaded = false;
-		this.timeLoaded = 0;
-		this.domElement = null;
-		this.timePlayed = 0;
-		this.blips = [];
-	};
-
-	var Piano = function (rootElement) {
-		var piano = this;
-		piano.rootElement = rootElement;
-		piano.keys = {};
-
-		var white_spatial = 0;
-		var black_spatial = 0;
-		var black_it = 0;
-		var black_lut = [2, 1, 2, 1, 1];
-		var addKey = function (note, octave) {
-			var key = new PianoKey(note, octave);
-			piano.keys[key.note] = key;
-			if (key.sharp) {
-				key.spatial = black_spatial;
-				black_spatial += black_lut[black_it % 5];
-				++black_it;
-			} else {
-				key.spatial = white_spatial;
-				++white_spatial;
-			}
-		};
-		if (test_mode) {
-			addKey("c", 2);
-		} else {
-			addKey("a", -1);
-			addKey("as", -1);
-			addKey("b", -1);
-			const notes = "c cs d ds e f fs g gs a as b".split(" ");
-			for (let octave = 0; octave < 7; octave++) {
-				for (const note of notes) {
-					addKey(note, octave);
-				}
-			}
-			addKey("c", 7);
+	class PianoKey {
+		constructor(note, octave) {
+			console.log(note);
+			this.note = note + octave;
+			this.baseNote = note;
+			this.octave = octave;
+			this.sharp = note.indexOf("s") != -1;
+			this.loaded = false;
+			this.timeLoaded = 0;
+			this.domElement = null;
+			this.timePlayed = 0;
+			this.blips = [];
 		}
+	}
 
-		this.renderer = new CanvasRenderer().init(this);
+	class Piano {
+		constructor(rootElement) {
+			var piano = this;
+			piano.rootElement = rootElement;
+			piano.keys = {};
 
-		window.addEventListener("resize", function () {
-			piano.renderer.resize();
-		});
-
-		window.AudioContext =
-			window.AudioContext || window.webkitAudioContext || undefined;
-		var audio_engine = AudioEngineWeb;
-		this.audio = new audio_engine().init();
-	};
-
-	Piano.prototype.play = function (note, vol, participant, delay_ms, lyric) {
-		if (!this.keys.hasOwnProperty(note) || !participant) return;
-		var key = this.keys[note];
-		if (key.loaded) this.audio.play(key.note, vol, delay_ms, participant.id);
-		if (gMidiOutTest)
-			gMidiOutTest(key.note, vol * 100, delay_ms, participant.id);
-		var self = this;
-		setTimeout(function () {
-			self.renderer.visualize(key, participant.color);
-			if (lyric) {
+			var white_spatial = 0;
+			var black_spatial = 0;
+			var black_it = 0;
+			var black_lut = [2, 1, 2, 1, 1];
+			var addKey = function (note, octave) {
+				var key = new PianoKey(note, octave);
+				piano.keys[key.note] = key;
+				if (key.sharp) {
+					key.spatial = black_spatial;
+					black_spatial += black_lut[black_it % 5];
+					++black_it;
+				} else {
+					key.spatial = white_spatial;
+					++white_spatial;
+				}
+			};
+			if (test_mode) {
+				addKey("c", 2);
+			} else {
+				addKey("a", -1);
+				addKey("as", -1);
+				addKey("b", -1);
+				const notes = "c cs d ds e f fs g gs a as b".split(" ");
+				for (let octave = 0; octave < 7; octave++) {
+					for (const note of notes) {
+						addKey(note, octave);
+					}
+				}
+				addKey("c", 7);
 			}
-			var jq_namediv = $(participant.nameDiv);
-			jq_namediv.addClass("play");
-			setTimeout(function () {
-				jq_namediv.removeClass("play");
-			}, 30);
-		}, delay_ms || 0);
-	};
 
-	Piano.prototype.stop = function (note, participant, delay_ms) {
-		if (!this.keys.hasOwnProperty(note)) return;
-		var key = this.keys[note];
-		if (key.loaded) this.audio.stop(key.note, delay_ms, participant.id);
-		if (gMidiOutTest) gMidiOutTest(key.note, 0, delay_ms, participant.id);
-	};
+			this.renderer = new CanvasRenderer().init(this);
+
+			window.addEventListener("resize", function () {
+				piano.renderer.resize();
+			});
+
+			window.AudioContext =
+				window.AudioContext || window.webkitAudioContext || undefined;
+			var audio_engine = AudioEngineWeb;
+			this.audio = new audio_engine().init();
+		}
+		play(note, vol, participant, delay_ms, lyric) {
+			if (!this.keys.hasOwnProperty(note) || !participant) return;
+			var key = this.keys[note];
+			if (key.loaded) this.audio.play(key.note, vol, delay_ms, participant.id);
+			if (gMidiOutTest)
+				gMidiOutTest(key.note, vol * 100, delay_ms, participant.id);
+			var self = this;
+			setTimeout(function () {
+				self.renderer.visualize(key, participant.color);
+				if (lyric) {
+				}
+				var jq_namediv = $(participant.nameDiv);
+				jq_namediv.addClass("play");
+				setTimeout(function () {
+					jq_namediv.removeClass("play");
+				}, 30);
+			}, delay_ms || 0);
+		}
+		stop(note, participant, delay_ms) {
+			if (!this.keys.hasOwnProperty(note)) return;
+			var key = this.keys[note];
+			if (key.loaded) this.audio.stop(key.note, delay_ms, participant.id);
+			if (gMidiOutTest) gMidiOutTest(key.note, 0, delay_ms, participant.id);
+		}
+	}
+
+
 
 	var gPiano = new Piano(document.getElementById("piano"));
 
@@ -1951,10 +1963,12 @@ $(function () {
 		$("#volume-label").text("Volume: " + Math.floor(v * 100) + "%");
 	});
 
-	var Note = function (note, octave) {
-		this.note = note;
-		this.octave = octave || 0;
-	};
+	class Note {
+		constructor(note, octave) {
+			this.note = note;
+			this.octave = octave || 0;
+		}
+	}
 
 	var n = function (a, b) {
 		return { note: new Note(a, b), held: false };
@@ -2634,83 +2648,85 @@ $(function () {
 
 	////////////////////////////////////////////////////////////////
 
-	var Notification = function (par) {
-		if (this instanceof Notification === false) throw "yeet";
-		EventEmitter.call(this);
+	class Notification {
+		constructor(par) {
+			if (this instanceof Notification === false) throw "yeet";
+			EventEmitter.call(this);
 
-		var par = par || {};
+			var par = par || {};
 
-		this.id = "Notification-" + (par.id || Math.random());
-		this.title = par.title || "";
-		this.text = par.text || "";
-		this.html = par.html || "";
-		this.target = $(par.target || "#piano");
-		this.duration = par.duration || 30000;
-		this["class"] = par["class"] || "classic";
+			this.id = "Notification-" + (par.id || Math.random());
+			this.title = par.title || "";
+			this.text = par.text || "";
+			this.html = par.html || "";
+			this.target = $(par.target || "#piano");
+			this.duration = par.duration || 30000;
+			this["class"] = par["class"] || "classic";
 
-		var self = this;
-		var eles = $("#" + this.id);
-		if (eles.length > 0) {
-			eles.remove();
-		}
-		this.domElement = $(
-			'<div class="notification"><div class="notification-body"><div class="title"></div>' +
-			'<div class="text"></div></div><div class="x" translated>X</div></div>',
-		);
-		this.domElement[0].id = this.id;
-		this.domElement.addClass(this["class"]);
-		this.domElement.find(".title").text(this.title);
-		if (this.text.length > 0) {
-			this.domElement.find(".text").text(this.text);
-		} else if (this.html instanceof HTMLElement) {
-			this.domElement.find(".text")[0].appendChild(this.html);
-		} else if (this.html.length > 0) {
-			this.domElement.find(".text").html(this.html);
-		}
-		document.body.appendChild(this.domElement.get(0));
+			var self = this;
+			var eles = $("#" + this.id);
+			if (eles.length > 0) {
+				eles.remove();
+			}
+			this.domElement = $(
+				'<div class="notification"><div class="notification-body"><div class="title"></div>' +
+				'<div class="text"></div></div><div class="x" translated>X</div></div>'
+			);
+			this.domElement[0].id = this.id;
+			this.domElement.addClass(this["class"]);
+			this.domElement.find(".title").text(this.title);
+			if (this.text.length > 0) {
+				this.domElement.find(".text").text(this.text);
+			} else if (this.html instanceof HTMLElement) {
+				this.domElement.find(".text")[0].appendChild(this.html);
+			} else if (this.html.length > 0) {
+				this.domElement.find(".text").html(this.html);
+			}
+			document.body.appendChild(this.domElement.get(0));
 
-		this.position();
-		this.onresize = function () {
-			self.position();
-		};
-		window.addEventListener("resize", this.onresize);
+			this.position();
+			this.onresize = function () {
+				self.position();
+			};
+			window.addEventListener("resize", this.onresize);
 
-		this.domElement.find(".x").click(function () {
-			self.close();
-		});
-
-		if (this.duration > 0) {
-			setTimeout(function () {
+			this.domElement.find(".x").click(function () {
 				self.close();
-			}, this.duration);
-		}
+			});
 
-		return this;
-	};
+			if (this.duration > 0) {
+				setTimeout(function () {
+					self.close();
+				}, this.duration);
+			}
+
+			return this;
+		}
+		position() {
+			var pos = this.target.offset();
+			var x = pos.left - this.domElement.width() / 2 + this.target.width() / 4;
+			var y = pos.top - this.domElement.height() - 8;
+			var width = this.domElement.width();
+			if (x + width > $("body").width()) {
+				x -= x + width - $("body").width();
+			}
+			if (x < 0) x = 0;
+			this.domElement.offset({ left: x, top: y });
+		}
+		close() {
+			var self = this;
+			window.removeEventListener("resize", this.onresize);
+			this.domElement.fadeOut(500, function () {
+				self.domElement.remove();
+				self.emit("close");
+			});
+		}
+	}
 
 	mixin(Notification.prototype, EventEmitter.prototype);
-	Notification.prototype.constructor = Notification;
+;
 
-	Notification.prototype.position = function () {
-		var pos = this.target.offset();
-		var x = pos.left - this.domElement.width() / 2 + this.target.width() / 4;
-		var y = pos.top - this.domElement.height() - 8;
-		var width = this.domElement.width();
-		if (x + width > $("body").width()) {
-			x -= x + width - $("body").width();
-		}
-		if (x < 0) x = 0;
-		this.domElement.offset({ left: x, top: y });
-	};
 
-	Notification.prototype.close = function () {
-		var self = this;
-		window.removeEventListener("resize", this.onresize);
-		this.domElement.fadeOut(500, function () {
-			self.domElement.remove();
-			self.emit("close");
-		});
-	};
 
 	// set variables from settings or set settings
 
@@ -4252,31 +4268,33 @@ $(function () {
 	var osc1_sustain = 0.5;
 	var osc1_release = 2.0;
 
-	function synthVoice(note_name, time) {
-		var note_number = MIDI_KEY_NAMES.indexOf(note_name);
-		note_number = note_number + 9 - MIDI_TRANSPOSE;
-		var freq = Math.pow(2, (note_number - 69) / 12) * 440.0;
-		this.osc = context.createOscillator();
-		this.osc.type = osc1_type;
-		this.osc.frequency.value = freq;
-		this.gain = context.createGain();
-		this.gain.gain.value = 0;
-		this.osc.connect(this.gain);
-		this.gain.connect(synth_gain);
-		this.osc.start(time);
-		this.gain.gain.setValueAtTime(0, time);
-		this.gain.gain.linearRampToValueAtTime(1, time + osc1_attack);
-		this.gain.gain.linearRampToValueAtTime(
-			osc1_sustain,
-			time + osc1_attack + osc1_decay,
-		);
+	class synthVoice {
+		constructor(note_name, time) {
+			var note_number = MIDI_KEY_NAMES.indexOf(note_name);
+			note_number = note_number + 9 - MIDI_TRANSPOSE;
+			var freq = Math.pow(2, (note_number - 69) / 12) * 440.0;
+			this.osc = context.createOscillator();
+			this.osc.type = osc1_type;
+			this.osc.frequency.value = freq;
+			this.gain = context.createGain();
+			this.gain.gain.value = 0;
+			this.osc.connect(this.gain);
+			this.gain.connect(synth_gain);
+			this.osc.start(time);
+			this.gain.gain.setValueAtTime(0, time);
+			this.gain.gain.linearRampToValueAtTime(1, time + osc1_attack);
+			this.gain.gain.linearRampToValueAtTime(
+				osc1_sustain,
+				time + osc1_attack + osc1_decay
+			);
+		}
+		stop(time) {
+			//this.gain.gain.setValueAtTime(osc1_sustain, time);
+			this.gain.gain.linearRampToValueAtTime(0, time + osc1_release);
+			this.osc.stop(time + osc1_release);
+		}
 	}
 
-	synthVoice.prototype.stop = function (time) {
-		//this.gain.gain.setValueAtTime(osc1_sustain, time);
-		this.gain.gain.linearRampToValueAtTime(0, time + osc1_release);
-		this.osc.stop(time + osc1_release);
-	};
 
 	(function () {
 		var button = document.getElementById("synth-btn");
