@@ -4728,7 +4728,7 @@ $(function () {
 		} else {
 			var button = document.getElementById("client-settings-btn");
 			var content = document.getElementById("client-settings-content");
-			var tablinks = document.getElementsByClassName("client-settings-tablink");
+			var tablinks = document.querySelectorAll(".client-settings-tablink");
 			var okButton = document.getElementById("client-settings-ok-btn");
 
 			button.addEventListener("click", (evt) => {
