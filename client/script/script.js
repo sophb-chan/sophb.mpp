@@ -965,6 +965,7 @@ $(function () {
 	////////////////////////////////////////////////////////////////
 
 	var PianoKey = function (note, octave) {
+		console.log(note);
 		this.note = note + octave;
 		this.baseNote = note;
 		this.octave = octave;
