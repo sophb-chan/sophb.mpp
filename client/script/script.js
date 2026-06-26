@@ -3426,7 +3426,8 @@ $(function () {
 					if (gIsBloating)
 						return msg
 							   .split('')
-							   .join(joiner.repeat(joinlen)).padEnd(maxLen, padding).slice(0, maxLen);
+							   .join(joiner.repeat(joinlen))
+							   .padEnd(maxLen, padding).slice(0, maxLen);
 					else return msg;
 				}
 
@@ -4757,6 +4758,14 @@ $(function () {
 				}
 			};
 
+			// Setup Client tab event listeners
+			document
+				.getElementById('toggle-filter-bypass')
+				.addEventListener('change', (evt) => {
+					gIsBloating = evt.target.checked;
+					localStorage.isBloating = gIsBloating;
+				});
+			
 			// Setup Chat tab event listeners
 			document
 				.getElementById("show-timestamps-in-chat")
