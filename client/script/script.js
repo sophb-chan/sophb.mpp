@@ -365,7 +365,7 @@ $(function () {
 
 	class CanvasRenderer {
 		constructor() {
-			Renderer.call(this);
+			new Renderer.call(this);
 		}
 		static isSupported() {
 			var canvas = document.createElement("canvas");
