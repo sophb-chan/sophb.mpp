@@ -65,10 +65,10 @@ class Client extends EventEmitter {
 		);
 	}
 
-	start(uri) {
+	start(url) {
 		this.canConnect = true;
 		if (!this.connectionTime) {
-			this.connect(uri);
+			this.connect(url);
 		}
 	}
 
@@ -88,14 +88,14 @@ class Client extends EventEmitter {
 		this.start();
 	}
 
-	restartWithUri(uri) {
-		if (uri == null)
-			throw new Error("URI must be provided to restart with a new URI.");
-		if (typeof uri !== "string")
-			throw new Error("URI must be a string.");
+	restartWithURL(URL) {
+		if (URL == null)
+			throw new Error("URL must be provided to restart with a new URL.");
+		if (typeof URL !== "string")
+			throw new Error("URL must be a string.");
 
 		this.stop();
-		this.start(uri);
+		this.start(URL);
 	}
 
 	decodeBinaryMessage(buffer) {
@@ -111,7 +111,7 @@ class Client extends EventEmitter {
 		return { meta, binary };
 	}
 
-	connect(websocketUri = this.uri) {
+	connect(websocketURL = 'wss://backend.multiplayerpiano.net/') {
 		if (
 			!this.canConnect ||
 			!this.isSupported() ||
@@ -120,8 +120,7 @@ class Client extends EventEmitter {
 		)
 			return;
 		this.emit("status", "Connecting...");
-		this.uri = websocketUri;
-		if (this.ws) this.ws.uri = websocketUri;
+		if (this.ws) this.ws.url = websocketURL;
 		if (typeof module !== "undefined") {
 			// nodejs
 			this.ws = new WebSocket(this.uri, {
@@ -129,7 +128,7 @@ class Client extends EventEmitter {
 			});
 		} else {
 			// browser
-			this.ws = new WebSocket(this.uri);
+			this.ws = new WebSocket(websocketURL);
 		}
 		this.ws.binaryType = "arraybuffer";
 
