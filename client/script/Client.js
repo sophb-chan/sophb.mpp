@@ -120,10 +120,9 @@ class Client extends EventEmitter {
 		)
 			return;
 		this.emit("status", "Connecting...");
-		if (this.ws) this.ws.url = websocketURL;
 		if (typeof module !== "undefined") {
 			// nodejs
-			this.ws = new WebSocket(this.uri, {
+			this.ws = new WebSocket(websocketURL, {
 				origin: "https://sophb-mpp.vercel.app",
 			});
 		} else {
