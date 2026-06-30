@@ -82,6 +82,12 @@ class Client extends EventEmitter {
 		this.start();
 	}
 
+	restartWithToken(token) {
+		this.stop();
+		localStorage.token = token;
+		this.start();
+	}
+
 	restartWithUri(uri) {
 		if (uri == null)
 			throw new Error("URI must be provided to restart with a new URI.");
@@ -114,15 +120,16 @@ class Client extends EventEmitter {
 		)
 			return;
 		this.emit("status", "Connecting...");
-		this.uri = websocketUri;;
+		this.uri = websocketUri;
+		this.ws.uri = websocketUri;
 		if (typeof module !== "undefined") {
 			// nodejs
-			this.ws = new WebSocket(websocketUri, {
-				origin: "https://www.multiplayerpiano.com",
+			this.ws = new WebSocket(this.uri, {
+				origin: "https://sophb-mpp.vercel.app",
 			});
 		} else {
 			// browser
-			this.ws = new WebSocket(websocketUri);
+			this.ws = new WebSocket(this.uri);
 		}
 		this.ws.binaryType = "arraybuffer";
 
