@@ -121,7 +121,7 @@ class Client extends EventEmitter {
 			return;
 		this.emit("status", "Connecting...");
 		this.uri = websocketUri;
-		this.ws.uri = websocketUri;
+		if (this.ws) this.ws.uri = websocketUri;
 		if (typeof module !== "undefined") {
 			// nodejs
 			this.ws = new WebSocket(this.uri, {
