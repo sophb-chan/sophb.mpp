@@ -35,371 +35,256 @@ async function runAI() {
     // AI
     const workerCode = `
     class TextNeuralNetwork {
-        constructor(hiddenNodes = 64, order = 4, embedDim = 32) {
+        constructor(hiddenNodes = 16, order = 3) {
             this.order = order;
             this.hiddenNodes = hiddenNodes;
-            this.embedDim = embedDim;
-
-            this.learningRate = 0.01;
+            this.learningRate = 0.2;
 
             this.charToIdx = {};
             this.idxToChar = {};
             this.vocabSize = 0;
 
-            // Embedding matrix: vocabSize x embedDim
-            this.embeddings = [];
-
-            // Hidden layer
-            this.W1 = []; // hiddenNodes x (order * embedDim)
-            this.b1 = [];
+            this.weights_ih = [];
+            this.weights_ho = [];
+            this.bias_h = Array.from({ length: this.hiddenNodes }, ()=> Math.random() * 0.2 - 0.1);
+            this.bias_o = [];
 
             this.END_MARKER = "<END>";
             this.updateVocabulary([this.END_MARKER]);
-
-            // training queue inside worker (prevents overlap)
-            this.trainQueue = [];
-            this.isTraining = false;
         }
 
-        randn(scale = 1) {
-            return (Math.random() * 2 - 1) * scale;
+        clear() {
+            this.charToIdx = {};
+            this.charToIdx = {};
+            this.weights_ho = [];
+            this.weights_ih = [];
+            this.bias_h = Array.from({ length: this.hiddenNodes }, ()=> Math.random() * 0.2 - 0.1);
+            this.bias_o = [];
+        }
+        setParams(hiddenNodes, order) {
+            this.hiddenNodes = hiddenNodes;
+            this.order = order;
+            this.clear();	
         }
 
-        he(scaleIn) {
-            return this.randn(Math.sqrt(2 / scaleIn));
-        }
+        updateVocabulary(textSamples) {
+            let addedNew = false;
 
-        updateVocabulary(tokens) {
-            let added = false;
-
-            for (const t of tokens) {
-                if (this.charToIdx[t] === undefined) {
-                    const idx = this.vocabSize;
-                    this.charToIdx[t] = idx;
-                    this.idxToChar[idx] = t;
+            textSamples.forEach(char => {
+                if (this.charToIdx[char] === undefined) {
+                    let newIdx = this.vocabSize;
+                    this.charToIdx[char] = newIdx;
+                    this.idxToChar[newIdx] = char;
                     this.vocabSize++;
-                    added = true;
+                    addedNew = true;
                 }
-            }
-
-            if (!added) return;
-
-            // grow embeddings
-            while (this.embeddings.length < this.vocabSize) {
-                const vec = Array.from({ length: this.embedDim }, () =>
-                    this.randn(0.1),
-                );
-                this.embeddings.push(vec);
-            }
-
-            const inputSize = this.order * this.embedDim;
-
-            // init or expand hidden weights
-            if (this.W1.length === 0) {
-                this.W1 = Array.from({ length: this.hiddenNodes }, () =>
-                    Array.from({ length: inputSize }, () => this.he(inputSize)),
-                );
-                this.b1 = Array(this.hiddenNodes).fill(0);
-            } else {
-                for (let i = 0; i < this.hiddenNodes; i++) {
-                    while (this.W1[i].length < inputSize) {
-                        this.W1[i].push(this.he(inputSize));
-                    }
-                }
-            }
-        }
-
-        encode(sequence) {
-            const vec = [];
-
-            for (let i = 0; i < this.order; i++) {
-                const token = sequence[i];
-                const idx = this.charToIdx[token];
-
-                const emb =
-                    idx != null
-                        ? this.embeddings[idx]
-                        : Array(this.embedDim).fill(0);
-
-                vec.push(...emb);
-            }
-
-            return vec;
-        }
-
-        tanh(x) {
-            return Math.tanh(x);
-        }
-
-        dtanh(y) {
-            return 1 - y * y;
-        }
-
-        softmax(arr) {
-            let max = -Infinity;
-            for (const v of arr) max = Math.max(max, v);
-
-            const exps = arr.map((v) => Math.exp(v - max));
-            const sum = exps.reduce((a, b) => a + b, 0);
-
-            return exps.map((v) => v / sum);
-        }
-
-        forward(x) {
-            const hiddenPre = Array(this.hiddenNodes).fill(0);
-            const hidden = Array(this.hiddenNodes).fill(0);
-
-            for (let i = 0; i < this.hiddenNodes; i++) {
-                let sum = this.b1[i];
-                const w = this.W1[i];
-
-                for (let j = 0; j < x.length; j++) {
-                    sum += w[j] * x[j];
-                }
-
-                hiddenPre[i] = sum;
-                hidden[i] = this.tanh(sum);
-            }
-
-            const logits = Array(this.vocabSize).fill(0);
-
-            for (let i = 0; i < this.vocabSize; i++) {
-                const emb = this.embeddings[i];
-                let sum = 0;
-
-                for (let j = 0; j < this.hiddenNodes; j++) {
-                    sum += hidden[j] * (emb[j % this.embedDim] ?? 0);
-                }
-
-                logits[i] = sum;
-            }
-
-            const probs = this.softmax(logits);
-
-            return { hiddenPre, hidden, logits, probs };
-        }
-
-        predict(x) {
-            const { hiddenPre, hidden } = this.forward(x);
-
-            const logits = Array(this.vocabSize).fill(0);
-
-            for (let i = 0; i < this.vocabSize; i++) {
-                const emb = this.embeddings[i];
-                let sum = 0;
-
-                for (let j = 0; j < this.hiddenNodes; j++) {
-                    // lightweight output weights are implicit via embeddings projection
-                    sum += hidden[j] * (emb[j % this.embedDim] ?? 0);
-                }
-
-                logits[i] = sum;
-            }
-
-            const probs = this.softmax(logits);
-
-            return { hiddenPre, hidden, logits, probs };
-        }
-
-        trainStep(sample) {
-            const inputVec = this.encode(sample.inputSeq);
-
-            const target = this.charToIdx[sample.targetChar];
-            if (target == null) return 0;
-
-            const { hidden, probs } = this.forward(inputVec);
-
-            const dLogits = Array(this.vocabSize).fill(0);
-
-            for (let i = 0; i < this.vocabSize; i++) {
-                const t = i === target ? 1 : 0;
-                dLogits[i] = probs[i] - t;
-            }
-
-            const dHidden = Array(this.hiddenNodes).fill(0);
-
-            for (let i = 0; i < this.vocabSize; i++) {
-                const emb = this.embeddings[i];
-
-                for (let j = 0; j < this.hiddenNodes; j++) {
-                    dHidden[j] += dLogits[i] * (emb[j % this.embedDim] ?? 0);
-                }
-            }
-
-            for (let i = 0; i < this.hiddenNodes; i++) {
-                const grad = dHidden[i] * this.dtanh(hidden[i]) * this.learningRate;
-
-                for (let j = 0; j < inputVec.length; j++) {
-                    this.W1[i][j] -= grad * inputVec[j];
-                }
-
-                this.b1[i] -= grad;
-            }
-
-            return -Math.log(probs[target] + 1e-9);
-        }
-
-        trainSession(text, epochs = 10) {
-            try {
-                const items = [...text, this.END_MARKER];
-                this.updateVocabulary(items);
-
-                const samples = [];
-                for (let i = 0; i <= items.length - this.order - 1; i++) {
-                    samples.push({
-                        inputSeq: items.slice(i, i + this.order),
-                        targetChar: items[i + this.order],
-                    });
-                }
-
-                if (samples.length === 0) {
-                    self.postMessage({
-                        type: "error",
-                        message: "No training samples.",
-                    });
-                    self.postMessage({ type: "train_complete" });
-                    return;
-                }
-
-                for (let e = 0; e < epochs; e++) {
-                    let loss = 0;
-
-                    for (const s of samples) {
-                        const l = this.trainStep(s);
-                        if (!isNaN(l)) loss += l;
-                    }
-
-                    //if (e % Math.max(1, Math.floor(epochs / 5)) === 0) {
-                        self.postMessage({
-                            type: "log",
-                            message: \`epoch \${e}/\${epochs} loss=\${(loss / samples.length).toFixed(4)}\`,
-                        });
-                    //}
-                }
-
-                self.postMessage({ type: "train_complete" });
-            } catch (err) {
-                self.postMessage({
-                    type: "error",
-                    message: String(err?.message || err),
-                });
-
-                self.postMessage({ type: "train_complete" });
-            }
-        }
-
-        generate(seed, maxLen = 120, temperature = 0.9) {
-            let seq = [...seed].slice(-this.order);
-            let out = seed;
-
-            for (let i = 0; i < maxLen; i++) {
-                const x = this.encode(seq);
-                const { probs } = this.forward(x);
-
-                const adjusted = probs.map((p) => Math.pow(p, 1 / temperature));
-
-                const sum = adjusted.reduce((a, b) => a + b, 0);
-                const norm = adjusted.map((v) => v / sum);
-
-                let r = Math.random();
-                let acc = 0;
-                let idx = 0;
-
-                for (let j = 0; j < norm.length; j++) {
-                    acc += norm[j];
-                    if (r <= acc) {
-                        idx = j;
-                        break;
-                    }
-                }
-
-                const ch = this.idxToChar[idx] || " ";
-                if (ch === this.END_MARKER) break;
-
-                out += ch;
-                seq.push(ch);
-                seq.shift();
-            }
-
-            return out;
-        }
-
-        enqueueTrain(text, epochs) {
-            this.trainQueue.push({ text, epochs });
-            this.processQueue();
-        }
-
-        async processQueue() {
-            if (this.isTraining) return;
-            this.isTraining = true;
-
-            while (this.trainQueue.length) {
-                const { text, epochs } = this.trainQueue.shift();
-                await this.trainSession(text, epochs);
-            }
-
-            this.isTraining = false;
-        }
-    };
-
-
-    let model = null;
-
-    self.onmessage = async e => {
-        const { action, text, epochs, hiddenNodes, order, seed, maxSafeLength } = e.data;
-
-        try {
-            if (action === "init") {
-                model = new TextNeuralNetwork(hiddenNodes, order);
-                self.postMessage({ type: "log", message: "Model initialized" });
-                return;
-            }
-
-            if (!model) {
-                self.postMessage({
-                    type: "error",
-                    message: "Model not initialized"
-                });
-                return;
-            }
-
-            if (action === "train") {
-                model.trainSession(text, epochs);
-
-                self.postMessage({
-                    type: "train_complete"
-                });
-                return;
-            }
-
-            if (action === "generate") {
-                const output = model.generate(seed, maxSafeLength);
-
-                self.postMessage({
-                    type: "generate_complete",
-                    output
-                });
-                return;
-            }
-
-        } catch (err) {
-            self.postMessage({
-                type: "error",
-                message: String(err?.stack || err)
             });
 
-            self.postMessage({ type: "train_complete" });
+            if (!addedNew) return;
+
+            const inputNodes = this.order * this.vocabSize;
+            const outputNodes = this.vocabSize;
+
+            if (this.weights_ih.length === 0) {
+                this.weights_ih = Array.from({ length: this.hiddenNodes }, () =>
+                    Array.from({ length: inputNodes }, () => Math.random() * 0.2 - 0.1)
+                );
+            } else {
+                for (let i = 0; i < this.hiddenNodes; i++) {
+                    if (this.weights_ih[i] == null) continue;
+                    while (this.weights_ih[i].length < inputNodes) {
+                        this.weights_ih[i].push(Math.random() * 0.2 - 0.1);
+                    }
+                }
+            }
+
+            while (this.weights_ho.length < outputNodes) {
+                this.weights_ho.push(Array.from({ length: this.hiddenNodes }, () => Math.random() * 0.2 - 0.1));
+            }
+
+            while (this.bias_o.length < outputNodes) {
+                this.bias_o.push(Math.random() * 0.2 - 0.1);
+            }
         }
-    };
+
+        encodeInput(sequenceArray) {
+            let inputVector = Array(this.order * this.vocabSize).fill(0);
+            for (let i = 0; i < this.order; i++) {
+                let item = sequenceArray[i];
+                if (item && this.charToIdx[item] !== undefined) {
+                    let idx = this.charToIdx[item];
+                    inputVector[i * this.vocabSize + idx] = 1;
+                }
+            }
+            return inputVector;
+        }
+
+        sigmoid(x) { return 1 / (1 + Math.exp(-x)); }
+        dsigmoid(y) { return y * (1 - y); }
+
+        predict(inputVector) {
+            let hidden = Array(this.hiddenNodes).fill(0);
+            for (let i = 0; i < this.hiddenNodes; i++) {
+                let sum = this.bias_h[i];
+                for (let j = 0; j < inputVector.length; j++) {
+                    sum += this.weights_ih[i][j] * inputVector[j];
+                }
+                hidden[i] = this.sigmoid(sum);
+            }
+
+            let output = Array(this.vocabSize).fill(0);
+            for (let i = 0; i < this.vocabSize; i++) {
+                let sum = this.bias_o[i];
+                for (let j = 0; j < this.hiddenNodes; j++) {
+                    sum += this.weights_ho[i][j] * hidden[j];
+                }
+                output[i] = this.sigmoid(sum);
+            }
+
+            return { hidden, output };
+        }
+
+        trainSession(text, epochs = 1000) {
+            const rawItems = [...text, this.END_MARKER];
+            self.postMessage({ type: 'log', message: "Analyzing text tokens and dynamically expanding vocabulary dimensions..." });
+            this.updateVocabulary(rawItems);
+
+            const samples = [];
+            for (let i = 0; i <= rawItems.length - this.order - 1; i++) {
+                samples.push({
+                    inputSeq: rawItems.slice(i, i + this.order),
+                    targetChar: rawItems[i + this.order]
+                });
+            }
+
+            if (samples.length === 0) {
+                self.postMessage({ type: 'error', message: "Text too short for the current lookback order." });
+                return;
+            }
+
+            self.postMessage({ type: 'log', message: "Training network across " + epochs + " iterations..." });
+
+            for (let epoch = 1; epoch <= epochs; epoch++) {
+                let totalError = 0;
+
+                samples.forEach(sample => {
+                    let inputVector = this.encodeInput(sample.inputSeq);
+                    let targetIdx = this.charToIdx[sample.targetChar];
+
+                    let { hidden, output } = this.predict(inputVector);
+
+                    let outputErrors = Array(this.vocabSize).fill(0);
+                    for (let i = 0; i < this.vocabSize; i++) {
+                        let targetVal = (i === targetIdx) ? 1.0 : 0.0;
+                        outputErrors[i] = targetVal - output[i];
+                        totalError += Math.abs(outputErrors[i]);
+                    }
+
+                    let outputGradients = Array(this.vocabSize).fill(0);
+                    for (let i = 0; i < this.vocabSize; i++) {
+                        outputGradients[i] = this.dsigmoid(output[i]) * outputErrors[i] * this.learningRate;
+                    }
+
+                    for (let i = 0; i < this.vocabSize; i++) {
+                        for (let j = 0; j < this.hiddenNodes; j++) {
+                            this.weights_ho[i][j] += outputGradients[i] * hidden[j];
+                        }
+                        this.bias_o[i] += outputGradients[i];
+                    }
+
+                    let hiddenErrors = Array(this.hiddenNodes).fill(0);
+                    for (let j = 0; j < this.hiddenNodes; j++) {
+                        let errorSum = 0;
+                        for (let i = 0; i < this.vocabSize; i++) {
+                            errorSum += this.weights_ho[i][j] * outputErrors[i];
+                        }
+                        hiddenErrors[j] = errorSum;
+                    }
+
+                    let hiddenGradients = Array(this.hiddenNodes).fill(0);
+                    for (let j = 0; j < this.hiddenNodes; j++) {
+                        hiddenGradients[j] = this.dsigmoid(hidden[j]) * hiddenErrors[j] * this.learningRate;
+                    }
+
+                    for (let j = 0; j < this.hiddenNodes; j++) {
+                        for (let k = 0; k < inputVector.length; k++) {
+                            this.weights_ih[j][k] += hiddenGradients[j] * inputVector[k];
+                        }
+                        this.bias_h[j] += hiddenGradients[j];
+                    }
+                });
+
+                if (epoch === 1 || epoch % (epochs / 5) === 0) {
+                    let avgLoss = (totalError / (samples.length * this.vocabSize)).toFixed(5);
+                    self.postMessage({ type: 'log', message: "   Epoch " + epoch + "/" + epochs + " | Loss Density: " + avgLoss });
+                }
+            }
+            self.postMessage({ type: 'train_complete' });
+        }
+
+        generate(seed, maxSafeLength = 100) {
+            if (this.vocabSize === 0) return "Train me first!";
+
+            let currentSequence = [...seed.padStart(this.order, " ")].slice(-this.order);
+            let output = seed;
+
+            for (let i = 0; i < maxSafeLength; i++) {
+                let inputVector = this.encodeInput(currentSequence);
+                let { output: rawPredictions } = this.predict(inputVector);
+
+                let maxVal = -1;
+                let targetIdx = 0;
+                rawPredictions.forEach((val, idx) => {
+                    if (val > maxVal) {
+                        maxVal = val;
+                        targetIdx = idx;
+                    }
+                });
+
+                let nextChar = this.idxToChar[targetIdx] || " ";
+
+                if (nextChar === this.END_MARKER) {
+                    break;
+                }
+
+                output += nextChar;
+                currentSequence.push(nextChar);
+                currentSequence.shift();
+            }
+            return output;
+        }
+    }
+
+    let ai = null;
+
+    self.onmessage = e => {
+        const { action, hiddenNodes, order, text, epochs, seed, maxSafeLength } = e.data;
+
+        if (action === 'init') {
+            ai = new TextNeuralNetwork(hiddenNodes, order);
+            self.postMessage({ type: 'log', message: "Neural Network initialized on worker thread." });
+        }
+
+        if (action === 'train') ai.trainSession(text, epochs);
+
+        if (action === 'generate') {
+            const response = ai.generate(seed, maxSafeLength);
+            self.postMessage({ type: 'generate_complete', output: response });
+        }
+
+        if (action === 'clear') ai.clear();
+        if (action === 'set_params') ai.setParams(hiddenNodes, order);
+    }
     `;
+
     class ThreadedAIClient {
         constructor(hiddenNodes = 64, order = 4) {
-            const workerBlob = new Blob([workerCode], { type: "application/javascript" });
-            this.worker = new Worker(URL.createObjectURL(workerBlob));
+            const blob = new Blob([workerCode], { type: "application/javascript" });
+            this.worker = new Worker(URL.createObjectURL(blob));
             this.onGenerateResolver = null;
             this.onTrainResolver = null;
 
-            this.worker.onmessage = e => {
+            this.worker.onmessage = (e) => {
                 const { type, message, output } = e.data;
                 if (type === "log") console.log(message);
                 if (type === "error") console.error(message);
@@ -416,15 +301,28 @@ async function runAI() {
             this.worker.postMessage({ action: "init", hiddenNodes, order });
         }
 
+        clear() {
+            return new Promise((resolve) => {
+                this.onClearResolver = resolve;
+                this.worker.postMessage({ action: "clear" });
+            });
+        }
+        setParams(hiddenNodes, order) {
+            return new Promise((resolve) => {
+                this.onClearResolver = resolve;
+                this.worker.postMessage({ action: "set_params", hiddenNodes, order });
+            });
+        }
+
         train(text, epochs = 1000) {
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
                 this.onTrainResolver = resolve;
                 this.worker.postMessage({ action: "train", text, epochs });
             });
         }
 
         generate(seed, maxSafeLength = 100) {
-            return new Promise(resolve => {
+            return new Promise((resolve) => {
                 this.onGenerateResolver = resolve;
                 this.worker.postMessage({ action: "generate", seed, maxSafeLength });
             });
@@ -432,7 +330,7 @@ async function runAI() {
     }
 
     let ai = new ThreadedAIClient(
-        parseInt(localStorage?.defaultHiddenNodes ?? 64),
+        parseInt(localStorage?.defaultHiddenNodes ?? 512),
         parseInt(localStorage?.defaultOrder ?? 3),
     );
 
