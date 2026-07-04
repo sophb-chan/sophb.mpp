@@ -2918,6 +2918,9 @@ $(function () {
 		var channel = msg.ch;
 		var info = $("#room > .info");
 		info.text(channel._id);
+		info.attr('i18next-orgval-0', channel._id);
+		
+		// brah
 		if (channel.settings.lobby) info.addClass("lobby");
 		else info.removeClass("lobby");
 		if (!channel.settings.chat) info.addClass("no-chat");
@@ -5561,12 +5564,6 @@ $(function () {
 			}
 		}
 	})();
-
-	if (window !== top) {
-		alert(
-			"Hey, it looks like you're visiting our site through another website. Consider playing Multiplayer Piano directly at https://multiplayerpiano.net",
-		);
-	}
 
 	(async () => {
 		// prettier-ignore
