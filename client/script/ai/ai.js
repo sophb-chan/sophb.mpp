@@ -915,4 +915,6 @@ async function runAI() {
     if (MPP.client.isConnecting() || !MPP.client.isConnected())
         MPP.client.on("hi", () => startup());
     else startup();
+
+    return ai;
 }
