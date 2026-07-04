@@ -706,6 +706,16 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	grid-row-gap: 2px;
 }
 
+#client-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+#client-settings-content .client-settings-tab * {
+	font-size: 14px;
+}
+
 #client-settings-ok-btn {
 	position: absolute;
 	right: 8px;
