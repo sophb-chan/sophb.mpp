@@ -1690,6 +1690,22 @@ $(function () {
 
 	// Playing notes
 	gClient.on("n", function (msg) {
+		if (gPianoMutes.includes(msg.p)) return;
+		const participant = gClient.ppl[msg.p];
+		for (const note of msg.n) {
+			if (note.s) {
+				setTimeout(()=>{
+					MPP.piano.stop(note.n, participant, 0);
+				}, note.d);
+			}
+			else {
+				setTimeout(()=>{
+					MPP.piano.play(note.n, note.v, participant, 0);
+				}, note.d);
+			}
+		}
+
+		/* broken code idk why
 		var t = msg.t - gClient.serverTimeOffset + TIMING_TARGET - Date.now();
 		var participant = gClient.findParticipantById(msg.p);
 		if (gPianoMutes.indexOf(participant._id) !== -1) return;
@@ -1722,6 +1738,7 @@ $(function () {
 				}
 			}
 		}
+			*/
 	});
 
 	// Send cursor updates
