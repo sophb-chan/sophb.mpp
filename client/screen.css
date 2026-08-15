@@ -652,7 +652,7 @@ body:has(#room .more[style*="display: block"]) #room {
 	height: 100%;
 	z-index: 1;
 
-	background: url(/arrow.svg) no-repeat center 0;
+	background: url(/arrow.svg) no-repeat center 50%;
 	transition: transform 0.5s ease;
 }
 
