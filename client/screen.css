@@ -641,13 +641,30 @@ body:has(#room .more[style*="display: block"]) #room {
 	top: 0;
 	border-radius: 0px 10px 10px 0px;
 	transition: border-radius 1s ease-in;
-	background: #232 url(/arrow.png) no-repeat center 0;
+	background: #232;
+}
+
+#room .expand::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+
+	background: url(/arrow.svg) no-repeat center 0;
+	transition: transform .5s ease;
 }
 
 body:has(#room .more[style*="display: block"]) #room .expand {
 	border-radius: 0px 0px 10px 0px;
 	transition: border-radius 0.5s ease;
 }
+body:has(#room .more[style*="display: block"]) #room .expand::before {
+	transform: rotate(180deg);
+}
+
 
 #room .more {
 	display: none;
