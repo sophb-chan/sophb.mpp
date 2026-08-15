@@ -2936,7 +2936,7 @@ $(function () {
 		var info = $("#room > .info");
 		info.text(channel._id);
 		info.attr('i18next-orgval-0', channel._id);
-		
+
 		// brah
 		if (channel.settings.lobby) info.addClass("lobby");
 		else info.removeClass("lobby");
@@ -3500,7 +3500,7 @@ $(function () {
 		// Optionally show a warning when clicking links
 		/*$("#chat ul").on("click", ".chatLink", function(ev) {
 		  var $s = $(this);
-	
+
 		  if(gWarnOnLinks) {
 			if(!$s.hasClass("clickedOnce")) {
 			  $s.addClass("clickedOnce");
@@ -3676,7 +3676,7 @@ $(function () {
 
 				//construct string for creating list element
 
-				var liString = `<li id="msg-${msg.id}">`;
+				var liString = `<li id="msg-${msg.id}" title="Click to copy the full ID!">`;
 
 				var isSpecialDm = false;
 
@@ -4484,14 +4484,14 @@ $(function () {
 		if(url.indexOf(".js") !== url.length - 3) return;
 		// extensions inject cross-domain embeds too
 		if(url.toLowerCase().indexOf("multiplayerpiano.com") == -1) return;
-	
+
 		// errors in my code
 		if(url.indexOf("script.js") !== -1) {
 		  if(message.indexOf("Object [object Object] has no method 'on'") !== -1) return;
 		  if(message.indexOf("Object [object Object] has no method 'off'") !== -1) return;
 		  if(message.indexOf("Property '$' of object [object Object] is not a function") !== -1) return;
 		}
-	
+
 		var enc = "/bugreport/"
 		  + (message ? encodeURIComponent(message) : "") + "/"
 		  + (url ? encodeURIComponent(url) : "") + "/"

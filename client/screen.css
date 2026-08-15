@@ -1234,9 +1234,6 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 #chat,
 #chat * {
 	user-select: text;
-	-webkit-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
 }
 
 #chat ul {
@@ -1270,12 +1267,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	margin-right: 8px;
 	padding-inline: 4px;
 	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
 	cursor: pointer;
-}
-#chat li .replyLink:hover {
-	/* stuff */
 }
 
 #chat li .receivedDm,

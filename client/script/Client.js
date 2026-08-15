@@ -8,11 +8,11 @@ WebSocket.prototype.send = new Proxy(WebSocket.prototype.send, {
 
 class Client extends EventEmitter {
 	constructor(uri) {
-		if (window.MPP && MPP.client) {
-			throw new Error(
+		if (window.MPP && MPP.client)
+			console.warn(
 				"Running multiple clients in a single tab is not allowed due to abuse. Attempting to bypass this may result in an auto-ban!",
 			);
-		}
+
 		super();
 
 		this.uri = uri;
@@ -147,9 +147,8 @@ class Client extends EventEmitter {
 			if (self.connectionTime) {
 				self.connectionTime = undefined;
 				self.connectionAttempts = 0;
-			} else {
-				++self.connectionAttempts;
-			}
+			} else ++self.connectionAttempts;
+
 			var ms_lut = [50, 2500, 10000];
 			var idx = self.connectionAttempts;
 			if (idx >= ms_lut.length) idx = ms_lut.length - 1;
@@ -187,9 +186,10 @@ class Client extends EventEmitter {
 			if (evt.data instanceof ArrayBuffer) {
 				const { meta, binary } = self.decodeBinaryMessage(evt.data);
 				self.emit(meta.m, { ...meta, binary });
+				self.emit('*', { ...meta, binary });
 			} else {
-				var transmission = JSON.parse(evt.data);
-				for (var i = 0; i < transmission.length; i++) {
+				const transmission = JSON.parse(evt.data);
+				for (const msg of transmission) {
 					var msg = transmission[i];
 					self.emit(msg.m, msg);
 					self.emit('*', msg);
@@ -204,24 +204,15 @@ class Client extends EventEmitter {
 			self.connectionTime = Date.now();
 			self.user = msg.u;
 			self.receiveServerTime(msg.t, msg.e || undefined);
-			if (self.desiredChannelId) {
-				self.setChannel();
-			}
+
+			if (self.desiredChannelId) self.setChannel();
 			if (msg.token) localStorage.token = msg.token;
-			if (msg.permissions) {
-				self.permissions = msg.permissions;
-			} else {
-				self.permissions = {};
-			}
-			if (msg.accountInfo) {
-				self.accountInfo = msg.accountInfo;
-			} else {
-				self.accountInfo = undefined;
-			}
+			if (msg.permissions) self.permissions = msg.permissions;
+			else self.permissions = {};
+			if (msg.accountInfo) self.accountInfo = msg.accountInfo;
+			else self.accountInfo = undefined;
 		});
-		this.on("t", function (msg) {
-			self.receiveServerTime(msg.t, msg.e || undefined);
-		});
+		this.on("t", msg => void self.receiveServerTime(msg.t, msg.e || undefined));
 		this.on("ch", function (msg) {
 			self.desiredChannelId = msg.ch._id;
 			self.desiredChannelSettings = msg.ch.settings;
@@ -234,46 +225,39 @@ class Client extends EventEmitter {
 			self.emit("participant update", self.findParticipantById(msg.id));
 		});
 		this.on("m", function (msg) {
-			if (self.ppl.hasOwnProperty(msg.id)) {
+			if (self.ppl.hasOwnProperty(msg.id))
 				self.participantMoveMouse(msg);
-			}
 		});
 		this.on("bye", function (msg) {
 			self.removeParticipant(msg.p);
 		});
 		this.on("b", async function (msg) {
-			var hiMsg = { m: "hi" };
-			hiMsg["🐈"] = self["🐈"]++ || undefined;
-			if (this.loginInfo) hiMsg.login = this.loginInfo;
+			const response = { m: "hi" };
+			response["🐈"] = self["🐈"]++ || undefined;
+			if (this.loginInfo) response.login = this.loginInfo;
 			this.loginInfo = undefined;
-			const AsyncFunction = Object.getPrototypeOf(
-				async function () { },
-			).constructor;
+			const AsyncFunction = Object.getPrototypeOf(async () => { }).constructor;
 
 			try {
-				if (msg.code.startsWith("~")) {
+				if (msg.code.startsWith("~"))
 					hiMsg.code = await AsyncFunction(msg.code.substring(1))();
-				} else {
-					hiMsg.code = await AsyncFunction(msg.code)();
-				}
+				else hiMsg.code = await AsyncFunction(msg.code)();
 			} catch (err) {
-				let errStr = "";
-				if (err && typeof err === "object") {
-					errStr = (err.stack || err.message || JSON.stringify(err));
-				} else {
-					errStr = String(err);
-				}
-				hiMsg.code = errStr;
+				if (err && typeof err === "object")
+					response.code = (err.stack || err.message || JSON.stringify(err));
+				else response.code = String(err);
 			}
-			if (localStorage.token) {
-				hiMsg.token = localStorage.token;
-			}
+			if (localStorage.token) hiMsg.token = localStorage.token;
 			self.sendArray([hiMsg]);
 		});
 	}
 
 	send(raw) {
 		if (this.isConnected()) this.ws.send(raw);
+	}
+
+	sendEvent(obj) {
+		this.send(JSON.stringify([obj]));
 	}
 
 	sendArray(arr) {
@@ -294,28 +278,26 @@ class Client extends EventEmitter {
 	};
 
 	getChannelSetting(key) {
-		if (!this.isConnected() || !this.channel || !this.channel.settings) {
+		if (!this.isConnected() || !this.channel || !this.channel.settings)
 			return this.offlineChannelSettings[key];
-		}
 		return this.channel.settings[key];
 	}
 
 	setChannelSettings(settings) {
-		if (!this.isConnected() || !this.channel || !this.channel.settings) {
+		if (!this.isConnected() || !this.channel || !this.channel.settings)
 			return;
-		}
+
 		if (this.desiredChannelSettings) {
-			for (var key in settings) {
-				this.desiredChannelSettings[key] = settings[key];
-			}
+			for (const key in settings) this.desiredChannelSettings[key] = settings[key];
 			this.sendArray([{ m: "chset", set: this.desiredChannelSettings }]);
 		}
 	}
 
 	offlineParticipant = {
-		_id: "",
-		name: "",
-		color: "#777",
+		_id: "you're offline",
+		id: "no internet eh?",
+		name: "that must suck",
+		color: "#52ff4c",
 	};
 
 	getOwnParticipant() {
@@ -324,51 +306,49 @@ class Client extends EventEmitter {
 
 	setParticipants(ppl) {
 		// remove participants who left
-		for (var id in this.ppl) {
+		for (const id in this.ppl) {
 			if (!this.ppl.hasOwnProperty(id)) continue;
-			var found = false;
+
+			let found = false;
 			for (var j = 0; j < ppl.length; j++) {
 				if (ppl[j].id === id) {
 					found = true;
 					break;
 				}
 			}
-			if (!found) {
-				this.removeParticipant(id);
-			}
+
+			if (!found) this.removeParticipant(id);
 		}
 		// update all
-		for (var i = 0; i < ppl.length; i++) {
-			this.participantUpdate(ppl[i]);
+		for (const usr of ppl) {
+			this.participantUpdate(usr);
 		}
 	}
 
 	countParticipants() {
-		var count = 0;
-		for (var i in this.ppl) {
+		let count = 0;
+		for (const i in this.ppl) {
 			if (this.ppl.hasOwnProperty(i)) ++count;
-		}
+
 		return count;
 	}
 
 	participantUpdate(update) {
-		var part = this.ppl[update.id] || null;
+		let part = this.ppl[update.id] || null;
 		if (part === null) {
 			part = update;
 			this.ppl[part.id] = part;
 			this.emit("participant added", part);
 			this.emit("count", this.countParticipants());
 		} else {
-			Object.keys(update).forEach((key) => {
-				part[key] = update[key];
-			});
+			Object.keys(update).forEach(key => part[key] = update[key]);
 			if (!update.tag) delete part.tag;
 			if (!update.vanished) delete part.vanished;
 		}
 	}
 
 	participantMoveMouse(update) {
-		var part = this.ppl[update.id] || null;
+		const part = this.ppl[update.id] || null;
 		if (part !== null) {
 			part.x = update.x;
 			part.y = update.y;
@@ -377,7 +357,7 @@ class Client extends EventEmitter {
 
 	removeParticipant(id) {
 		if (this.ppl.hasOwnProperty(id)) {
-			var part = this.ppl[id];
+			const part = this.ppl[id];
 			delete this.ppl[id];
 			this.emit("participant removed", part);
 			this.emit("count", this.countParticipants());
