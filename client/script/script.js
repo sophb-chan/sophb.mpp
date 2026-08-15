@@ -3033,7 +3033,7 @@ $(function () {
 				html:
 					'<p>' +
 					"You're in a room by yourself now, but you can always invite friends by sending them the link."
-					+ (Math.random() > 0.75 ? '<br>(Do you even have friends?)' : '')
+					+ (Math.random() < 0.01 ? '<br>(Do you even have friends?)' : '')
 					+ '</p><br><a href="' +
 					location.href +
 					'">' +
@@ -3670,7 +3670,7 @@ $(function () {
 
 				//construct string for creating list element
 
-				var liString = `<li id="msg-${msg.id}" title="Click to copy the full ID!">`;
+				var liString = `<li id="msg-${msg.id}">`;
 
 				var isSpecialDm = false;
 
@@ -3865,8 +3865,10 @@ $(function () {
 						li.find(".name").text(msg.sender.name);
 						li.find(".name2").text(msg.recipient.name + ":");
 
-						if (gShowIdsInChat)
+						if (gShowIdsInChat) {
 							li.find(".id").text(msg.sender._id.substring(0, 6));
+							li.find(".id").title = "Click to copy the full ID!";
+						}
 						if (gShowIdsInChat)
 							li.find(".id2").text(
 								msg.recipient._id.substring(0, 6),
