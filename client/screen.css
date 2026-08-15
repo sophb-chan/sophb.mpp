@@ -1082,16 +1082,14 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 
 .dialog {
 	background: #232;
-	width: 400px;
-	height: 100px;
+	width: fit-content;
+	height: fit-content;
 	position: fixed;
-	left: 50%;
-	top: 50%;
-	margin-left: -200px;
-	margin-top: -50px;
+	left: 50vw;
+	top: 50vh;
+	transform: translate(-50%, -50%);
 	padding: 10px;
 	border: 1px solid #565;
-	max-height: 25vh;
 	overflow: hidden;
 	border-radius: 4px;
 	box-shadow: 0 0 8px 2px #000;
@@ -1135,6 +1133,16 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	text-shadow: #a91 4px 4px 3px;
 }
 
+#motd {
+	height: fit-content;
+	max-height: 50vh;
+	max-width: 75vw;
+	min-width: 90px;
+	padding-bottom: 40px;
+	overflow: none;
+	word-break: break-word;
+}
+
 #language {
 	height: 80px;
 }
@@ -1158,8 +1166,8 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 #account {
-	height: 300px;
-	margin-top: -150px;
+	width: 50vw;
+	height: 50vh;
 }
 
 #account-info {
@@ -1168,12 +1176,14 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	right: 8px;
 }
 
-#client-settings {
-	height: 300px;
-	margin-top: -150px;
-	overflow: hidden;
+#account-info .logged-in-text {
+	padding-bottom: 6px;
 }
 
+#client-settings {
+	height: 50vh;
+	width: 75vw;
+}
 #client-settings div {
 	float: left;
 	margin-left: 2px;
@@ -1587,6 +1597,14 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	overflow: hidden;
 	white-space: nowrap;
 	color: #fff;
+}
+
+.top-button:hover {
+	background: #222;
+}
+
+.top-button.stuck {
+	background: rgba(204, 187, 170, 0.35);
 }
 
 .icon-button img {
