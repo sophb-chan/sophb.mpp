@@ -5081,22 +5081,19 @@ $(function () {
 			});
 
 			window.changeClientSettingsTab = (evt, tabName) => {
-				for (const tablink of tablinks) {
-					tablink.classList.remove("active");
-				}
+				for (const tablink of tablinks) tablink.classList.remove("active");
 				evt.currentTarget.classList.add("active");
 
 				// Hide all tabs
 				const tabs = document.querySelectorAll(".client-settings-tab");
-				tabs.forEach((tab) => (tab.style.display = "none"));
+				tabs.forEach((tab) => void (tab.style.display = "none"));
 
 				// Show the selected tab
 				const selectedTab = document.querySelector(
 					`.client-settings-tab[data-name="${tabName}"]`,
 				);
-				if (selectedTab != null) {
+				if (selectedTab != null)
 					selectedTab.style.display = "revert";
-				}
 			};
 
 			// Setup Client tab event listeners
@@ -5212,8 +5209,10 @@ $(function () {
 
 			// Setup tab click handlers
 			for (const tablink of tablinks) {
+				console.log(tablink);
 				tablink.addEventListener("click", (evt) => {
-					const tabName = tablink.textContent.trim();
+					console.log(tablink);
+					const tabName = tablink.dataset.name.trim();
 					window.changeClientSettingsTab(evt, tabName);
 				});
 			}
