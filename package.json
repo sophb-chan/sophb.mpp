@@ -9,6 +9,5 @@
 	},
 	"scripts": {
 		"build": "echo 'No build required'"
-		// "build": "esbuild --minify client/*.js client/*.css --outdir=client/ --allow-overwrite"
 	}
 }
