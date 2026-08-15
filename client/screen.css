@@ -61,9 +61,19 @@ body {
 	initial-value: -15deg;
 }
 
-@keyframes rotate-bg {
+@property --swing-amount {
+	syntax: "<angle>";
+	inherits: false;
+	initial-value: 25deg;
+}
+
+
+@keyframes swing-bg {
+	from {
+		--bg-angle: calc(-15deg - var(--swing-amount));
+	}
 	to {
-		--bg-angle: calc(-15deg + 45deg);
+		--bg-angle: calc(-15deg + var(--swing-amount));
 	}
 }
 
@@ -73,7 +83,7 @@ body {
 		var(--color) 0%,
 		var(--color2) 100%
 	);
-	animation: rotate-bg 15s ease-in-out alternate infinite;
+	animation: swing-bg 15s ease-in-out alternate infinite;
 	transition:
 		--color 1s ease,
 		--color2 2s ease;
