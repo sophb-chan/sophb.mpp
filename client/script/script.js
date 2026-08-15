@@ -5209,7 +5209,6 @@ $(function () {
 
 			// Setup tab click handlers
 			for (const tablink of tablinks) {
-				console.log(tablink);
 				tablink.addEventListener("click", (evt) => {
 					console.log(tablink);
 					const tabName = tablink.dataset.name.trim();
