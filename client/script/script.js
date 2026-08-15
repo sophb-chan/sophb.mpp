@@ -3409,8 +3409,10 @@ $(function () {
 		gClient.on("c", function (msg) {
 			chat.clear();
 			if (msg.c) {
-				for (var i = 0; i < msg.c.length; i++) {
-					chat.receive(msg.c[i]);
+				for (const chatMsg of msg.c) {
+					chatMsg = structuredClone(chatMsg);
+					chatMsg.isFromLogs = true;
+					chat.receive(chatMsg
 				}
 			}
 		});
@@ -3668,6 +3670,7 @@ $(function () {
 					if (gChatMutes.indexOf(msg.p._id) != -1) return;
 				}
 
+				const dontCheckMention = msg.isFromLogs;
 				//construct string for creating list element
 
 				var liString = `<li id="msg-${msg.id}">`;
@@ -3720,7 +3723,7 @@ $(function () {
 				if (msg.r) {
 					var repliedMsg = messageCache.find((e) => e.id === msg.r);
 					if (!tabIsActive) {
-						if (repliedMsg?.p?._id === gClient.user._id) {
+						if (repliedMsg?.p?._id === gClient.user._id && !dontCheckMention) {
 							document.title = `You have received a reply!`;
 							youreReplied = true;
 						}
@@ -3802,7 +3805,7 @@ $(function () {
 						if (user.id === gClient.getOwnParticipant().id) {
 							if (!tabIsActive) {
 								youreMentioned = true;
-								document.title = window.i18nextify.i18next.t(
+								if (dontCheckMention) document.title = window.i18nextify.i18next.t(
 									"You were mentioned!",
 								);
 							}
