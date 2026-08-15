@@ -5099,7 +5099,7 @@ $(function () {
 
 			// Setup Client tab event listeners
 			document
-				.getElementById("websocket-uri")
+				.getElementById("websocket-url")
 				.addEventListener("change", (evt) => {
 					// handle later
 				});
@@ -5350,7 +5350,7 @@ $(function () {
 			}
 
 			// Initialize inputs with current values
-			document.getElementById("websocket-uri").value =
+			document.getElementById("websocket-url").value =
 				gClient.uri;
 			document.getElementById("toggle-filter-bypass").checked =
 				gIsBloating;
