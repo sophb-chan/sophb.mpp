@@ -727,10 +727,14 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 .ugly-button {
-	height: 12px;
+	height: fit-content;
+	width: fit-content;
+
 	font-size: 12px;
 	background: #2328;
 	border: 1px solid #454;
+	color: #fff;
+
 	padding: 5px;
 	cursor: pointer;
 	line-height: 12px;
