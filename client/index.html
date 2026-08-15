@@ -139,7 +139,7 @@
 				<button class="submit">PLAY</button>
 			</div>
 			<div id="new-room" class="dialog">
-				<p><input type="text" name="name" placeholder="Your Fancy New Room's Name" class="text" maxlength="512" /></p>
+				<p><input type="text" name="name" placeholder="Your Fancy New Room's Name" size="32" class="text" maxlength="512" /></p>
 				<p>
 					<label>
 						<input type="checkbox" name="visible" class="checkbox" checked>
@@ -344,11 +344,12 @@
 						<p>
 							<span data-i18n="Filter bypass joiner character:">Filter bypass joiner character:</span>
 							<input type="text"
-							pattern="^[0-9a-fA-F]{4}$"
-    						title="Please enter a valid hexadecimal unicode index (0-9, A-F)"
-    						required
-							size="4"
-							id="filter-bypass-joiner" class="setting">
+								pattern="^[0-9a-fA-F]{4}$"
+								title="Please enter a valid hexadecimal unicode index (0-9, A-F)"
+								required
+								size="4"
+								id="filter-bypass-joiner" class="setting"
+							/>
 						</p>
 						<button class="ugly-button" onclick="MPP.client.restart()">Reconnect</button>
 					</div>
