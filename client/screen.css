@@ -565,7 +565,6 @@ body:has(#names:hover) #cursors {
 	left: 0;
 	width: 100%;
 	height: 60px;
-	background: var(--color2);
 	margin-bottom: 3px;
 	transition:
 		--color 1000ms,
@@ -584,8 +583,8 @@ body:has(#names:hover) #cursors {
 	padding: 5px;
 	width: 240px;
 	height: 12px;
-	background: #444;
-	border: 1px solid #ccc;
+	background: #454;
+	border: 1px solid #cdc;
 	cursor: pointer;
 	border-radius: 10px;
 	transition: border-radius 1s ease-in;
@@ -642,7 +641,7 @@ body:has(#room .more[style*="display: block"]) #room {
 	top: 0;
 	border-radius: 0px 10px 10px 0px;
 	transition: border-radius 1s ease-in;
-	background: #222 url(/arrow.png) no-repeat center 0;
+	background: #232 url(/arrow.png) no-repeat center 0;
 }
 
 body:has(#room .more[style*="display: block"]) #room .expand {
@@ -662,16 +661,16 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	); /* screen height - height lifted from botton - clearance */
 	overflow: hidden;
 	overflow-y: scroll;
-	background: #4448;
+	background: #4548;
 	backdrop-filter: blur(4px) saturate(200%);
-	border: 1px solid #ccc;
+	border: 1px solid #cdc;
 	border-radius: 10px 10px 0 0;
 }
 
 #room .more > div {
 	margin: 0;
 	padding: 10px calc(infinity * 1px) 0px 5px; /* actual black magic btw */
-	border-bottom: solid 1px #8888;
+	border-bottom: solid 1px #8988;
 	text-overflow: clip;
 	width: 100%;
 	height: 20px;
@@ -683,7 +682,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 #room .more .info:hover {
-	background: #8886;
+	background: #8986;
 }
 #room .more .info.lobby:hover {
 	background: #8846;
@@ -696,7 +695,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 #room .more .new {
-	background: #1118;
+	background: #1318;
 	font-family: inter-italic;
 	font-weight: bold;
 	width: 100%;
@@ -707,39 +706,40 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 #room .more .new:hover {
-	background: #3338;
+	background: #3538;
 	font-weight: revert;
 }
 
 .ugly-button {
 	height: 12px;
 	font-size: 12px;
-	background: #2228;
-	border: 1px solid #444;
+	background: #2328;
+	border: 1px solid #454;
 	padding: 5px;
 	cursor: pointer;
 	line-height: 12px;
 	border-radius: 10px;
 	overflow: hidden;
 	white-space: pre;
-	transition: border-radius 1s ease-in;
+	transition: border-radius 1s ease-in, background .25s ease;
 	text-align: center;
 }
 
 .ugly-button:hover {
-	background: #2a2a2abb;
+	background: #2a4a2abb;
 	border-radius: 5px;
 	transition: border-radius 0.25s ease-out;
 }
 
 .ugly-button.stuck {
-	background: rgba(204, 187, 170, 0.35);
+	background: #ccbbaa59;
 }
 
 .buttons {
 	position: absolute;
 	left: 300px;
 	top: 4px;
+	max-width: 50vw;
 	margin-right: 120px;
 	grid-auto-flow: column;
 	display: grid;
@@ -769,13 +769,13 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 #client-settings-ok-btn:hover {
-	background: #222;
+	background: #232;
 }
 
 #tooltip {
 	position: absolute;
 	pointer-events: none;
-	background: #000;
+	background: #010;
 	color: #fff;
 	font-size: 10px;
 }
@@ -852,18 +852,20 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 
 #quota {
 	width: 100%;
-	height: 3px;
+	height: 5px;
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	background: #f80;
+	background: #ff0080;
 }
 
 #quota .value {
+	display: block;
 	width: 100%;
 	height: 100%;
-	display: block;
-	background: #fd0;
+	background: #52ff4c;
+	will-change: width;
+	transition: width .25s ease;
 }
 
 .relative {
@@ -922,11 +924,11 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	position: absolute;
 	right: 0;
 	top: 0;
-	
+
 	cursor: pointer;
 	font-size: 0;
 	color: #ff0080;
-	
+
 	transform: translate(-4px, 4px);
 	padding: 10px;
 
@@ -934,7 +936,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
-	
+
 	font-family: monospace;
 	text-shadow: none;
 	transition: color .5s ease, transform .5s ease;
@@ -1005,7 +1007,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	margin: 1px;
 	padding: 4px;
 	background: 0 0 #5b2525;
-	border: 1px solid #555;
+	border: 1px solid #565;
 	border-radius: 4px;
 	cursor: pointer;
 	font-family: monospace;
@@ -1020,16 +1022,17 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	margin: 1px;
 	padding: 4px;
 	background: 0 0;
-	border: 1px solid #555;
+	border: 1px solid #565;
 	border-radius: 4px;
 	cursor: pointer;
-	font-family: monospace;
+	transition: font-weight .5s ease;
 }
 
 .notification .pack.enabled {
 	background: #2b562b;
 	cursor: not-allowed;
 	font-weight: bolder;
+	transition: font-weight .25s ease;
 }
 
 .notification .pack:after {
@@ -1078,7 +1081,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 .dialog {
-	background: #222;
+	background: #232;
 	width: 400px;
 	height: 100px;
 	position: fixed;
@@ -1087,14 +1090,11 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	margin-left: -200px;
 	margin-top: -50px;
 	padding: 10px;
-	border: 1px solid #555;
+	border: 1px solid #565;
+	max-height: 25vh;
 	overflow: hidden;
 	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	box-shadow: 0 0 8px #000;
-	-webkit-box-shadow: 0 0 8px #000;
-	-moz-box-shadow: 0 0 8px #000;
+	box-shadow: 0 0 8px 2px #000;
 }
 
 .dialog p {
@@ -1113,33 +1113,26 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 .dialog .submit {
+	cursor: pointer;
 	background: #fe4;
 	border: none;
 	padding: 7px 40px 20px 30px;
 	font-size: 20px;
 	color: #000;
-	text-shadow: #444 2px 2px 2px;
+	text-shadow: #874 2px 2px 2px;
 	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	box-shadow: inset 0 0 4px #000;
-	-webkit-box-shadow: inset 0 0 4px #000;
-	-moz-box-shadow: inset 0 0 4px #000;
+	box-shadow: inset 0 0 4px#000;
 	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
 	position: absolute;
 	bottom: -10px;
 	right: -10px;
 }
 
 .dialog .submit:hover {
+	border-radius: 8px;
 	background: #ff8;
-	transition: all 0.25s;
-	-webkit-transition: all 0.25s;
-	-moz-transition: all 0.25s;
-	-o-transition: all 0.25s;
+	box-shadow: inset 0 0 4px 1px #000;
+	text-shadow: #a91 4px 4px 3px;
 }
 
 #language {

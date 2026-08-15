@@ -2357,22 +2357,15 @@ $(function () {
 
 	// NoteQuota
 	var gNoteQuota = (function () {
-		var last_rat = 0;
-		var nqjq = $("#quota .value");
+		let last_rat = 0;
+		const nqjq = $("#quota .value");
 		setInterval(function () {
 			gNoteQuota.tick();
 		}, 2000);
 		return new NoteQuota(function (points) {
 			// update UI
-			var rat = (points / this.max) * 100;
-			if (rat <= last_rat)
-				nqjq.stop(true, true).css("width", rat.toFixed(0) + "%");
-			else
-				nqjq.stop(true, true).animate(
-					{ width: rat.toFixed(0) + "%" },
-					2000,
-					"linear",
-				);
+			const rat = (points / this.max) * 100;
+			$("#quota .value")[0].style.width = `${rat.toFixed(2)}%`;
 			last_rat = rat;
 		});
 	})();
