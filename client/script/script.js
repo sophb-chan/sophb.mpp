@@ -3409,7 +3409,7 @@ $(function () {
 		gClient.on("c", function (msg) {
 			chat.clear();
 			if (msg.c) {
-				for (const chatMsg of msg.c) {
+				for (let chatMsg of msg.c) {
 					chatMsg = structuredClone(chatMsg);
 					chatMsg.isFromLogs = true;
 					chat.receive(chatMsg);
