@@ -865,7 +865,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	height: 100%;
 	background: #52ff4c;
 	will-change: width;
-	transition: width .25s ease;
+	transition: width .5s ease;
 }
 
 .relative {
