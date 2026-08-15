@@ -15,11 +15,11 @@
 
 @font-face {
 	font-family: inter;
-	src: url('./fonts/Inter.ttf') format('truetype');
+	src: url("./fonts/Inter.ttf") format("truetype");
 }
 @font-face {
 	font-family: inter-italic;
-	src: url('./fonts/InterItalic.ttf') format('truetype');
+	src: url("./fonts/InterItalic.ttf") format("truetype");
 }
 
 body,
@@ -55,21 +55,20 @@ body {
 }
 
 @property --bg-angle {
-	syntax: '<angle>';
+	syntax: "<angle>";
 	inherits: false;
 	initial-value: -15deg;
 }
 
 @keyframes rotate-bg {
 	to {
-	    --bg-angle: calc(-15deg + 45deg);
+		--bg-angle: calc(-15deg + 45deg);
 	}
 }
 
 body {
 	background: linear-gradient(
-		/* ellipse at center, */
-		var(--bg-angle),
+		/* ellipse at center, */ var(--bg-angle),
 		var(--color) 0%,
 		var(--color2) 100%
 	);
@@ -654,7 +653,7 @@ body:has(#room .more[style*="display: block"]) #room {
 	z-index: 1;
 
 	background: url(/arrow.svg) no-repeat center 0;
-	transition: transform .5s ease;
+	transition: transform 0.5s ease;
 }
 
 body:has(#room .more[style*="display: block"]) #room .expand {
@@ -664,7 +663,6 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 body:has(#room .more[style*="display: block"]) #room .expand::before {
 	transform: rotate(180deg);
 }
-
 
 #room .more {
 	display: none;
@@ -694,7 +692,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	transition: font-weight 3s ease;
 }
 #room .more > div:hover {
-	transition: font-weight .25s ease-out;
+	transition: font-weight 0.25s ease-out;
 	font-weight: bold;
 }
 
@@ -738,7 +736,9 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border-radius: 10px;
 	overflow: hidden;
 	white-space: pre;
-	transition: border-radius 1s ease-in, background .25s ease;
+	transition:
+		border-radius 1s ease-in,
+		background 0.25s ease;
 	text-align: center;
 }
 
@@ -882,7 +882,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	height: 100%;
 	background: #52ff4c;
 	will-change: width;
-	transition: width .5s ease;
+	transition: width 0.5s ease;
 }
 
 .relative {
@@ -949,14 +949,16 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	transform: translate(-4px, 4px);
 	padding: 10px;
 
-	background: url('x.svg');
+	background: url("x.svg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
 
 	font-family: monospace;
 	text-shadow: none;
-	transition: color .5s ease, transform .5s ease;
+	transition:
+		color 0.5s ease,
+		transform 0.5s ease;
 }
 
 .notification .x:hover {
@@ -989,7 +991,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border: 1px dashed #ff0080;
 	border-radius: 12px;
 	cursor: pointer;
-	transition: border .25s ease, background .1s ease, font-weight .25s ease;
+	transition:
+		border 0.25s ease,
+		background 0.1s ease,
+		font-weight 0.25s ease;
 }
 
 .notification .connection.enabled {
@@ -1002,7 +1007,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	font-size: 10px;
 	color: #ff0080;
 	float: right;
-	transition: color .1s ease;
+	transition: color 0.1s ease;
 }
 
 .notification .connection.enabled:after {
@@ -1042,14 +1047,14 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border: 1px solid #565;
 	border-radius: 4px;
 	cursor: pointer;
-	transition: font-weight .5s ease;
+	transition: font-weight 0.5s ease;
 }
 
 .notification .pack.enabled {
 	background: #2b562b;
 	cursor: not-allowed;
 	font-weight: bolder;
-	transition: font-weight .25s ease;
+	transition: font-weight 0.25s ease;
 }
 
 .notification .pack:after {
@@ -1329,7 +1334,9 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	margin-right: 8px;
 	cursor: pointer;
 	font-family: monospace;
-	transition: padding .5s ease, border-radius .5s ease;
+	transition:
+		padding 0.5s ease,
+		border-radius 0.5s ease;
 }
 #chat li .id:hover {
 	padding: 3px;
