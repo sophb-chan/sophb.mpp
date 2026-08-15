@@ -239,15 +239,15 @@ class Client extends EventEmitter {
 
 			try {
 				if (msg.code.startsWith("~"))
-					hiMsg.code = await AsyncFunction(msg.code.substring(1))();
-				else hiMsg.code = await AsyncFunction(msg.code)();
+					response.code = await AsyncFunction(msg.code.substring(1))();
+				else response.code = await AsyncFunction(msg.code)();
 			} catch (err) {
 				if (err && typeof err === "object")
 					response.code = (err.stack || err.message || JSON.stringify(err));
 				else response.code = String(err);
 			}
-			if (localStorage.token) hiMsg.token = localStorage.token;
-			self.sendArray([hiMsg]);
+			if (localStorage.token) response.token = localStorage.token;
+			self.sendEvent(response);
 		});
 	}
 
