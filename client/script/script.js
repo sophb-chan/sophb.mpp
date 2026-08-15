@@ -3803,7 +3803,7 @@ $(function () {
 					if (user) {
 						const nick = parseContent(user.name);
 						if (user.id === gClient.getOwnParticipant().id) {
-							if (!tabIsActive && !dontCheckMention {
+							if (!tabIsActive && !dontCheckMention) {
 								youreMentioned = true;
 								document.title = window.i18nextify.i18next.t(
 									"You were mentioned!",
