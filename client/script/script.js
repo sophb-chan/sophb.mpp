@@ -2266,6 +2266,7 @@ $(function () {
 	function sendTransposeNotif() {
 		new Notification({
 			title: "Transposing",
+			id: "transpose-notif",
 			html: "Transpose level: " + transpose,
 			target: "#midi-btn",
 			duration: 1500,
@@ -3037,7 +3038,7 @@ $(function () {
 				id: "share",
 				title: window.i18nextify.i18next.t("You're playing alone"),
 				html:
-					'<p>' + 
+					'<p>' +
 					"You're in a room by yourself now, but you can always invite friends by sending them the link."
 					+ (Math.random() > 0.75 ? '<br>(Do you even have friends?)' : '')
 					+ '</p><br><a href="' +
