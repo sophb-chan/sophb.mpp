@@ -3412,7 +3412,7 @@ $(function () {
 				for (const chatMsg of msg.c) {
 					chatMsg = structuredClone(chatMsg);
 					chatMsg.isFromLogs = true;
-					chat.receive(chatMsg
+					chat.receive(chatMsg);
 				}
 			}
 		});
