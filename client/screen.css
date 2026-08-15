@@ -36,6 +36,7 @@ html {
 	*/
 	color: #fff;
 	text-shadow: #222 0px 0px 2px;
+	accent-color: #52ff4c;
 }
 
 body {
@@ -766,6 +767,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 #client-settings {
+	max-width: 50vw;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -1220,14 +1222,18 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 .client-settings-tablink.active {
-	background-color: rgb(69, 69, 69);
+	background-color: #343;
+	border: 1px solid #565;
+	font-weight: bold;
+	border-radius: 2px;
 }
 
 .client-settings-button {
 	height: 14px;
 	font-size: 18px;
-	background: #111;
-	border: 1px solid #444;
+	background: #121;
+	border: 1px solid #454;
+	border-radius: 8px;
 	padding: 6px;
 	cursor: pointer;
 	line-height: 12px;
@@ -1235,11 +1241,14 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	overflow: hidden;
 	white-space: nowrap;
 	text-align: center;
+	transition: all .25s ease;
 }
 
-/* .client-settings-button:hover {
-	background: #222;
-} */
+.client-settings-button:hover {
+	background: #232;
+	font-weight: 200;
+	border-radius: 4px;
+}
 
 .client-settings-button.stuck {
 	background: rgba(204, 187, 170, 0.35);
