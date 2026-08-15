@@ -3035,10 +3035,10 @@ $(function () {
 		setTimeout(function () {
 			new Notification({
 				id: "share",
-				title: window.i18nextify.i18next.t("Playing alone"),
+				title: window.i18nextify.i18next.t("You're playing alone"),
 				html:
 					window.i18nextify.i18next.t(
-						"You are playing alone in a room by yourself, but you can always invite friends by sending them the link."
+						"You're in a room by yourself now, but you can always invite friends by sending them the link."
 						+ Math.random() > 0.75 ? '\n(Do you even have friends?)' : '',
 					) +
 					'<br><a href="' +
