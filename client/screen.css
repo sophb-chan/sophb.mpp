@@ -13,15 +13,27 @@
 	-ms-user-select: none;
 }
 
+@font-face {
+	font-family: inter;
+	src: url('./fonts/Inter.ttf') format('truetype');
+}
+@font-face {
+	font-family: inter-italic;
+	src: url('./fonts/InterItalic.ttf') format('truetype');
+}
+
 body,
 html {
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	overflow: hidden;
+	font-family: verdana;
+	/*
 	font:
 		20pt verdana,
 		"DejaVu Sans",
 		sans-serif;
+	*/
 	color: #fff;
 	text-shadow: #222 0px 0px 2px;
 }
@@ -33,26 +45,38 @@ body {
 @property --color {
 	syntax: "<color>";
 	inherits: false;
-	/* initial-value: #ecfafd; */
-	initial-value: #000000;
+	initial-value: #328826;
 }
 
 @property --color2 {
 	syntax: "<color>";
 	inherits: false;
-	/* initial-value: #c5d5d8; */
-	initial-value: #000000;
+	initial-value: #020;
+}
+
+@property --bg-angle {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: -15deg;
+}
+
+@keyframes rotate-bg {
+	to {
+	    --bg-angle: calc(-15deg + 45deg);
+	}
 }
 
 body {
-	background: radial-gradient(
-		ellipse at center,
+	background: linear-gradient(
+		/* ellipse at center, */
+		var(--bg-angle),
 		var(--color) 0%,
 		var(--color2) 100%
 	);
+	animation: rotate-bg 15s ease-in-out alternate infinite;
 	transition:
-		--color 1s,
-		--color2 1s;
+		--color 1s ease,
+		--color2 2s ease;
 }
 
 a,
@@ -579,6 +603,8 @@ body:has(#room .more[style*="display: block"]) #room {
 	line-height: 12px;
 	overflow: hidden;
 	height: 20px;
+	max-width: calc(240px - 24px); /* room picker width - expand icon width */
+	text-overflow: ellipsis;
 }
 
 /*
@@ -664,9 +690,11 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 
 #room .more > div {
 	margin: 0;
-	padding: 3px 6px 0 6px;
+	padding: 5px calc(infinity * 1px) 0px 5px; /* actual black magic btw */
+	border-bottom: solid 1px #888;
+	text-overflow: clip;
 	width: 100%;
-	height: 20px;
+	height: 15px;
 }
 
 #room .more .info:hover {
@@ -684,6 +712,8 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 
 #room .more .new {
 	background: #1118;
+	width: 100%;
+	text-wrap: nowrap;
 	position: sticky;
 	top: 0;
 	backdrop-filter: blur(4px);
