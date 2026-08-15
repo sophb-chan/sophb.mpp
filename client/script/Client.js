@@ -328,7 +328,7 @@ class Client extends EventEmitter {
 		let count = 0;
 		for (const i in this.ppl) {
 			if (this.ppl.hasOwnProperty(i)) ++count;
-
+		}
 		return count;
 	}
 
