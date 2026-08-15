@@ -1589,10 +1589,6 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	color: #fff;
 }
 
-.top-button.stuck {
-	background: rgba(204, 187, 170, 0.35);
-}
-
 .icon-button img {
 	width: 16px;
 	height: 16px;
