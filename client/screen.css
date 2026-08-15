@@ -877,17 +877,17 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 }
 
 .notification-body {
-	background: #222;
-	border-color: #555;
+	background: #232;
+	border-color: #565;
 	padding: 10px;
 	position: relative;
 	left: 0;
 	top: 0;
 	color: #fff;
 	font-size: 12px;
-	text-shadow: #444 1px 1px;
-	border-radius: 6px;
-	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+	text-shadow: #454 1px 1px;
+	border-radius: 8px;
+	box-shadow: 2px 2px 5px #0004;
 }
 
 .notification-body .text {
@@ -904,37 +904,51 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	left: 50%;
 	margin-left: -3px;
 	border-top: 10px solid transparent;
-	border-top-color: inherit;
+	border-top-color: #232;
 	border-left: 6px solid transparent;
 	border-right: 6px solid transparent;
 }
 
 .title {
-	border-bottom: 1px solid #f50;
+	border-bottom: 1px solid #ff0080;
+	font-family: inter-italic;
 	font-size: 16px;
-	font-weight: 700;
+	font-weight: 800;
 	padding-bottom: 5px;
 	margin-bottom: 8px;
 }
 
 .notification .x {
 	position: absolute;
-	right: 4px;
+	right: 0;
 	top: 0;
+	
 	cursor: pointer;
-	font-size: 20px;
-	color: #d55;
+	font-size: 0;
+	color: #ff0080;
+	
+	transform: translate(-4px, 4px);
+	padding: 10px;
+
+	background: url('x.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	
+	font-family: monospace;
 	text-shadow: none;
+	transition: color .5s ease, transform .5s ease;
 }
 
 .notification .x:hover {
-	color: #f66;
+	color: #ff44a0;
+	transform: scale(1.25);
 }
 
 .notification.classic .notification-body {
 	width: 400px;
-	background: #222;
-	border-color: #555;
+	background: #232;
+	border-color: #565;
 }
 
 .notification.short .title {
@@ -952,27 +966,30 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 .notification .connection {
 	padding: 8px;
 	margin: 8px;
-	background: #fed;
-	border: 1px solid #f84;
+	background: #200;
+	border: 1px dashed #ff0080;
+	border-radius: 12px;
 	cursor: pointer;
-	font-family: monospace;
+	transition: border .25s ease, background .1s ease, font-weight .25s ease;
 }
 
 .notification .connection.enabled {
-	background: #dfd;
+	background: #040;
+	border: 2px solid #52ff4c;
 }
 
 .notification .connection:after {
 	content: "OFF";
 	font-size: 10px;
-	color: #a44;
+	color: #ff0080;
 	float: right;
+	transition: color .1s ease;
 }
 
 .notification .connection.enabled:after {
 	content: "ON";
 	font-size: 10px;
-	color: #4a4;
+	color: #52ff4c;
 	float: right;
 }
 
