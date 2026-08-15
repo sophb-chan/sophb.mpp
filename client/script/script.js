@@ -3037,10 +3037,10 @@ $(function () {
 				id: "share",
 				title: window.i18nextify.i18next.t("You're playing alone"),
 				html:
-					'<a>' + 
+					'<p>' + 
 					"You're in a room by yourself now, but you can always invite friends by sending them the link."
 					+ (Math.random() > 0.75 ? '<br>(Do you even have friends?)' : '')
-					+ '</a><br><a href="' +
+					+ '</p><br><a href="' +
 					location.href +
 					'">' +
 					location.href +
@@ -4258,7 +4258,6 @@ $(function () {
 								}
 							};
 						}
-						showConnections(false);
 						updateDevices();
 					}
 
