@@ -1162,13 +1162,12 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	max-height: 50vh;
 	max-width: 75vw;
 	min-width: 90px;
-	padding-bottom: 40px;
 	overflow: none;
 	word-break: break-word;
 }
 
-#rename {
-	height: 75px;
+#room-settings, #new-room, #rename, #motd {
+	padding-bottom: 50px;
 }
 
 #language {
@@ -1177,11 +1176,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 
 #languages {
 	width: 300px;
-}
-
-#room-settings {
-	height: 400px;
-	margin-top: -200px;
 }
 
 #siteban {
