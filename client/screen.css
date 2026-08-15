@@ -1165,6 +1165,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	word-break: break-word;
 }
 
+#rename {
+	height: 75px;
+}
+
 #language {
 	height: 80px;
 }
