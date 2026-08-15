@@ -402,7 +402,7 @@ input[type="range"]:hover {
 .cursor {
 	width: 18px;
 	height: 24px;
-	background: url(/cursor.svg);
+	background: url(/cursor.svg) no-repeat top left;
 	position: absolute;
 	pointer-events: none;
 	margin-left: -2px;
