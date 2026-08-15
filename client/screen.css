@@ -1581,14 +1581,9 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 .top-button {
 	height: 24px;
 	font-size: 12px;
-	background: #111;
-	border: 1px solid #444;
 	padding: 5px;
 	cursor: pointer;
 	line-height: 12px;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
 	overflow: hidden;
 	white-space: nowrap;
 	color: #fff;
