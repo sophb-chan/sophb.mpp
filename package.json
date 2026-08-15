@@ -2,11 +2,6 @@
 	"name": "sophb.mpp",
 	"version": "1.0.0",
 	"license": "MIT",
-	"devDependencies": {
-		"esbuild": "^0.17.5",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-prettier": "^5.1.2"
-	},
 	"scripts": {
 		"build": "echo 'No build required'"
 	}
