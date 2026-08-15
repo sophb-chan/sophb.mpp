@@ -933,8 +933,9 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border-right: 6px solid transparent;
 }
 
-.title {
+.notification .title {
 	border-bottom: 1px solid #ff0080;
+	text-align: center;
 	font-family: inter-italic;
 	font-size: 16px;
 	font-weight: 800;
