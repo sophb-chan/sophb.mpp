@@ -1631,7 +1631,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	line-height: 12px;
 	overflow: hidden;
 	white-space: nowrap;
-	color: #fff;
 }
 
 .icon-button img {
