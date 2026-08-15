@@ -190,7 +190,6 @@ class Client extends EventEmitter {
 			} else {
 				const transmission = JSON.parse(evt.data);
 				for (const msg of transmission) {
-					var msg = transmission[i];
 					self.emit(msg.m, msg);
 					self.emit('*', msg);
 				}
