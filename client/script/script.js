@@ -5210,8 +5210,7 @@ $(function () {
 			// Setup tab click handlers
 			for (const tablink of tablinks) {
 				tablink.addEventListener("click", (evt) => {
-					console.log(tablink);
-					const tabName = tablink.dataset.name.trim();
+					const tabName = tablink.dataset.name;
 					window.changeClientSettingsTab(evt, tabName);
 				});
 			}
