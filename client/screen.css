@@ -172,7 +172,7 @@ table {
 }
 
 #names .name.owner:before {
-	content: url(/crown.png);
+	content: url(/crown.svg);
 	position: absolute;
 	top: -8px;
 	left: 4px;
@@ -401,7 +401,7 @@ input[type="range"]:hover {
 .cursor {
 	width: 18px;
 	height: 24px;
-	background: url(/cursor.png);
+	background: url(/cursor.svg);
 	position: absolute;
 	pointer-events: none;
 	margin-left: -2px;
@@ -452,7 +452,7 @@ input[type="range"]:hover {
 }
 
 .cursor.owner .name:after {
-	content: url(/crown.png);
+	content: url(/crown.svg);
 	position: relative;
 	top: -8px;
 	left: 0;
@@ -533,7 +533,7 @@ body:has(#names:hover) #cursors {
 	position: absolute;
 	width: 16px;
 	height: 16px;
-	background: url(/crown.png) no-repeat;
+	background: url(/crown.svg) no-repeat;
 	cursor: pointer;
 	font-size: 10px;
 }
@@ -619,14 +619,14 @@ body:has(#room .more[style*="display: block"]) #room {
 }
 
 #room .info.crownsolo:after {
-	content: url("/crownsolo.png");
+	content: url("/crownsolo.svg");
 	position: relative;
 	top: 2px;
 	margin-left: 4px;
 }
 
 #room .info.no-chat:after {
-	content: url("/no-chat.png");
+	content: url("/no-chat.svg");
 	position: relative;
 	top: 2px;
 	margin-left: 4px;
