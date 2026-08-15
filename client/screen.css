@@ -728,7 +728,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 
 .ugly-button {
 	height: fit-content;
-	width: fit-content;
 
 	font-size: 12px;
 	background: #2328;
