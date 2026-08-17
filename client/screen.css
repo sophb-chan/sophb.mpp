@@ -17,6 +17,7 @@
 	font-family: inter;
 	src: url("./fonts/Inter.ttf") format("truetype");
 }
+
 @font-face {
 	font-family: inter-italic;
 	src: url("./fonts/InterItalic.ttf") format("truetype");
@@ -72,6 +73,7 @@ body {
 	from {
 		--bg-angle: calc(-15deg - var(--swing-amount));
 	}
+
 	to {
 		--bg-angle: calc(-15deg + var(--swing-amount));
 	}
@@ -79,10 +81,10 @@ body {
 
 body {
 	background: linear-gradient(
-		/* ellipse at center, */ var(--bg-angle),
-		var(--color) 0%,
-		var(--color2) 100%
-	);
+			/* ellipse at center, */
+				var(--bg-angle),
+				var(--color) 0%,
+			var(--color2) 100%);
 	animation: swing-bg 15s ease-in-out alternate infinite;
 	transition:
 		--color 1s ease,
@@ -112,6 +114,7 @@ a:hover,
 	cursor: pointer;
 	color: #fe0;
 }
+
 .link:hover {
 	color: #ff2;
 }
@@ -159,11 +162,13 @@ table {
 		transform 0.5s ease-in,
 		box-shadow 0.5s ease-in;
 }
+
 #names .name.play {
 	transition: none;
 	transform: translateY(-4px);
 	-webkit-transform: translateY(-4px);
 }
+
 #names .name:hover {
 	transform: translateY(-3px);
 	box-shadow: #000 0px 3px 5px;
@@ -193,6 +198,7 @@ table {
 #names .name.muted-chat {
 	color: #f88;
 }
+
 #names .name.muted-notes:after,
 #names .name.muted-chat:after {
 	color: #f88;
@@ -208,9 +214,11 @@ table {
 #names .name.muted-notes:after {
 	content: "Muted Notes";
 }
+
 #names .name.muted-chat:after {
 	content: "Muted Chat";
 }
+
 #names .name.muted-notes.muted-chat:after {
 	content: "Muted Completely";
 }
@@ -251,16 +259,14 @@ input[type="range"] {
 	border-radius: 1px;
 	position: relative;
 
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		right top,
-		color-stop(0, hsla(254, 100%, 25%, 0.8)),
-		color-stop(0.08, hsla(254, 100%, 13%, 0.8)),
-		color-stop(0.5, hsl(200, 80%, 0%)),
-		color-stop(0.92, hsl(200, 80%, 15%)),
-		color-stop(1, hsl(200, 80%, 45%))
-	);
+	background-image: -webkit-gradient(linear,
+				left top,
+				right top,
+				color-stop(0, hsla(254, 100%, 25%, 0.8)),
+				color-stop(0.08, hsla(254, 100%, 13%, 0.8)),
+				color-stop(0.5, hsl(200, 80%, 0%)),
+				color-stop(0.92, hsl(200, 80%, 15%)),
+			color-stop(1, hsl(200, 80%, 45%)));
 
 	-webkit-background-clip: padding-box;
 	background-clip: padding-box;
@@ -279,19 +285,17 @@ input[type="range"]::-webkit-slider-thumb {
 	height: 20px;
 	border-radius: 1px / 2px;
 
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		right top,
-		color-stop(0, hsl(0, 0%, 15%)),
-		color-stop(0.16, hsl(0, 0%, 22%)),
-		color-stop(0.18, hsl(0, 0%, 30%)),
-		color-stop(0.2, hsl(0, 0%, 26%)),
-		color-stop(0.8, hsl(0, 0%, 26%)),
-		color-stop(0.82, hsl(0, 0%, 30%)),
-		color-stop(0.84, hsl(0, 0%, 22%)),
-		color-stop(1, hsl(0, 0%, 15%))
-	);
+	background-image: -webkit-gradient(linear,
+				left top,
+				right top,
+				color-stop(0, hsl(0, 0%, 15%)),
+				color-stop(0.16, hsl(0, 0%, 22%)),
+				color-stop(0.18, hsl(0, 0%, 30%)),
+				color-stop(0.2, hsl(0, 0%, 26%)),
+				color-stop(0.8, hsl(0, 0%, 26%)),
+				color-stop(0.82, hsl(0, 0%, 30%)),
+				color-stop(0.84, hsl(0, 0%, 22%)),
+			color-stop(1, hsl(0, 0%, 15%)));
 
 	-webkit-box-shadow:
 		inset hsla(0, 0%, 100%, 0.15) 0 1px 0px,
@@ -301,28 +305,23 @@ input[type="range"]::-webkit-slider-thumb {
 		rgba(0, 0, 0, 0.5) 0 8px 5px;
 
 	-webkit-transform: translateY(-3px);
-	-webkit-box-reflect: below
-		0px -webkit-gradient(
-			linear,
+	-webkit-box-reflect: below 0px -webkit-gradient(linear,
 			left top,
 			left bottom,
 			from(transparent),
 			color-stop(0.6, transparent),
-			to(rgba(255, 255, 255, 0.15))
-		);
+			to(rgba(255, 255, 255, 0.15)));
 }
 
 input[type="range"]:hover {
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		right top,
-		color-stop(0, hsla(284, 100%, 25%, 0.8)),
-		color-stop(0.08, hsla(284, 100%, 13%, 0.8)),
-		color-stop(0.5, hsl(200, 80%, 0%)),
-		color-stop(0.92, hsl(200, 80%, 15%)),
-		color-stop(1, hsl(200, 80%, 45%))
-	);
+	background-image: -webkit-gradient(linear,
+				left top,
+				right top,
+				color-stop(0, hsla(284, 100%, 25%, 0.8)),
+				color-stop(0.08, hsla(284, 100%, 13%, 0.8)),
+				color-stop(0.5, hsl(200, 80%, 0%)),
+				color-stop(0.92, hsl(200, 80%, 15%)),
+			color-stop(1, hsl(200, 80%, 45%)));
 
 	box-shadow:
 		inset #000 1px 1px 1px,
@@ -483,9 +482,11 @@ input[type="range"]:hover {
 #cursors {
 	transition: opacity 0.5s ease;
 }
+
 body:has(#names:hover) #cursors {
 	opacity: 25%;
 }
+
 #cursors[smooth-cursors] .cursor {
 	top: 0;
 	left: 0;
@@ -612,7 +613,8 @@ body:has(#room .more[style*="display: block"]) #room {
 	line-height: 12px;
 	overflow: hidden;
 	height: 20px;
-	max-width: calc(240px - 24px); /* room picker width - expand icon width */
+	max-width: calc(240px - 24px);
+		/* room picker width - expand icon width */
 	text-overflow: ellipsis;
 }
 
@@ -671,6 +673,7 @@ body:has(#room .more[style*="display: block"]) #room .expand {
 	border-radius: 0px 0px 10px 0px;
 	transition: border-radius 0.5s ease;
 }
+
 body:has(#room .more[style*="display: block"]) #room .expand::before {
 	transform: rotate(180deg);
 }
@@ -682,9 +685,8 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	left: -1px;
 	width: 100%;
 	height: fit-content;
-	max-height: calc(
-		100vh - 60px - 5px
-	); /* screen height - height lifted from botton - clearance */
+	max-height: calc(100vh - 60px - 5px);
+		/* screen height - height lifted from botton - clearance */
 	overflow: hidden;
 	overflow-y: scroll;
 	background: #4548;
@@ -693,16 +695,17 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border-radius: 10px 10px 0 0;
 }
 
-#room .more > div {
+#room .more>div {
 	margin: 0;
-	padding: 10px calc(infinity * 1px) 0px 5px; /* actual black magic btw */
+	padding: 10px calc(infinity * 1px) 0px 5px;
+		/* actual black magic btw */
 	border-bottom: solid 1px #8988;
 	text-overflow: clip;
 	width: 100%;
 	height: 20px;
 	transition: font-weight 3s ease;
 }
-#room .more > div:hover {
+#room .more>div:hover {
 	transition: font-weight 0.25s ease-out;
 	font-weight: bold;
 }
@@ -710,12 +713,15 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 #room .more .info:hover {
 	background: #8986;
 }
+
 #room .more .info.lobby:hover {
 	background: #8846;
 }
+
 #room .more .info.banned:hover {
 	background: #844a;
 }
+
 #room .more .info.banned:active {
 	background: #f008;
 }
@@ -1180,7 +1186,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	word-break: break-word;
 }
 
-#room-settings, #new-room, #rename, #motd {
+#room-settings,
+#new-room,
+#rename,
+#motd {
 	padding-bottom: 50px;
 }
 
@@ -1197,7 +1206,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	margin-top: -200px;
 }
 
-#account > .ugly-button {
+#account>.ugly-button {
 	width: min-content;
 }
 
@@ -1220,6 +1229,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	height: 50vh;
 	width: 75vw;
 }
+
 #client-settings div {
 	float: left;
 	margin-left: 2px;
@@ -1359,6 +1369,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 		padding 0.5s ease,
 		border-radius 0.5s ease;
 }
+
 #chat li .id:hover {
 	padding: 3px;
 	border-radius: 8px;
