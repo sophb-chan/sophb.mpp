@@ -12,7 +12,7 @@ for (const userscriptURL of userscriptURLs) {
 			break;
 		} catch (err) {
 			attempts++
-			if (attempts === 15) {
+			if (attempts === 3) {
 				console.error('Failed to load an addon.');
 				break;
 			};
