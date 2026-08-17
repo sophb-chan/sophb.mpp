@@ -6,8 +6,7 @@
 
 	<title>Thanks for using sophb.mpp!</title>
 	<meta name="title" content="sophb.mpp // a modern MPP clone" />
-	<meta name="description"
-		content="Smoother, faster, cleaner, 'n' better than MPP.net. (Don't use MPP.com!!)" />
+	<meta name="description" content="Smoother, faster, cleaner, 'n' better than MPP.net. (Don't use MPP.com!!)" />
 
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content="https://sophb-mpp.vercel.app/" />
@@ -79,17 +78,17 @@
 			Plug up your MIDI keyboard, MIDI Throughput is supported.
 			You should be able to hear some seriously talented piano players performing here!
 			Join in or just chat and listen.
-			</p>
-			<p>
+		</p>
+		<p>
 			For good performance, Chromium-based browsers are highly recommended.
 			Firefox also supports the requisite Web Audio API, but performance may not be as good.
 			Chrome has Web MIDI.
-			</p>
-			<p>
+		</p>
+		<p>
 			Of course, first you need to
 			<a href="http://www.enable-javascript.com/" class="link">Enable Javascript</a>
 			or it won't do anything...!
-			</p>
+		</p>
 	</noscript>
 
 	<div id="bottom">
@@ -139,7 +138,8 @@
 				<button class="submit">PLAY</button>
 			</div>
 			<div id="new-room" class="dialog">
-				<p><input type="text" name="name" placeholder="Your Fancy New Room's Name" size="32" class="text" maxlength="512" /></p>
+				<p><input type="text" name="name" placeholder="Your Fancy New Room's Name" size="32" class="text"
+						maxlength="512" /></p>
 				<p>
 					<label>
 						<input type="checkbox" name="visible" class="checkbox" checked>
@@ -189,13 +189,13 @@
 					</label>
 				</p>
 				<p>
-					<label>Bottom color: &nbsp;
-						<input type="color" name="color" placeholder="" maxlength="7" class="color" />
+					<label>Top color: &nbsp;
+						<input type="color" name="color2" placeholder="" maxlength="7" class="color">
 					</label>
 				</p>
 				<p>
-					<label>Top color: &nbsp;
-						<input type="color" name="color2" placeholder="" maxlength="7" class="color">
+					<label>Bottom color: &nbsp;
+						<input type="color" name="color" placeholder="" maxlength="7" class="color" />
 					</label>
 				</p>
 				<p>
@@ -275,13 +275,14 @@
 							</option>
 							<option value="custom">Custom...</option>
 						</select>
-						<input type="text" name="reasonText" placeholder="Ban reason..." maxlength="512" class="text" style="width: 100%;" />
-						</label>
+						<input type="text" name="reasonText" placeholder="Ban reason..." maxlength="512" class="text"
+							style="width: 100%;" />
+					</label>
 					</label></p>
 				<p>
 					<label>Duration: <br>
-						<input type="number" name="durationNumber" placeholder="Amount of unit..." value="5" class="text"
-							style="width: 60%" />
+						<input type="number" name="durationNumber" placeholder="Amount of unit..." value="5"
+							class="text" style="width: 60%" />
 						<select name="durationUnit">
 							<option value="seconds">Seconds</option>
 							<option value="minutes">Minutes</option>
@@ -302,8 +303,8 @@
 			</div>
 			<div id="account" class="dialog">
 				<p>
-					<h3>Log in:</h3>
-					<div class="ugly-button login-discord">Discord</div>
+				<h3>Log in:</h3>
+				<div class="ugly-button login-discord">Discord</div>
 				</p>
 				<div id="account-info">
 					<div id="logged-in-text" class="text logged-in-text">Logged in as:</div>
@@ -316,19 +317,19 @@
 				<div class="client-settings-tabs">
 					<div class="client-settings-tablink client-settings-button" data-name="Client">
 						Client
-						</div>
+					</div>
 					<div class="client-settings-tablink client-settings-button" data-name="Chat">
 						Chat
-						</div>
+					</div>
 					<div class="client-settings-tablink client-settings-button" data-name="MIDI">
 						MIDI
-						</div>
+					</div>
 					<div class="client-settings-tablink client-settings-button" data-name="Piano">
 						Piano
-						</div>
+					</div>
 					<div class="client-settings-tablink client-settings-button" data-name="Misc">
 						Misc
-						</div>
+					</div>
 					<br>
 				</div>
 				<div id="client-settings-content">
@@ -343,13 +344,9 @@
 						</p>
 						<p>
 							<span data-i18n="Filter bypass joiner character:">Filter bypass joiner character:</span>
-							<input type="text"
-								pattern="^[0-9a-fA-F]{4}$"
-								title="Please enter a valid hexadecimal unicode index (0-9, A-F)"
-								required
-								size="4"
-								id="filter-bypass-joiner" class="setting"
-							/>
+							<input type="text" pattern="^[0-9a-fA-F]{4}$"
+								title="Please enter a valid hexadecimal unicode index (0-9, A-F)" required size="4"
+								id="filter-bypass-joiner" class="setting" />
 						</p>
 						<button class="ugly-button" onclick="MPP.client.restart()">Reconnect</button>
 					</div>
@@ -447,13 +444,11 @@
 	<script src="/script/NoteQuota.js"></script>
 	<script src="/script/Color.js"></script>
 	<script src="https://raw.githack.com/sophb-ccjt/developermonkey/main/core.js"></script>
-	<script
-		src="https://rawcdn.githack.com/sophb-ccjt/protoplus/refs/heads/main/protoplus.js"
-	></script>
+	<script src="https://rawcdn.githack.com/sophb-ccjt/protoplus/refs/heads/main/protoplus.js"></script>
 	<script src="/script/addons.js"></script>
 	<script src="https://unpkg.com/i18nextify@3.3.1/i18nextify.min.js" id="i18nextify" fallbacklng="en"
 		integrity="sha256-Qe0fuK8+CJ5rVsP5a0+1dGBHLDJa7SOe5Aa5I0XUrws=" crossorigin="anonymous">
-	</script>
+		</script>
 	<script src="/script/script.js"></script>
 </body>
 
