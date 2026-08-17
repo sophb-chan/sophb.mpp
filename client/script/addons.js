@@ -4,18 +4,23 @@ const userscriptURLs = [
 	'https://greasyfork.org/en/scripts/567148-eval',
 	'https://greasyfork.org/en/scripts/542677-multiplayer-piano-optimizations-emotes'
 ];
-for (const userscriptURL of userscriptURLs) {
-	let attempts = 0;
-	while (true) {
-		try {
-			runFromGreasyfork(userscriptURL);
-			break;
-		} catch (err) {
-			attempts++
-			if (attempts === 3) {
+
+async function loadAddons() {
+	for (const userscriptURL of userscriptURLs) {
+		const maxAttempts = 3;
+		for (let attempts = 0; attempts <= maxAttempts;) {
+			if (attempts === maxAttempts) {
 				console.error('Failed to load an addon.');
 				break;
-			};
+			}
+
+			try {
+				await runFromGreasyfork(userscriptURL);
+				break;
+			} catch (err) {
+				attempts++;
+			}
 		}
 	}
 }
+loadAddons();
