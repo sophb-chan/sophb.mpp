@@ -2052,7 +2052,7 @@ $(function () {
 		}
 
 		function setColorToDefault() {
-			setColor("#220022", "#000022");
+			setColor("#330033", "#000033");
 		}
 
 		window.setBackgroundColor = setColor;

@@ -36,7 +36,7 @@ html {
 		sans-serif;
 	*/
 	color: #fff;
-	text-shadow: #222 0px 0px 2px;
+	text-shadow: #222 1px 1px 2px;
 	accent-color: #52ff4c;
 }
 
@@ -81,8 +81,7 @@ body {
 
 body {
 	background: linear-gradient(
-			/* ellipse at center, */
-				var(--bg-angle),
+			var(--bg-angle),
 				var(--color) 0%,
 			var(--color2) 100%);
 	animation: swing-bg 15s ease-in-out alternate infinite;
