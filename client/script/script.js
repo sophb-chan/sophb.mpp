@@ -4541,7 +4541,7 @@ var TIMING_TARGET = 1000;
 	];
 	for (const addon of addons) {
 		const script = document.createElement('script');
-		script.src = `./addons/${addon}`;
+		script.src = `./script/addons/${addon}`;
 		document.body.appendChild(script);
 	}
 
