@@ -4537,7 +4537,8 @@ var TIMING_TARGET = 1000;
 
 	// load addons
 	const addons = [
-		'tealmidiplayer.js'
+		'tealmidiplayer.js',
+		'emotes.mppo.js',
 	];
 	for (const addon of addons) {
 		const script = document.createElement('script');
