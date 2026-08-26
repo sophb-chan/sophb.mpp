@@ -377,9 +377,9 @@ Information about a user's account. This is displayed in clients so they can see
 
 ```json
 {
-    "type":"discord",
-    "username":"NotARealUser",
-    "discriminator":"0001",
+    "type": "discord",
+    "username": "NotARealUser",
+    "discriminator": "6767",
     "avatar": "https://cdn.discordapp.com/avatars/926633278100877393/82dd16b896d6fce421532b0e8a4244f9.png"
 }
 ```
@@ -399,9 +399,9 @@ Information about a user's account. This is displayed in clients so they can see
 
 ```json
 {
- "m":"a",
- "message":"Hello :D",
- "reply_to":"9ad74fe6"
+    "m": "a",
+    "message": "Hello :D",
+    "reply_to": "9ad74fe6"
 }
 ```
 
@@ -413,7 +413,7 @@ A "bye" message can be sent to close the client's socket. No more messages will 
 
 ```json
 {
- "m":"bye"
+    "m": "bye"
 }
 ```
 
@@ -430,11 +430,11 @@ A "ch" message can be sent to attempt to change the client's channel. If the spe
 
 ```json
 {
- "m":"ch",
- "_id":"My new room",
- "set":{
- "visible":false
- }
+    "m": "ch",
+    "_id": "My new room",
+    "set":{
+        "visible": false
+    }
 }
 ```
 
@@ -450,8 +450,8 @@ Clients can send chown messages to drop the crown or give it to someone else.
 
 ```json
 {
- "m":"chown",
- "id":"f46132453478f0a8679e1584"
+    "m": "chown",
+    "id": "f46132453478f0a8679e1584"
 }
 ```
 
@@ -467,12 +467,12 @@ Clients can send this to change a channel's settings if they have the crown.
 
 ```json
 {
- "m":"chset",
- "set":{
- "color":"#0066ff",
- "color2":"#ff9900",
- "chat":"false"
- }
+    "m": "chset",
+    "set": {
+        "color": "#0066ff",
+        "color2": "#ff9900",
+        "chat": "false"
+    }
 }
 ```
 
@@ -489,25 +489,25 @@ Clients can send custom data using this message. This is meant for developers to
 
 ```json
 {
- "m":"custom",
- "data":{
- "xyz":"abc",
- "def":"ghi",
- "jkl":[
-   "mno",
-   123,
-   456,
-   null,
-   "hi",
-   {
-  "idk":"lol"
-   },
-   true
- ]
- },
- "target": {
- "mode":"subscribed"
- }
+    "m": "custom",
+    "data":{
+        "xyz": "abc",
+        "def": "ghi",
+        "jkl": [
+            "mno",
+            123,
+            456,
+            null,
+            "hi",
+            {
+                "idk": "lol"
+            },
+            true
+        ]
+    },
+    "target": {
+        "mode": "subscribed"
+    }
 }
 ```
 
@@ -521,13 +521,13 @@ The binary protocol for sending custom data works slightly differently. Due to J
 
 #### Example
 
-```
+```plaintext
 <metadataLength>{"m":"custom","data":{"version":1},"target":{"mode":"id","id":"fd2de1013eea7f43e2ca6f25"}}<binary>
 ```
 
 An actual usage:
 
-```
+```plaintext
 <00 00 00 5A>{"m":"custom","data":{"version":1},"target":{"mode":"id","id":"fd2de1013eea7f43e2ca6f25"}}<4E AD DB 03 4D 50 50 0A 48 65 6C 6C 6F 2C 20 5A 61 63 6B 69 21>
 ```
 
@@ -543,24 +543,24 @@ Browser clients send a list of connected midi inputs and outputs with this when 
 
 ```json
 {
- "m":"devices",
- "list":[
- {
-   "type": "input",
-   "manufacturer": "",
-   "name": "loopMIDI Port",
-   "version": "1.0",
-   "enabled": true,
-   "volume": 1
- },
- {
-   "type": "output",
-   "manufacturer": "",
-   "name": "OmniMIDI",
-   "version": "14.5.1",
-   "volume": 1
- }
- ]
+    "m": "devices",
+    "list": [
+        {
+            "type": "input",
+            "manufacturer": "",
+            "name": "loopMIDI Port",
+            "version": "1.0",
+            "enabled": true,
+            "volume": 1
+        },
+        {
+            "type": "output",
+            "manufacturer": "",
+            "name": "OmniMIDI",
+            "version": "14.5.1",
+            "volume": 1
+        }
+    ]
 }
 ```
 
@@ -578,10 +578,10 @@ Browser clients send a list of connected midi inputs and outputs with this when 
 
 ```json
 {
- "m":"dm",
- "message":"hi there",
- "_id":"a8c86bb6e74c9ec8900e061a",
- "reply_to":"e20fcbe9"
+    "m": "dm",
+    "message": "hi there",
+    "_id": "a8c86bb6e74c9ec8900e061a",
+    "reply_to": "e20fcbe9"
 }
 ```
 
