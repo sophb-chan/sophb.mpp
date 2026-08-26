@@ -8,8 +8,8 @@ WebSocket.prototype.send = new Proxy(WebSocket.prototype.send, {
 
 class Client extends EventEmitter {
 	constructor(uri) {
-		if (window.MPP && MPP.client)
-			console.warn(
+		if (MPP?.client != null)
+			throw new Error(
 				"Running multiple clients in a single tab is not allowed due to abuse. Attempting to bypass this may result in an auto-ban!",
 			);
 
