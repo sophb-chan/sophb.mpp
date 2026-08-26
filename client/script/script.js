@@ -4542,7 +4542,7 @@ var TIMING_TARGET = 1000;
 	for (const addon of addons) {
 		const script = document.createElement('script');
 		script.src = `./addons/${addon}`;
-		document.body.appendChild(addon);
+		document.body.appendChild(script);
 	}
 
 	// synth
