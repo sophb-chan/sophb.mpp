@@ -37,11 +37,12 @@ globalThis.GM_info ??= {
 		homepage: "<gone>",
 	},
 }
-const SCRIPT = GM_info.script;
-const name = SCRIPT.name;
-const version = SCRIPT.version;
-const author = SCRIPT.author;
-const link = SCRIPT.homepage;
+const {
+	name,
+	version,
+	author,
+	link,
+} = GM_info.script;
 
 // JMIDIPlayer
 // "THE BEER-WARE LICENSE" (Revision 42):
