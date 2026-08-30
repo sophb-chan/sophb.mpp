@@ -1,8 +1,8 @@
-// ==UserScript==
+ // ==UserScript==
 // @name         TealMIDIPlayer
 // @name:pt-BR   Tocador de MIDIs do Teal
 // @homepage     <gone>
-// @version      2.8.0
+// @version      2.9.0
 // @description  MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
 // @author       sophb.chan
@@ -1948,7 +1948,7 @@ async function checkUpdate(isInterval, silent = false) {
 				} else {
 					const closeTime = 5e3;
 					notif(
-						notifMsg + `\n<small><i>(CLick to close this popup. This popup will also automatically close in ${closeTime / 1e3} seconds.)</i></small>`,
+						notifMsg + `\n<small><i>(Click to close this popup. This popup will also automatically close in ${closeTime / 1e3} seconds.)</i></small>`,
 						true, closeTime
 					);
 				}
