@@ -1938,11 +1938,20 @@ async function checkUpdate(isInterval, silent = false) {
 					default: notifMsg = null;
 				}
 				if (notifMsg == null || silent) return;
-				const closeTime = 15e3;
-				notif(
-					notifMsg + `\n<small><i>(This popup will automatically close in ${closeTime / 1e3} seconds.)</i></small>`,
-					false, closeTime
-				);
+				if (isInterval) {
+					const closeTime = 15e3;
+					notif(
+						notifMsg + `\n<small><i>(This popup will automatically close in ${closeTime / 1e3} seconds.)</i></small>`,
+						false, closeTime
+					);
+
+				} else {
+					const closeTime = 5e3;
+					notif(
+						notifMsg + `\n<small><i>(CLick to close this popup. This popup will also automatically close in ${closeTime / 1e3} seconds.)</i></small>`,
+						true, closeTime
+					);
+				}
 			}
 
 			if (loadNotif.isConnected) {
