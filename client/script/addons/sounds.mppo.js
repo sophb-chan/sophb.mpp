@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Multiplayer Piano Optimizations [Sounds]
 // @namespace    https://tampermonkey.net/
-// @version      1.7.14
+// @version      1.7.14 (Embedded)
 // @description  Play sounds when users join, leave, or mention you in Multiplayer Piano
 // @author       zackiboiz
 // @contributor  cheezburger0
-// @contributor  sophb-ccjt <sophb.code@proton.me>
+// @contributor  sophb-chan <sophb.code@proton.me>
 // @match        *://*.multiplayerpiano.com/*
 // @match        *://*.multiplayerpiano.net/*
 // @match        *://*.multiplayerpiano.org/*
@@ -51,8 +51,8 @@ globalThis.GM_info ??= {
 		homepageURL: null, // this is used, but not actually defined in the header, so i have no idea what to set this to
 		name: "Multiplayer Piano Optimizations [Sounds]",
 		version: "embedded",
-	}
-}
+	},
+};
 (async () => {
 	const dl = GM_info.script.downloadURL || GM_info.script.updateURL || GM_info.script.homepageURL || "";
 	const match = dl.match(/greasyfork\.org\/scripts\/(\d+)/);
