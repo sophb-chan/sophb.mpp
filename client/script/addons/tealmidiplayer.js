@@ -1,23 +1,25 @@
- // ==UserScript==
-// @name         TealMIDIPlayer
-// @name:pt-BR   Tocador de MIDIs do Teal
-// @homepage     <gone>
-// @version      2.9.0
-// @description  MIDI Player bot for MPP. (Based off of Teal's MIDI player)
+// ==UserScript==
+// @name               TealMIDIPlayer
+// @name:ru            TealMIDIPlayer
+// @name:pt-BR         TealMIDIPlayer
+// @homepage           <gone>
+// @version            2.9.0
+// @description        MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
-// @author       sophb.chan
-// @match        *://multiplayerpiano.net/*
-// @match        *://multiplayerpiano.org/*
-// @match        *://multiplayerpiano.com/*
-// @match        *://piano.mpp.community/*
-// @match        *://mpp.8448.space/*
-// @match        *://mpp.7458.space/*
-// @match        *://www.multiplayerpiano.dev/*
-// @match        *://mpp.smp-meow.net/*
-// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @grant        GM_info
-// @license      MIT
-// @namespace    https://greasyfork.org/users/1459137
+// @description:ru     Бот-MIDI-плеер для MPP. (Основан на MIDI-плеере, встроенном в Teal)
+// @author             sophb.chan
+// @match              *://multiplayerpiano.net/*
+// @match              *://multiplayerpiano.org/*
+// @match              *://multiplayerpiano.com/*
+// @match              *://piano.mpp.community/*
+// @match              *://mpp.8448.space/*
+// @match              *://mpp.7458.space/*
+// @match              *://www.multiplayerpiano.dev/*
+// @match              *://mpp.smp-meow.net/*
+// @icon               data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
+// @grant              GM_info
+// @license            MIT
+// @namespace          https://greasyfork.org/users/1459137
 // ==/UserScript==
 
 
@@ -1922,7 +1924,7 @@ async function checkUpdate(isInterval, silent = false) {
 
 
 			const callback = () => {
-				let notifMsg = 'Hello, world!';
+				let notifMsg;
 				switch (result) {
 					case 'outdated':
 						notifMsg = `Your script is <b>outdated!</b>\nNewest version: ${versionNum} - Your version: ${version}\nPlease <a href='https://greasyfork.org/en/scripts/554578-tealmidiplayer' target='_blank'>update your script here</a>.`;
