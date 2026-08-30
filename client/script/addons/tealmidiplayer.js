@@ -3,7 +3,7 @@
 // @name:ru            TealMIDIPlayer
 // @name:pt-BR         TealMIDIPlayer
 // @homepage           <gone>
-// @version            2.9.1
+// @version            2.10.0
 // @description        MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
 // @description:ru     Бот-MIDI-плеер для MPP. (Основан на MIDI-плеере, встроенном в Teal)
@@ -35,6 +35,7 @@ globalThis.GM_info ??= {
 		author: "sophb.chan",
 		version: "Unknown (no `GM_info` accessible, running from DevTools?)",
 		homepage: "<gone>",
+		embedded: true,
 	},
 }
 const {
@@ -42,6 +43,7 @@ const {
 	version,
 	author,
 	link,
+	embedded,
 } = GM_info.script;
 
 // JMIDIPlayer
@@ -1909,7 +1911,7 @@ async function checkUpdate(isInterval, silent = false) {
 			const isBeta = results.includes('>') && (results.includes('<') ? (results.indexOf('>') < results.indexOf('<')) : true),
 				isOutdated = results.includes('<') && (results.includes('>') ? (results.indexOf('<') < results.indexOf('>')) : true),
 				isStable = results.includes('=') && !results.includes('<') && !results.includes('>'),
-				isDevTools = /^unknown/i.test(version);
+				isDevTools = embedded;
 
 			if (isDevTools)
 				result = 'unknown';
