@@ -4539,7 +4539,7 @@ var TIMING_TARGET = 1000;
 	const addons = [
 		'tealmidiplayer.js',
 		'emotes.mppo.js',
-		'colorsteal.js',
+		// 'colorsteal.js', // V2 IN THE WORKS
 	];
 	for (const addon of addons) {
 		const script = document.createElement('script');

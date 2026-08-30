@@ -16,6 +16,7 @@
 // @match              *://mpp.7458.space/*
 // @match              *://www.multiplayerpiano.dev/*
 // @match              *://mpp.smp-meow.net/*
+// @match              *://sophb-mpp.vercel.app/*
 // @icon               data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant              GM_info
 // @license            MIT
@@ -29,22 +30,28 @@ let prefix = localStorage.tmp_prefix;
 const sep = '-'
 
 // script info
-globalThis.GM_info ??= {
-	script: {
-		name: "TealMIDIPlayer",
-		author: "sophb.chan",
-		version: "Unknown (no `GM_info` accessible, running from DevTools?)",
-		homepage: "<gone>",
-		embedded: true,
-	},
-}
+const GMinfo = (() => {
+	try {
+		return GM_info;
+	} catch {
+		return {
+			script: {
+				name: "TealMIDIPlayer",
+				author: "sophb.chan",
+				version: "Unknown (no `GM_info` accessible, running from DevTools?)",
+				homepage: "<gone>",
+				embedded: true,
+			},
+		}
+	};
+})();
 const {
 	name,
 	version,
 	author,
 	link,
 	embedded,
-} = GM_info.script;
+} = GMinfo.script;
 
 // JMIDIPlayer
 // "THE BEER-WARE LICENSE" (Revision 42):
