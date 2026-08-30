@@ -1937,7 +1937,7 @@ async function checkUpdate(isInterval, silent = false) {
 						if (!isInterval)
 							notifMsg = `You are using ${name} on a non-userscript environment.\nSome features may be broken.`;
 						break;
-					default: notifMsg = null;
+					default: notifMsg = null; break;
 				}
 				if (notifMsg == null || silent) return;
 				if (isInterval) {
