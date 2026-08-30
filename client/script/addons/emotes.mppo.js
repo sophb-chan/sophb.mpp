@@ -74,7 +74,7 @@
 			if (
 				compareVersions(localVersion, remoteVersion) < 0
 				&&
-				GM_info.script.version !== 'embedded'
+				GM_info.script.version.toLowerCase() !== 'embedded'
 			) {
 				new MPP.Notification({
 					"m": "notification",
