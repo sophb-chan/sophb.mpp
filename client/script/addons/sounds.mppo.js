@@ -44,16 +44,17 @@
 // @updateURL    https://update.greasyfork.org/scripts/542502/Multiplayer%20Piano%20Optimizations%20%5BSounds%5D.meta.js
 // ==/UserScript==
 
-globalThis.GM_info ??= {
-	script: {
-		downloadURL: "https://update.greasyfork.org/scripts/542502/Multiplayer%20Piano%20Optimizations%20%5BSounds%5D.user.js",
-		updateURL: "https://update.greasyfork.org/scripts/542502/Multiplayer%20Piano%20Optimizations%20%5BSounds%5D.meta.js",
-		homepageURL: null, // this is used, but not actually defined in the header, so i have no idea what to set this to
-		name: "Multiplayer Piano Optimizations [Sounds]",
-		version: "embedded",
-	},
-};
 (async () => {
+	const GM_info = {
+		script: {
+			downloadURL: "https://update.greasyfork.org/scripts/542502/Multiplayer%20Piano%20Optimizations%20%5BSounds%5D.user.js",
+			updateURL: "https://update.greasyfork.org/scripts/542502/Multiplayer%20Piano%20Optimizations%20%5BSounds%5D.meta.js",
+			homepageURL: null, // this is used, but not actually defined in the header, so i have no idea what to set this to
+			name: "Multiplayer Piano Optimizations [Sounds]",
+			version: "ersion: embedded",
+		},
+	};
+
 	const dl = GM_info.script.downloadURL || GM_info.script.updateURL || GM_info.script.homepageURL || "";
 	const match = dl.match(/greasyfork\.org\/scripts\/(\d+)/);
 	if (!match) {
@@ -73,7 +74,11 @@ globalThis.GM_info ??= {
 			return r.json();
 		}).then(data => {
 			const remoteVersion = data.version;
-			if (compareVersions(localVersion, remoteVersion) < 0) {
+			if (
+				compareVersions(localVersion, remoteVersion) < 0
+				&&
+				GM_info.script.version !== 'embedded'
+			) {
 				new MPP.Notification({
 					"m": "notification",
 					"duration": 15000,

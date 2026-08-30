@@ -42,16 +42,16 @@
 // @updateURL    https://update.greasyfork.org/scripts/542677/Multiplayer%20Piano%20Optimizations%20%5BEmotes%5D.meta.js
 // ==/UserScript==
 
-globalThis.GM_info ??= {
-	script: {
-		downloadURL: "https://update.greasyfork.org/scripts/542677/Multiplayer%20Piano%20Optimizations%20%5BEmotes%5D.user.js",
-		updateURL: "https://update.greasyfork.org/scripts/542677/Multiplayer%20Piano%20Optimizations%20%5BEmotes%5D.meta.js",
-		homepageURL: null, // this is used in the code, but not actually defined in the header, so i have no idea what to set this to
-		name: "Multiplayer Piano Optimizations [Emotes]",
-		version: "embedded",
-	},
-};
 (async function () {
+	const GM_info = {
+		script: {
+			downloadURL: "https://update.greasyfork.org/scripts/542677/Multiplayer%20Piano%20Optimizations%20%5BEmotes%5D.user.js",
+			updateURL: "https://update.greasyfork.org/scripts/542677/Multiplayer%20Piano%20Optimizations%20%5BEmotes%5D.meta.js",
+			homepageURL: null, // this is used in the code, but not actually defined in the header, so i have no idea what to set this to
+			name: "Multiplayer Piano Optimizations [Emotes]",
+			version: "Embedded",
+		},
+	};
 	const dl = GM_info.script.downloadURL || GM_info.script.updateURL || GM_info.script.homepageURL || "";
 	const match = dl.match(/greasyfork\.org\/scripts\/(\d+)/);
 	if (!match) {
@@ -71,7 +71,11 @@ globalThis.GM_info ??= {
 			return r.json();
 		}).then(data => {
 			const remoteVersion = data.version;
-			if (compareVersions(localVersion, remoteVersion) < 0) {
+			if (
+				compareVersions(localVersion, remoteVersion) < 0
+				&&
+				GM_info.script.version !== 'embedded'
+			) {
 				new MPP.Notification({
 					"m": "notification",
 					"duration": 15000,
@@ -87,7 +91,6 @@ globalThis.GM_info ??= {
 	}
 
 	function compareVersions(a, b) {
-		if (a === 'embedded' || b === 'embedded') return 0;
 		const pa = a.split(".").map(n => parseInt(n, 10) || 0);
 		const pb = b.split(".").map(n => parseInt(n, 10) || 0);
 		const len = Math.max(pa.length, pb.length);
