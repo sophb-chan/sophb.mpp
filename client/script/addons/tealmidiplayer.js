@@ -1928,7 +1928,8 @@ async function checkUpdate(isInterval, silent = false) {
 						notifMsg = `Your script is <b>outdated!</b>\nNewest version: ${versionNum} - Your version: ${version}\nPlease <a href='https://greasyfork.org/en/scripts/554578-tealmidiplayer' target='_blank'>update your script here</a>.`;
 						break;
 					case 'beta':
-						notifMsg = `You are using an unreleased version of <b>${name}</b>.\nExpect instability and bugs.`;
+						if (!isInterval)
+							notifMsg = `You are using an unreleased version of <b>${name}</b>.\nExpect instability and bugs.`;
 						break;
 					case 'unknown': case 'devtools':
 						if (!isInterval)
