@@ -3,7 +3,7 @@
 // @name:ru            TealMIDIPlayer
 // @name:pt-BR         TealMIDIPlayer
 // @homepage           <gone>
-// @version            2.11.0-beta
+// @version            2.11.0
 // @description        MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
 // @description:ru     Бот-MIDI-плеер для MPP. (Основан на MIDI-плеере, встроенном в Teal)
@@ -1024,30 +1024,37 @@ globalThis.hijackedSend ??= function hijackedSend(msg) {
 }
 if (MPP.chat.send !== hijackedSend) MPP.chat.send = hijackedSend;
 
-function midiLoading() {
-	playNote('as3', 1);
-	setTimeout(() => {
+function midiLoading(stopFn) {
+	let stop = false;
+	stopFn ??= () => stop = true;
+
+	// Notes
+	const loop = async () => {
+		if (stop) return;
+		playNote('as3', 1);
+		await delay(250);
 		stopNote('as3');
+		if (stop) return;
 		playNote('cs4', 1);
-	}, 250);
-	setTimeout(() => {
+		await delay(250);
 		stopNote('cs4');
+		if (stop) return;
 		playNote('fs4', 1);
-	}, 500);
-	setTimeout(() => {
+		await delay(250);
 		stopNote('fs4');
-	}, 750);
-	setTimeout(() => {
-		stopNote('c4');
-	}, 1000)
+		await delay(250);
+		if (stop) return;
+		loop();
+	}
+	loop();
+
+	return stopFn;
 }
 
-let loadnotes;
+let stopFn;
 function loadNotes(start) {
-	if (start) {
-		midiLoading()
-		loadnotes = setInterval(midiLoading, 1e3);
-	} else clearInterval(loadnotes);
+	if (stopFn != null || !start) stopFn();
+	if (start) stopFn = midiLoading();
 }
 function validURL(url) {
 	let result;
@@ -1180,21 +1187,38 @@ const jevents = {
 let eventsplayed = 0;
 const keys = Object.keys(MPP.piano.keys);
 let currenttick;
+let deblack = 0;
 player.on('midiEvent', (event) => {
 	eventsplayed++;
 	currenttick = event.tick;
-	if (event.type == jevents.noteon && event.velocity !== 0 && event.channel !== 9) {
-		if (volume > 1) {
-			if (volume % 1 !== 0)
-				playNote(keys[event.note - 21 + transpose], (event.velocity / 127) * volume % 1);
-			for (let i = 0; i < Math.trunc(volume); i++) {
-				playNote(keys[event.note - 21 + transpose], (event.velocity / 127) * 1);
+	const offset = -21 + transpose;
+	switch (event.type) {
+		case jevents.noteon:
+			// No drum channel (yet!)
+			if (event.channel === 0) break;
+
+			// Stop 0 vel notes
+			if (event.velocity === 0) {
+				if (!sustain) stopNote(keys[event.note + offset]);
+				break;
 			}
-		} else {
-			playNote(keys[event.note - 21 + transpose], (event.velocity / 127) * volume);
-		}
-	} else if (event.type == jevents.noteoff || event.velocity == 0) {
-		if (!sustain) stopNote(keys[event.note - 21 + transpose]);
+
+			if (event.velocity < deblack) break; // Stop notes below deblacking threshold
+
+			if (volume > 1) {
+				if (volume % 1 > 0)
+					playNote(keys[event.note + offset], (event.velocity / 127) * volume % 1);
+
+				for (let i = 0; i < Math.trunc(volume); i++) {
+					playNote(keys[event.note + offset], (event.velocity / 127) * 1);
+				}
+			} else
+				playNote(keys[event.note + offset], (event.velocity / 127) * volume);
+			break;
+
+		case jevents.noteoff:
+			if (!sustain) stopNote(keys[event.note + offset]);
+			break;
 	}
 })
 player.on('endOfFile', async () => {
@@ -1223,9 +1247,7 @@ player.on('endOfFile', async () => {
 			send('Queue is now empty.');
 		}
 		eventsplayed = 0;
-		keys.forEach(key => {
-			stopNote(key);
-		})
+		stopNotes();
 	}
 })
 
@@ -1352,9 +1374,7 @@ const cmds = {
 				let callback = () => {
 					clearObj(queue);
 					player.stop();
-					keys.forEach(key => {
-						stopNote(key);
-					})
+					stopNotes();
 					send(`Downloading \`${getFileName(args[1])}\`...`);
 					queue[getFileName(args[1])] = args[1];
 					playMIDIfromURL(getFileName(args[1]));
@@ -1403,9 +1423,7 @@ const cmds = {
 			loadNotes(false);
 			player.stop();
 			player.unload();
-			keys.forEach(key => {
-				stopNote(key);
-			});
+			stopNotes();
 			send("Stopped playing.");
 		}
 	},
@@ -1421,7 +1439,7 @@ const cmds = {
 				clearObj(queue);
 				player.stop();
 				player.unload();
-				keys.forEach(key => stopNote(key));
+				stopNotes();
 
 				send('Skipped track.', 'Queue is now empty.');
 
@@ -1429,7 +1447,7 @@ const cmds = {
 				delete queue[Object.keys(queue)[0]];
 				player.stop();
 				player.unload();
-				keys.forEach(key => stopNote(key));
+				stopNotes();
 				playMIDIfromURL(Object.keys(queue)[0]);
 
 				setTimeout(() => {
@@ -1445,11 +1463,7 @@ const cmds = {
 		func: () => {
 			sustain = !sustain
 			send(`Sustain is now ${sustain ? 'on' : 'off'}.`);
-			if (!sustain) {
-				keys.forEach(key => {
-					stopNote(key);
-				})
-			}
+			if (!sustain) stopNotes(key);
 		}
 	},
 	volume: {
@@ -1505,9 +1519,7 @@ const cmds = {
 			if (player.isLoaded()) {
 				if (player.isPlaying) {
 					player.pause();
-					keys.forEach(key => {
-						stopNote(key);
-					})
+					stopNotes();
 					send("Paused track.");
 				} else {
 					player.play();
