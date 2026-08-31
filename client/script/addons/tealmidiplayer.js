@@ -1072,9 +1072,13 @@ function validMIDI(arrBuf) {
 		return false;
 }
 const signal = new AbortController().signal;
-async function playMIDIfromURL(url) {
-	if (queue[getFileName(url)] == null)
-		queue[getFileName(url)] = url;
+async function playMIDIfromURL(targetMIDI) {
+	url = queue[getFileName(targetMIDI)] ?? queue[targetMIDI];
+	if (url == null) {
+		queue[getFileName(targetMIDI)] = targetMIDI;
+		url = targetMIDI;
+	}
+
 
 	eventsplayed = 0;
 	let fetchtime, fetchstart, parsetime, result;
