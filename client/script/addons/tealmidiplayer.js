@@ -1734,11 +1734,12 @@ const cmds = {
 	}
 }
 for (const [name, info] of Object.entries(categories)) {
-	const oldFn = cmds[name]?.func ?? ()=>{};
+	const oldFn = cmds[name]?.func ?? (()=>{});
 	const newFn = () => {
 		oldFn();
 		send(`If you're looking for the **category** "\`${info.label}\`", use \`${prefix}help ${info.label}\` instead.`);
 	}
+	cmds[name].func = newFn;
 }
 
 function createcmdstr(categ) {
