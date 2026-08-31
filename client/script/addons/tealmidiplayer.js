@@ -1079,7 +1079,6 @@ async function playMIDIfromURL(targetMIDI) {
 		url = targetMIDI;
 	}
 
-
 	eventsplayed = 0;
 	let fetchtime, fetchstart, parsetime, result;
 
