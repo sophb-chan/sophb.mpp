@@ -3,7 +3,7 @@
 // @name:ru            TealMIDIPlayer
 // @name:pt-BR         TealMIDIPlayer
 // @homepage           <gone>
-// @version            2.10.0
+// @version            2.11.0-beta
 // @description        MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
 // @description:ru     Бот-MIDI-плеер для MPP. (Основан на MIDI-плеере, встроенном в Teal)
@@ -1024,14 +1024,14 @@ globalThis.hijackedSend ??= function hijackedSend(msg) {
 if (MPP.chat.send !== hijackedSend) MPP.chat.send = hijackedSend;
 
 function midiLoading() {
-	if (!player.isPlaying) playNote('as3', 1);
+	playNote('as3', 1);
 	setTimeout(() => {
 		stopNote('as3');
-		if (!player.isPlaying) playNote('cs4', 1);
+		playNote('cs4', 1);
 	}, 250);
 	setTimeout(() => {
 		stopNote('cs4');
-		if (!player.isPlaying) playNote('fs4', 1);
+		playNote('fs4', 1);
 	}, 500);
 	setTimeout(() => {
 		stopNote('fs4');
@@ -1041,14 +1041,14 @@ function midiLoading() {
 	}, 1000)
 }
 
-let loadnotes
+let loadnotes;
 function loadNotes(start) {
 	if (start) {
 		midiLoading()
 		loadnotes = setInterval(midiLoading, 1e3);
 	} else clearInterval(loadnotes);
 }
-function validUrl(url) {
+function validURL(url) {
 	let result;
 	try {
 		new URL(url);
@@ -1058,126 +1058,93 @@ function validUrl(url) {
 	}
 	return result;
 }
-const signal = new AbortController().signal;
-async function loadStuff(a) {
-	function validMidi(arrbuf) {
-		const decoder = new TextDecoder('utf8');
-		let textdata = decoder.decode(arrbuf);
-		if (textdata.startsWith('MThd'))
-			return true;
-		else
-			return false;
-	}
-
-	let out = await a.arrayBuffer();
-	if (validMidi(out))
-		return out;
-	else
-		throw new Error('The file provided is invalid, as it doesn\'t start with the header "MThd".');
-}
-
-let playing = {}
 function delay(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
-async function playMidiFromUrl(url) {
+
+const playing = {};
+function validMIDI(arrBuf) {
+	const decoder = new TextDecoder('utf8');
+	const textdata = decoder.decode(arrBuf);
+	if (textdata.startsWith('MThd'))
+		return true;
+	else
+		return false;
+}
+const signal = new AbortController().signal;
+async function playMIDIfromURL(url) {
+	if (queue[getFileName(url)] == null)
+		queue[getFileName(url)] = url;
+
 	eventsplayed = 0;
-	let fetchtime;
-	let fetchstart;
-	let parsetime;
+	let fetchtime, fetchstart, parsetime, result;
+
 	loadNotes(true);
 	await delay(50);
-	let result;
-	fetchtime = 0;
-	fetchstart = Date.now();
-	console.log('trying to play', url);
-	if (validUrl(url)) {
-		if (player.isPlaying) {
-			player.stop();
-			player.unload();
-		}
-		try {
-			fetch(url, {
-				method: 'get',
-				signal: signal
-			}).then(async (a) => {
-				try {
-					let out = await loadStuff(a);
-					return out;
-				} catch (err) {
-					send("There was an error when playing the file.", `Error: \`${err.message}\``);
-					console.log(err);
-					loadNotes(false);
-					return false;
-				}
-			}).then(async a => {
-				fetchtime = Date.now() - fetchstart;
-				if (a) {
-					let parsestart = Date.now();
-					try {
-						await player.loadArrayBuffer(a);
-						player.play();
-						parsetime = Date.now() - parsestart;
-					}
-					catch (err) {
-						parsetime = Date.now() - parsestart;
-						result = false;
-						send("There was an error when playing the file.", `Error: \`${err}\``);
-						console.err(err);
-						loadNotes(false);
-						queue.shift();
-						if (queue.length > 0) {
-							setTimeout(() => {
-								send(`Downloading next song on the queue... (\`${getFileName(queue[0])}\`)`);
-								playMidiFromUrl(queue[0]);
-							}, 1e3);
-						} else {
-							send('Queue is now empty.');
-						}
-						return
-					}
-					console.log(`Fetch time: ${fetchtime}ms\nParse time: ${parsetime}ms`);
-					send(
-						`Fetched MIDI in ${fetchtime}ms.`,
-						`Parsed MIDI in ${parsetime}ms.`,
-						`Now playing \`${decodeURIComponent(url.split("/")[url.split("/").length - 1])}\`.`
-					);
-					playing.name = getFileName(url);
-					playing.url = url;
-					loadNotes(false);
-				} else {
-					loadNotes(false);
-					return;
-				}
-			})
-		} catch (err) {
-			result = false;
-			send('Error');
-			loadNotes(false);
-			queue.shift();
-			if (queue.length > 0) {
-				setTimeout(() => {
-					send(`Downloading next song on the queue... (\`${getFileName(queue[0])}\`)`);
-					playMidiFromUrl(queue[0]);
-				}, 1e3);
-			} else {
-				send('Queue is now empty');
-			}
 
-		}
-	} else {
+	let fetchtime = 0, fetchstart = Date.now();
+
+	const errorRoutine = (err) => {
 		result = false;
-		send("There was an error when playing the file.", "Error: `Invalid URL`");
-		queue.shift();
-		if (queue.length > 0) {
+
+		send("There was an error when playing the file.", `Error: \`${err.message ?? JSON.stringify(err)}\``);
+		loadNotes(false);
+
+		delete queue[Object.keys(queue)[0]];
+		if (Object.keys(queue).length > 0) {
 			setTimeout(() => {
-				send(`Downloading next song on the queue... (\`${getFileName(queue[0])}\`)`);
-				playMidiFromUrl(queue[0]);
+				send(`Downloading next song on the queue... (\`${Object.keys(queue)[0])}\`)`);
+				playMIDIfromURL(Object.keys(queue)[0]);
 			}, 1e3);
 		} else {
 			send('Queue is now empty');
 		}
 	}
+
+	console.log('trying to play', url);
+	if (validURL(url) || url instanceof ArrayBuffer) {
+		if (player.isPlaying) {
+			player.stop();
+			player.unload();
+		}
+		try {
+			fetchstart = Date.now();
+
+			let arrayBuf;
+			if (validURL(url)) {
+				const r = await fetch(url, { signal });
+				arrayBuf = await r.arrayBuffer();
+			} else {
+				arrayBuf = url;
+			}
+
+			if (!validMIDI(arrayBuf))
+				throw new Error('The file provided is invalid, as it doesn\'t start with the header "MThd".');
+
+			fetchtime = Date.now() - fetchstart;
+			if (arrayBuf) {
+				let parsestart = Date.now();
+				await player.loadArrayBuffer(arrayBuf);
+				player.play();
+				parsetime = Date.now() - parsestart;
+
+				console.log(`Fetch time: ${fetchtime}ms\nParse time: ${parsetime}ms`);
+				send(
+					`Fetched MIDI in ${fetchtime}ms.`,
+					`Parsed MIDI in ${parsetime}ms.`,
+					`Now playing \`${decodeURIComponent(url.split("/")[url.split("/").length - 1])}\`.`
+				);
+
+				playing.name = getFileName(url);
+				playing.url = url;
+			}
+		} catch (err) {
+			errorRoutine(err);
+		}
+	} else {
+		errorRoutine(new Error('Invalid URL'));
+	}
+
 	loadNotes(false);
 	return result;
 }
@@ -1242,12 +1209,12 @@ player.on('endOfFile', async () => {
 		);
 
 		player.unload();
-		playing = {};
-		queue.splice(0, 1);
-		if (queue.length > 0) {
+		while (Object.keys(playing).length > 0) delete playing[Object.keys(playing)[0]]; // Clear playing
+		delete queue[Object.keys(queue)[0]]; // Delete first item in queue
+		if (Object.keys(queue).length > 0) {
 			setTimeout(() => {
-				send(`Downloading next song on the queue... (\`${getFileName(queue[0])}\`)`);
-				playMidiFromUrl(queue[0]);
+				send(`Downloading next song on the queue... (\`${Object.keys(queue)[0]}\`)`);
+				(Object.keys(queue)[0]);
 			}, 500);
 		} else {
 			send('Queue is now empty.');
@@ -1259,15 +1226,16 @@ player.on('endOfFile', async () => {
 	}
 })
 
-function getFileName(url) {
-	let filename = "";
-	filename = url.split('/');
-	filename = filename[filename.length - 1];
-	filename = decodeURIComponent(filename);
-	return filename;
+function clearQueue() {
+	while (Object.keys(queue).length > 0) delete queue[Object.keys(queue)[0]];
+}
+function getFileName(URL) {
+	return decodeURIComponent(
+		URL.split('/').at(-1)
+	).split('.').slice(0, -1).join('.');
 }
 
-let queue = [];
+const queue = {};
 const categories = {
 	'midi': {
 		icon: '🎹',
@@ -1375,14 +1343,14 @@ const cmds = {
 				send(`Please specify a direct download URL to the desired MIDI file to play.`, `Usage: \`${ogcmd} <URL>\``);
 			else {
 				let callback = () => {
-					queue = [];
+					clearQueue();
 					player.stop();
 					keys.forEach(key => {
 						stopNote(key);
 					})
 					send(`Downloading \`${getFileName(args[1])}\`...`);
-					queue.push(args[1]);
-					playMidiFromUrl(args[1]);
+					queue[getFileName(args[1])] = args[1];
+					playMIDIfromURL(getFileName(args[1]));
 				}
 				if (player.isPlaying)
 					setTimeout(callback, 250);
@@ -1400,9 +1368,9 @@ const cmds = {
 			if (args.length === 1)
 				send(`Please specify a direct download URL to the desired MIDI file to add to the queue.`, `Usage: \`${ogcmd} <URL>\``);
 			else {
-				if (queue.length > 0) {
-					queue.push(args[1]);
-					send(`Added \`${getFileName(args[1])}\` to queue.`, `Amount of queued tracks: ${queue.length}`);
+				if (Object.keys(queue).length > 0) {
+					queue[getFileName(args[1])] = args[1];
+					send(`Added \`${getFileName(args[1])}\` to queue.`, `Amount of queued tracks: ${Object.keys(queue).length}`);
 				} else {
 					cmds.play.func(...args);
 				}
@@ -1419,7 +1387,7 @@ const cmds = {
 				return;
 			}
 
-			queue = [];
+			clearQueue();
 			loadNotes(false);
 			player.stop();
 			player.unload();
@@ -1434,30 +1402,26 @@ const cmds = {
 		category: 'midi',
 		about: "Skips to the next track in the queue.",
 		func: () => {
-			if (queue.length === 0)
+			if (Object.keys(queue).length === 0)
 				send('The queue is already empty!');
 
-			else if (queue.length === 1) {
-				queue = [];
+			else if (Object.keys(queue).length === 1) {
+				clearQueue();
 				player.stop();
 				player.unload();
-				keys.forEach(key => {
-					stopNote(key);
-				})
+				keys.forEach(key => stopNote(key));
 
 				send('Skipped track.', 'Queue is now empty.');
 
-			} else if (queue.length > 1) {
-				queue.shift();
+			} else if (Object.keys(queue).length > 1) {
+				delete queue[Object.keys(queue)[0]];
 				player.stop();
 				player.unload();
-				keys.forEach(key => {
-					stopNote(key);
-				})
-				playMidiFromUrl(queue[0]);
+				keys.forEach(key => stopNote(key));
+				playMIDIfromURL(Object.keys(queue)[0]);
 
 				setTimeout(() => {
-					send('Skipped track.', `Downloading \`${getFileName(queue[0])}\`...`);
+					send('Skipped track.', `Downloading \`${Object.keys(queue)[0]}\`...`);
 				}, 250);
 			}
 		}
@@ -1649,11 +1613,11 @@ const cmds = {
 		category: 'info',
 		about: "Shows the list of queued tracks.",
 		func: () => {
-			let qFormatted = [];
-			for (let i = 0; i < queue.length; i++) {
-				qFormatted.push(getFileName(queue[i]));
+			const qFormatted = [];
+			for (const queued of Object.keys(queue)) {
+				qFormatted.push(queued);
 			}
-			send(`[${queue.length}] Queue${looping ? " (currently looping, won't go to next)" : ''}: ${queue.length > 0 ? `\`${qFormatted.join('`, `')}\`` : '*(empty)*'}`);
+			send(`[${Object.keys(queue).length}] Queue${looping ? " (currently looping, won't go to next)" : ''}: ${Object.keys(queue).length > 0 ? `\`${qFormatted.join('`, `')}\`` : '*(empty)*'}`);
 		}
 	},
 	prefix: {
