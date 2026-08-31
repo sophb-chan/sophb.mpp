@@ -1713,7 +1713,7 @@ function createcmdstr(categ) {
 	if (categ == null) {
 		const result = [];
 
-		for (const [name, info] of Objects.entries(categories))
+		for (const [name, info] of Object.entries(categories))
 			// expected output: "<categ. emoji> <categ. label/name> (`<categ internal name>`)"
 			result.push(`${info.icon} ${info.label} (\`${name}\`)`);
 
@@ -1723,7 +1723,7 @@ function createcmdstr(categ) {
 
 		let targetCateg;
 		const categs = [];
-		for (const [name, info] of Objects.entries(categories)) {
+		for (const [name, info] of Object.entries(categories)) {
 			categs.push(name.toLowerCase());
 			categs.push(info.label.toLowerCase());
 
