@@ -3031,13 +3031,13 @@ var TIMING_TARGET = 1000;
 				title: window.i18nextify.i18next.t("You're playing alone"),
 				html:
 					'<p>' +
-					"You're in a room by yourself now, but you can always invite friends by sending them the link."
-					+ (Math.random() < 0.01 ? '<br>(Do you even have friends?)' : '')
+					"You're in a room by yourself now, but you can always invite friends by sending them this link: "
 					+ '</p><br><a href="' +
 					location.href +
 					'">' +
 					location.href +
 					"</a>",
+					+ (Math.random() < 0.01 ? '<br>(Do you even have friends?)' : '')
 				duration: 25000,
 			});
 		}, 1000);
