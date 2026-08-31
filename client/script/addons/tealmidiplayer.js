@@ -1739,6 +1739,7 @@ for (const [name, info] of Object.entries(categories)) {
 		oldFn();
 		send(`If you're looking for the **category** "\`${info.label}\`", use \`${prefix}help ${info.label}\` instead.`);
 	}
+	cmds[name] ??= {}
 	cmds[name].func = newFn;
 }
 
