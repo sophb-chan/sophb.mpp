@@ -1233,9 +1233,13 @@ function clearQueue() {
 	while (Object.keys(queue).length > 0) delete queue[Object.keys(queue)[0]];
 }
 function getFileName(URL) {
-	return decodeURIComponent(
-		URL.split('/').at(-1)
-	).split('.').slice(0, -1).join('.');
+	try {
+		return decodeURIComponent(
+			URL.split('/').at(-1)
+		).split('.').slice(0, -1).join('.');
+	} catch {
+		return URL;
+	}
 }
 
 const queue = {};
