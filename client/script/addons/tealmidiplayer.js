@@ -1399,12 +1399,18 @@ const cmds = {
 				send(`Please specify a direct download URL to the desired MIDI file to add to the queue.`, `Usage: \`${ogcmd} <URL>\``);
 			else {
 				if (Object.keys(queue).length > 0) {
-					queue[getFileName(args[1])] = args[1];
-					send(`Added \`${getFileName(args[1])}\` to queue.`, `Amount of queued tracks: ${Object.keys(queue).length}`);
+					const name = getFileName(args[1]);
+					if (queue[name] != null) {
+						send(`There already is a track named "\`${name}\`" in the queue!`);
+						return;
+					}
+
+					queue[name] = args[1];
+					send(`Added \`${name}\` to queue.`, `Amount of queued tracks: ${Object.keys(queue).length}`);
 					try {
 						const r = await fetch(args[1]);
 						const arrayBuf = await r.arrayBuffer();
-						queue[getFileName(args[1])] = arrayBuf;
+						queue[name] = arrayBuf;
 					} catch {}
 				} else {
 					cmds.play.func(...args);
