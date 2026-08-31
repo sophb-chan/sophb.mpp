@@ -1212,7 +1212,7 @@ player.on('endOfFile', async () => {
 		);
 
 		player.unload();
-		while (Object.keys(playing).length > 0) delete playing[Object.keys(playing)[0]]; // Clear playing
+		clearObj(playing);
 		delete queue[Object.keys(queue)[0]]; // Delete first item in queue
 		if (Object.keys(queue).length > 0) {
 			setTimeout(() => {
@@ -1229,8 +1229,8 @@ player.on('endOfFile', async () => {
 	}
 })
 
-function clearQueue() {
-	while (Object.keys(queue).length > 0) delete queue[Object.keys(queue)[0]];
+function clearObj(obj) {
+	while (Object.keys(obj).length > 0) delete queue[Object.keys(obj)[0]];
 }
 function getFileName(URL) {
 	try {
@@ -1350,7 +1350,7 @@ const cmds = {
 				send(`Please specify a direct download URL to the desired MIDI file to play.`, `Usage: \`${ogcmd} <URL>\``);
 			else {
 				let callback = () => {
-					clearQueue();
+					clearObj(queue);
 					player.stop();
 					keys.forEach(key => {
 						stopNote(key);
@@ -1399,7 +1399,7 @@ const cmds = {
 				return;
 			}
 
-			clearQueue();
+			clearObj(queue);
 			loadNotes(false);
 			player.stop();
 			player.unload();
@@ -1418,7 +1418,7 @@ const cmds = {
 				send('The queue is already empty!');
 
 			else if (Object.keys(queue).length === 1) {
-				clearQueue();
+				clearObj(queue);
 				player.stop();
 				player.unload();
 				keys.forEach(key => stopNote(key));
