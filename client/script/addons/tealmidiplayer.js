@@ -1171,6 +1171,9 @@ function stopNote(note) {
 	else
 		MPP.release(note);
 }
+function stopNotes() {
+	keys.forEach(key => stopNote(key));
+}
 
 let looping = false;
 let sustain = false;
