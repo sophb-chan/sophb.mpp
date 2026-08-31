@@ -1053,7 +1053,10 @@ function midiLoading(stopFn) {
 
 let stopFn;
 function loadNotes(start) {
-	if (stopFn != null || !start) stopFn();
+	if (stopFn != null || !start) {
+		stopFn();
+		stopFn = null;
+	}
 	if (start) stopFn = midiLoading();
 }
 function validURL(url) {
