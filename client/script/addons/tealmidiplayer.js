@@ -928,7 +928,7 @@ class JMIDIPlayer {
 let player = new JMIDIPlayer();
 player.isLoaded = () => !player.isLoading && player.trackCount > 0;
 
-if (localStorage.tmp_clientside == null) localStorage.tmp_clientside = 'false';
+localStorage.tmp_clientside ??= 'true';
 let clientside = localStorage.tmp_clientside === 'true';
 const charLimit = 512;
 function send(...msgs) {
