@@ -1104,6 +1104,7 @@ async function playMIDIfromURL(targetMIDI) {
 
 	console.log('trying to play', url);
 	if (validURL(url) || url instanceof ArrayBuffer) {
+		const loadMethod = validURL(url) ? 'url' : 'arrbuf';
 		if (player.isPlaying) {
 			player.stop();
 			player.unload();
@@ -1133,7 +1134,7 @@ async function playMIDIfromURL(targetMIDI) {
 				send(
 					`Fetched MIDI in ${fetchtime}ms.`,
 					`Parsed MIDI in ${parsetime}ms.`,
-					`Now playing \`${decodeURIComponent(url.split("/")[url.split("/").length - 1])}\`.`
+					`Now playing \`${targetMIDI}\`.`
 				);
 
 				playing.name = getFileName(url);
@@ -1167,7 +1168,7 @@ let looping = false;
 let sustain = false;
 let transpose = 0;
 let volume = 1;
-let jevents = {
+const jevents = {
 	noteon: 9,
 	noteoff: 8,
 	ctrlChange: 0x0B,
@@ -1176,7 +1177,7 @@ let jevents = {
 	meta: 0xFF
 };
 let eventsplayed = 0;
-let keys = Object.keys(MPP.piano.keys);
+const keys = Object.keys(MPP.piano.keys);
 let currenttick;
 player.on('midiEvent', (event) => {
 	eventsplayed++;
@@ -1372,6 +1373,11 @@ const cmds = {
 				if (Object.keys(queue).length > 0) {
 					queue[getFileName(args[1])] = args[1];
 					send(`Added \`${getFileName(args[1])}\` to queue.`, `Amount of queued tracks: ${Object.keys(queue).length}`);
+					try {
+						const r = await fetch(args[1]);
+						const arrayBuf = await r.arrayBuffer();
+						queue[getFileName(args[1])] = arrayBuf;
+					} catch {}
 				} else {
 					cmds.play.func(...args);
 				}
