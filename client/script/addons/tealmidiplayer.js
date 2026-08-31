@@ -1082,8 +1082,6 @@ async function playMIDIfromURL(url) {
 	loadNotes(true);
 	await delay(50);
 
-	let fetchtime = 0, fetchstart = Date.now();
-
 	const errorRoutine = (err) => {
 		result = false;
 
