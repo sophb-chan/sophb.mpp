@@ -1010,13 +1010,14 @@ function send(...msgs) {
 const ogSend = MPP.chat.send;
 globalThis.hijackedSend ??= function hijackedSend(msg) {
 	if (clientside && msg.startsWith(prefix)) {
+		document.getElementById('chat-input').value = '';
 		const event = {
 			m: 'a',
 			id: 'hijacked',
 			a: msg,
 			p: MPP.client.getOwnParticipant(),
 			t: Date.now(),
-		}
+		};
 		MPP.chat.receive(event);
 		chatMessageHandler(event);
 	} else ogSend(msg);
@@ -1704,7 +1705,7 @@ const cmds = {
 		}
 	}
 }
-for (const [name, info] of Objects.entries(categories)) {
+for (const [name, info] of Object.entries(categories)) {
 
 }
 
