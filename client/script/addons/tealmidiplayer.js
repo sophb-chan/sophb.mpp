@@ -1052,8 +1052,9 @@ function midiLoading(stopFn) {
 }
 
 let stopFn;
-function loadNotes(start) {
-	if (stopFn != null || !start) {
+function loadNotes(start = true) {
+	console.log(stopFn);
+	if (typeof stopFn === 'function') {
 		stopFn();
 		stopFn = null;
 	}
@@ -1093,7 +1094,7 @@ async function playMIDIfromURL(targetMIDI) {
 	eventsplayed = 0;
 	let fetchtime, fetchstart, parsetime, result;
 
-	loadNotes(true);
+	loadNotes();
 	await delay(50);
 
 	const errorRoutine = (err) => {
