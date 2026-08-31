@@ -1053,7 +1053,6 @@ function midiLoading(stopFn) {
 
 let stopFn;
 function loadNotes(start = true) {
-	console.log(stopFn);
 	if (typeof stopFn === 'function') {
 		stopFn();
 		stopFn = null;
@@ -1357,7 +1356,7 @@ const cmds = {
 					}
 				}
 				// fallback
-				send("That category (or command) does not exist.");
+				send(defaultMsgs.categs.notfound);
 			}
 		}
 	},
@@ -1792,6 +1791,7 @@ const defaultMsgs = {
 	},
 	categs: {
 		invalid: 'Invalid category',
+		notfound: "That category (or command) does not exist.",
 	}
 }
 const chatMessageHandler = async data => {
@@ -1808,7 +1808,7 @@ const chatMessageHandler = async data => {
 		if (cmds[targetCmd] == null)
 			targetCmd = Object.entries(cmds).find(([c, m]) => (m.aliases ?? []).includes(cmd))?.[0];
 		if (cmds[targetCmd] == null) {
-			send(defaultMsgs.cmd.noperms.replace('{cmd}', prefix + cmd));
+			send(defaultMsgs.cmd.notfound.replace('{cmd}', prefix + cmd));
 			return;
 		}
 
