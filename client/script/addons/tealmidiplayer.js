@@ -1044,7 +1044,7 @@ function midiLoading(stopFn) {
 		stopNote('fs4');
 		await delay(250);
 		if (stop) return;
-		loop();
+		requestAnimationFrame(loop);
 	}
 	loop();
 
