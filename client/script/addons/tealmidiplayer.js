@@ -1151,13 +1151,13 @@ async function playMIDIfromURL(targetMIDI) {
 }
 
 function playNote(note, vel) {
-	if (clientside)
+	if (!clientside)
 		MPP.piano.play(note, vel, MPP.client.getOwnParticipant(), 0);
 	else
 		MPP.press(note, vel);
 }
 function stopNote(note) {
-	if (clientside)
+	if (!clientside)
 		MPP.piano.stop(note, MPP.client.getOwnParticipant(), 0);
 	else
 		MPP.release(note);
