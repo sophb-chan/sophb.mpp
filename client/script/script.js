@@ -3036,8 +3036,8 @@ var TIMING_TARGET = 1000;
 					location.href +
 					'">' +
 					location.href +
-					"</a>",
-					+ (Math.random() < 0.01 ? '<br>(Do you even have friends?)' : '')
+					"</a>"
+					+ (Math.random() < 0.01 ? '<br>(Do you even have friends?)' : ''),
 				duration: 25000,
 			});
 		}, 1000);
