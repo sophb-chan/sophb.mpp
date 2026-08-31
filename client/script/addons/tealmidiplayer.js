@@ -1198,7 +1198,7 @@ player.on('midiEvent', (event) => {
 	switch (event.type) {
 		case jevents.noteon:
 			// No drum channel (yet!)
-			if (event.channel === 0) break;
+			if (event.channel === 9) break;
 
 			// Stop 0 vel notes
 			if (event.velocity === 0) {
