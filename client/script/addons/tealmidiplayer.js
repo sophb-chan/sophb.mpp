@@ -1704,52 +1704,47 @@ const cmds = {
 		}
 	}
 }
-function createcmdstr(categ) {
-	if (!categ) {
-		let result = [];
-		for (let i = 0; i < Object.keys(categories).length; i++) {
-			const name = Object.keys(categories)[i];
-			const info = Object.values(categories)[i];
+for (const [name, info] of Objects.entries(categories)) {
 
+}
+
+function createcmdstr(categ) {
+	if (categ == null) {
+		const result = [];
+
+		for (const [name, info] of Objects.entries(categories))
 			// expected output: "<categ. emoji> <categ. label/name> (`<categ internal name>`)"
 			result.push(`${info.icon} ${info.label} (\`${name}\`)`);
-		}
 
 		return result.join(', ');
 	} else {
 		categ = categ.toLowerCase();
 
 		let targetCateg;
-
-		let categs = [];
-		for (let i = 0; i < Object.keys(categories).length; i++) {
-			const name = Object.keys(categories)[i];
-			const info = Object.values(categories)[i];
+		const categs = [];
+		for (const [name, info] of Objects.entries(categories)) {
 			categs.push(name.toLowerCase());
 			categs.push(info.label.toLowerCase());
+
 			if (categ === info.label.toLowerCase() || categ === name.toLowerCase())
 				targetCateg = name;
 		}
 
-		if (!categs.includes(categ)) return 'Invalid category';
+		if (!categs.includes(categ)) return defaultMsgs.categs.invalid;
 
-		let result = [];
-		for (let i = 0; i < Object.keys(cmds).length; i++) {
-			const cmd = Object.keys(cmds)[i];
-			const cmdinfo = Object.values(cmds)[i];
-
-			// console.log(result)
-			// skip cmd if its category isn't the target category
+		const result = [];
+		for (const [cmd, cmdinfo] of Object.entries(cmds)) {
+			// Skip command if its category isn't the target category
 			if (cmdinfo.category !== targetCateg) continue;
 
-			// expected output: "`;<cmd>`"
-			let str = `\`${prefix}${cmd}\``;
-
-			// expected output: "`;<cmd>` (`;<alias>`)"
+			// Expected output: "`;<cmd>`"
+			let str = `\`${prefix + cmd}\``;
+			// Expected output: "`;<cmd>` (`;<alias>`)"
 			// or alternatively: "`;<cmd>` (`;<alias1>`, `;<alias2>`, ...)"
 			if (cmdinfo.aliases.length > 0) {
-				str += ` (\`${prefix}${cmdinfo.aliases.join(`\`, \`${prefix}`)}\`)`;
+				str += ` (\`${prefix + cmdinfo.aliases.join(`\`, \`${prefix}`)}\`)`;
 			}
+
 			result.push(str);
 		}
 
@@ -1760,6 +1755,15 @@ function createcmdstr(categ) {
 if (!localStorage.getItem('tmp_public')) localStorage.tmp_public = 'false';
 let public = localStorage.tmp_public === 'true';
 if (clientside && public) localStorage.tmp_clientside = clientside = false;
+const defaultMsgs = {
+	cmd: {
+		noperms: 'You do not have permission to use this command.',
+		notfound: `The command \`{cmd}\` does not exist. Use \`${prefix}help\` to see the categories of commands you can use.`,
+	},
+	categs: {
+		invalid: 'Invalid category',
+	}
+}
 const chatMessageHandler = async data => {
 	if (!public && data.p._id !== MPP.client.getOwnParticipant()._id) return;
 	const args = data.a.split(' ');
@@ -1772,13 +1776,16 @@ const chatMessageHandler = async data => {
 		// Find command
 		let targetCmd = cmd;
 		if (cmds[targetCmd] == null)
-			targetCmd = Object.entries(cmds).find((c,m) => (m.aliases ?? []).includes(cmd))?.[0];
-		if (cmds[targetCmd] == null) return; // Command not found
+			targetCmd = Object.entries(cmds).find(([c, m]) => (m.aliases ?? []).includes(cmd))?.[0];
+		if (cmds[targetCmd] == null) {
+			send(defaultMsgs.cmd.noperms.replace('{cmd}', prefix + cmd));
+			return;
+		}
 
 		// Check permissions and execute command
 		targetCmd = cmds[targetCmd];
 		if (targetCmd.locked && data.p._id !== MPP.client.getOwnParticipant()._id) {
-			send('You do not have permission to use this command.');
+			send(defaultMsgs.cmd.noperms);
 			return;
 		}
 		await targetCmd.func(...args);
