@@ -1091,7 +1091,7 @@ async function playMIDIfromURL(url) {
 		delete queue[Object.keys(queue)[0]];
 		if (Object.keys(queue).length > 0) {
 			setTimeout(() => {
-				send(`Downloading next song on the queue... (\`${Object.keys(queue)[0])}\`)`);
+				send(`Downloading next song on the queue... (\`${Object.keys(queue)[0]}\`)`);
 				playMIDIfromURL(Object.keys(queue)[0]);
 			}, 1e3);
 		} else {
