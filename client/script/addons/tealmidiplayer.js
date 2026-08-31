@@ -1217,7 +1217,7 @@ player.on('endOfFile', async () => {
 		if (Object.keys(queue).length > 0) {
 			setTimeout(() => {
 				send(`Downloading next song on the queue... (\`${Object.keys(queue)[0]}\`)`);
-				(Object.keys(queue)[0]);
+				playMIDIfromURL(Object.keys(queue)[0]);
 			}, 500);
 		} else {
 			send('Queue is now empty.');
