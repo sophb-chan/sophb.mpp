@@ -1364,7 +1364,7 @@ const cmds = {
 		aliases: ['addtoqueue', 'queuenext', 'next', 'qa', 'qu', 'up', 'addnext', 'nextup', 'nu'],
 		category: 'midi',
 		about: "Adds a MIDI file link to the track queue.",
-		func: (...args) => {
+		func: async (...args) => {
 			let ogcmd = args[0];
 			if (args.length === 1)
 				send(`Please specify a direct download URL to the desired MIDI file to add to the queue.`, `Usage: \`${ogcmd} <URL>\``);
@@ -1754,25 +1754,28 @@ function createcmdstr(categ) {
 if (!localStorage.getItem('tmp_public')) localStorage.tmp_public = 'false';
 let public = localStorage.tmp_public === 'true';
 if (clientside && public) localStorage.tmp_clientside = clientside = false;
-const chatMessageHandler = (data) => {
+const chatMessageHandler = async data => {
 	if (!public && data.p._id !== MPP.client.getOwnParticipant()._id) return;
-	let args = data.a.split(' ');
+	const args = data.a.split(' ');
 	let cmd = args[0].toLowerCase();
+
 	if (cmd.startsWith(prefix)) {
 		cmd = cmd.substring(prefix.length);
-		if (Object.keys(cmds).includes(cmd)) {
-			cmds[cmd].func(...args);
-		} else {
-			for (let i = -1; ++i < Object.keys(cmds).length;) {
-				if (Object.values(cmds)[i].aliases.includes(cmd)) {
-					if (cmds[Object.keys(cmds)[i]].locked && data.p._id !== MPP.client.getOwnParticipant()._id) {
-						send('You do not have permission to use this command.');
-						return;
-					}
-					cmds[Object.keys(cmds)[i]].func(...args);
-				}
-			}
+		if (cmd === '') return; // Empty command
+
+		// Find command
+		let targetCmd = cmd;
+		if (cmds[targetCmd] == null)
+			targetCmd = Object.entries(cmds).find((c,m) => m.aliases.includes(cmd))?.[0];
+		if (cmds[targetCmd] == null) return; // Command not found
+
+		// Check permissions and execute command
+		targetCmd = cmds[targetCmd];
+		if (targetCmd.locked && data.p._id !== MPP.client.getOwnParticipant()._id) {
+			send('You do not have permission to use this command.');
+			return;
 		}
+		await targetCmd.func(...args);
 	}
 }
 MPP.client.on('a', chatMessageHandler);
