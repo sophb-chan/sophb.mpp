@@ -1772,7 +1772,7 @@ const chatMessageHandler = async data => {
 		// Find command
 		let targetCmd = cmd;
 		if (cmds[targetCmd] == null)
-			targetCmd = Object.entries(cmds).find((c,m) => m.aliases.includes(cmd))?.[0];
+			targetCmd = Object.entries(cmds).find((c,m) => (m.aliases ?? []).includes(cmd))?.[0];
 		if (cmds[targetCmd] == null) return; // Command not found
 
 		// Check permissions and execute command
