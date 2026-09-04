@@ -3,18 +3,19 @@ if (
 	&&
 	'Translator' in self
 ) {
-	const detector = await LanguageDetector.create({
-		expectedInputLanguages: ["ru", "ko", "pt-BR"],
-	});
 	async function translate(text, inputLanguage, outputLanguage = 'en') {
 		const translator = await Translator.create({
 			sourceLanguage: inputLanguage,
 			targetLanguage: outputLanguage,
 		});
 		const translated = await translator.translate(text);
+		translator.destroy();
 		return translated;
 	}
 	async function detectLanguage(text) {
+		const detector = await LanguageDetector.create({
+			expectedInputLanguages: ["ru", "ko", "pt-BR"],
+		});
 		const results = detector.detect(text);
 		const mostConfidentResult = results.reduce(
 			(mostConfidentYet, currentResult) => {
@@ -27,6 +28,7 @@ if (
 				detectedLanguage: 'en',
 			},
 		);
+		detector.destroy();
 		return mostConfidentResult.detectedLanguage;
 	}
 	async function smartTranslate(text, outputLanguage) {
