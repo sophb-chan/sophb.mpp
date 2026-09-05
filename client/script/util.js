@@ -399,8 +399,11 @@ const markdownPatterns = {
 		replacer: '<code class="markdown">$1</code>',
 	},
 }
+function escapeHTML(text) {
+	return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('&', '&amp;');
+}
 function betterParseMarkdown(text) {
-	let parsedText = text;
+	let parsedText = escapeHTML(text);
 	for (const [name, info] of Object.entries(markdownPatterns)) {
 		parsedText = parsedText.replaceAll(info.regex, info.replacer);
 	}
