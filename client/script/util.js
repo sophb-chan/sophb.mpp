@@ -402,7 +402,7 @@ const markdownPatterns = {
 function betterParseMarkdown(text) {
 	let parsedText = text;
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		parsedText = parsedText.replaceAll(info.regex, perlReplacer);
+		parsedText = parsedText.replaceAll(info.regex, info.replacer);
 	}
 	return parsedText;
 }
