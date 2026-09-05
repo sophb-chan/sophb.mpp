@@ -3814,7 +3814,7 @@ var TIMING_TARGET = 1000;
 
 
 				//apply names, colors, ids
-				li.querySelector('.message').innerHTML = message;
+				li.find(".message").html(message);
 
 				if (msg.m === "dm") {
 					if (!gNoChatColors)
