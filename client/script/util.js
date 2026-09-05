@@ -364,7 +364,7 @@ const markdownPatterns = {
 			"(?:[/?#]\\S*)?",
 			"ig",
 		),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$0">$0</a>',
+		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$&">$&</a>',
 	},
 	strikethrough: {
 		regex: /~~(.+?)~~/ig,
@@ -402,7 +402,6 @@ const markdownPatterns = {
 function betterParseMarkdown(text) {
 	let parsedText = text;
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		const perlReplacer = info.replacer.replaceAll('$0', '$&');
 		parsedText = parsedText.replaceAll(info.regex, perlReplacer);
 	}
 	return parsedText;
