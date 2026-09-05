@@ -400,7 +400,16 @@ const markdownPatterns = {
 	},
 }
 function escapeHTML(text) {
-	return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('&', '&amp;');
+	const entities = {
+		'<': '&lt;',
+		'>': '&gt;',
+		'&': '&amp;',
+	}
+	let escapedText = text;
+	for (const [raw, entity] of Object.entries(entities)) {
+		escapedText = escapedText.replaceAll(raw, entity);
+	}
+	return escapedText;
 }
 function betterParseMarkdown(text) {
 	let parsedText = escapeHTML(text);
