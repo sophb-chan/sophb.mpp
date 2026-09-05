@@ -322,6 +322,91 @@ const parseUrl = (text) => {
 	});
 };
 
+const markdownPatterns = {
+	url: {
+		regex: new RegExp(
+			// protocol identifier (optional)
+			// short syntax // still required
+			"(?:(?:(?:https?|ftp):)?\\/\\/)" +
+			// user:pass BasicAuth (optional)
+			"(?:\\S+(?::\\S*)?@)?" +
+			"(?:" +
+			// IP address exclusion
+			// private & local networks
+			"(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
+			"(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
+			"(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+			// IP address dotted notation octets
+			// excludes loopback network 0.0.0.0
+			// excludes reserved space >= 224.0.0.0
+			// excludes network & broadcast addresses
+			// (first & last IP address of each class)
+			"(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
+			"(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
+			"(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
+			"|" +
+			// host & domain names, may end with dot
+			// can be replaced by a shortest alternative
+			// (?![-_])(?:[-\\w\\u00a1-\\uffff]{0,63}[^-_]\\.)+
+			"(?:" +
+			"(?:" +
+			"[a-z0-9\\u00a1-\\uffff]" +
+			"[a-z0-9\\u00a1-\\uffff_-]{0,62}" +
+			")?" +
+			"[a-z0-9\\u00a1-\\uffff]\\." +
+			")+" +
+			// TLD identifier name, may end with dot
+			"(?:[a-z\\u00a1-\\uffff]{2,}\\.?)" +
+			")" +
+			// port number (optional)
+			"(?::\\d{2,5})?" +
+			// resource path (optional)
+			"(?:[/?#]\\S*)?",
+			"ig",
+		),
+		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$0">$0</a>',
+	},
+	strikethrough: {
+		regex: /~~(.+?)~~/ig,
+		replacer: '<del class="markdown">$1</del>',
+	},
+	boldItalic: {
+		regex: /\*\*\*(.+?)\*\*\*/ig,
+		replacer: '<i class="markdown"><b class="markdown">$1</b></i>',
+	},
+	bold: {
+		regex: /\*\*(.+?)\*\*/ig,
+		replacer: '<b class="markdown">$1</b>',
+	},
+	italic: {
+		regex: /\*(.+?)\*/ig,
+		replacer: '<i class="markdown">$1</i>',
+	},
+	spoiler: {
+		regex: /\|\|(.+?)\|\|/ig,
+		replacer: '<span class="markdown spoiler">$1</span>',
+	},
+	code1: {
+		regex: /`(.+?)`/ig,
+		replacer: '<code class="markdown">$1</code>',
+	},
+	code2: {
+		regex: /``(.+?)``/ig,
+		replacer: '<code class="markdown">$1</code>',
+	},
+	code3: {
+		regex: /```(.+?)```/ig,
+		replacer: '<code class="markdown">$1</code>',
+	},
+}
+function betterParseMarkdown(text) {
+	let parsedText = text;
+	for (const [name, info] of Object.entries(markdownPatterns)) {
+		parsedText = parsedText.replaceAll(info.regex, info.replacer);
+	}
+	return parsedText;
+}
+
 const parseMarkdown = (text, parseFunction = (t) => t) => {
 	return text
 	.split(markdownRegex)
@@ -337,21 +422,21 @@ const parseMarkdown = (text, parseFunction = (t) => t) => {
 			const endsWithTwoBackticks = match.endsWith("``");
 			const endsWithBacktick = match.endsWith("`");
 			const endsWithVerticalBars = match.endsWith("||");
-			if (
-		(match.startsWith("\\~~") && endsWithTildes) ||
-		(match.startsWith("\\___") && endsWithThreeUnderscores) ||
-		(match.startsWith("\\__") && endsWithTwoUnderscores) ||
-		(match.startsWith("\\_") && endsWithUnderscore) ||
-		(match.startsWith("\\***") && endsWithThreeAsterisks) ||
-		(match.startsWith("\\**") && endsWithTwoAsterisks) ||
-		(match.startsWith("\\*") && endsWithAsterisk) ||
-		(match.startsWith("\\```") && endsWithThreeBackticks) ||
-		(match.startsWith("\\``") && endsWithTwoBackticks) ||
-		(match.startsWith("\\`") && endsWithBacktick) ||
-		(match.startsWith("\\||") && endsWithVerticalBars)
-			) {
-		return parseFunction(match.slice(1));
-			} else if (match.startsWith("~~") && endsWithTildes) {
+		if (
+			(match.startsWith("\\~~") && endsWithTildes) ||
+			(match.startsWith("\\___") && endsWithThreeUnderscores) ||
+			(match.startsWith("\\__") && endsWithTwoUnderscores) ||
+			(match.startsWith("\\_") && endsWithUnderscore) ||
+			(match.startsWith("\\***") && endsWithThreeAsterisks) ||
+			(match.startsWith("\\**") && endsWithTwoAsterisks) ||
+			(match.startsWith("\\*") && endsWithAsterisk) ||
+			(match.startsWith("\\```") && endsWithThreeBackticks) ||
+			(match.startsWith("\\``") && endsWithTwoBackticks) ||
+			(match.startsWith("\\`") && endsWithBacktick) ||
+			(match.startsWith("\\||") && endsWithVerticalBars)
+		) {
+			return parseFunction(match.slice(1));
+		} else if (match.startsWith("~~") && endsWithTildes) {
 		const content = parseMarkdown(
 					getTextContent(match.slice(2, match.length - 2)),
 					parseFunction,

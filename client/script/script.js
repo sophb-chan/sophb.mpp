@@ -3794,24 +3794,23 @@ var TIMING_TARGET = 1000;
 					);
 				}
 
-				const message = parseMarkdown(
-					parseContent(msg.a),
-					parseUrl,
-				).replace(/@([\da-f]{24})/g, (match, id) => {
-					const user = gClient.ppl[id];
-					if (user) {
+				const message =
+					betterParseMarkdown(msg.a)
+					.replace(/@([\da-f]{24})/g, (match, id) => {
+						const user = gClient.ppl[id];
+						if (!user) return match;
+
 						const nick = parseContent(user.name);
-						if (user.id === gClient.getOwnParticipant().id) {
-							if (!tabIsActive && !dontCheckMention) {
-								youreMentioned = true;
-								document.title = window.i18nextify.i18next.t(
-									"You were mentioned!",
-								);
-							}
-							return `<span class="mention" style="background-color: ${user.color};">${nick}</span>`;
-						} else return `@${nick}`;
-					} else return match;
-				});
+						if (user.id !== gClient.getOwnParticipant().id) return `@${nick}`;
+
+						if (!tabIsActive && !dontCheckMention) {
+							youreMentioned = true;
+							document.title = window.i18nextify.i18next.t(
+								"You were mentioned!",
+							);
+						}
+						return `<span class="mention" style="background-color: ${user.color};">${nick}</span>`;
+					});
 
 
 				//apply names, colors, ids
