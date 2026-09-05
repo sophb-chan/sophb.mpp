@@ -401,9 +401,9 @@ const markdownPatterns = {
 }
 function escapeHTML(text) {
 	const entities = {
+		'&': '&amp;',
 		'<': '&lt;',
 		'>': '&gt;',
-		'&': '&amp;',
 	}
 	let escapedText = text;
 	for (const [raw, entity] of Object.entries(entities)) {
