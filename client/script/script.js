@@ -3797,8 +3797,9 @@ var TIMING_TARGET = 1000;
 
 				// TODO:
 				// · Translate to website locale
-				// · Communicate that the message was translated in a better way
-				const translatedMessage = `[TRANSLATED] ${await smartTranslate(msg.a, 'en')}`;
+				// · Convey that the message was translated in a better way
+				const translatedContent = await smartTranslate(msg.a, 'en');
+				const translatedMessage = ['[TRANSLATED] ', ''][+(translatedContent === msg.a)] + translatedContent;
 
 				const message =
 					parseMarkdown(translatedMessage)
