@@ -309,16 +309,8 @@ const markdownPatterns = {
 		regex: /\|\|(.+?)\|\|/ig,
 		replacer: '<span class="markdown spoiler">$1</span>',
 	},
-	code3: {
-		regex: /```(.+?)```/ig,
-		replacer: '<code class="markdown">$1</code>',
-	},
-	code2: {
-		regex: /``(.+?)``/ig,
-		replacer: '<code class="markdown">$1</code>',
-	},
-	code1: {
-		regex: /`(.+?)`/ig,
+	code: {
+		regex: /(`{1,3})(.+?)\1/gi,
 		replacer: '<code class="markdown">$1</code>',
 	},
 }
