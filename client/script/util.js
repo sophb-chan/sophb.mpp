@@ -300,10 +300,6 @@ const markdownPatterns = {
 		regex: /__(.+?)__/gi,
 		replacer: '<u class="markdown">$1</u>'
 	},
-	boldItalic: {
-		regex: /\*\*\*(.+?)\*\*\*/ig,
-		replacer: '<i class="markdown"><b class="markdown">$1</b></i>',
-	},
 	bold: {
 		regex: /\*\*(.+?)\*\*/ig,
 		replacer: '<b class="markdown">$1</b>',
