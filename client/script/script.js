@@ -3822,7 +3822,7 @@ var TIMING_TARGET = 1000;
 				// TODO:
 				// · Translate to website locale
 				// · Convey that the message was translated in a better way
-				const translatedContent = smartTranslate(msg.a, 'en')
+				const translatedContent = smartTranslate(msg.a, localStorage.i18nextLng)
 					.then(translatedContent => {
 						const wasTranslated = (translatedContent !== msg.a);
 						const translatedMessage = ['', '[TRANSLATED] '][+wasTranslated] + translatedContent;
