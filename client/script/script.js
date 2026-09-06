@@ -3826,7 +3826,7 @@ var TIMING_TARGET = 1000;
 					.then(translatedContent => {
 						const wasTranslated = (translatedContent !== msg.a);
 						const translatedMessage = ['', '[TRANSLATED] '][+wasTranslated] + translatedContent;
-						li.find(".message").html(message);
+						li.find(".message").html(translatedMessage);
 						li.find(".message").attr('title', `Original content: ${msg.a}`);
 					});
 
