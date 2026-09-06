@@ -285,8 +285,8 @@ const URLregexPattern =
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
 	link: {
-		regex: new RegExp(URLregexPattern, "ig"),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$&">$&</a>',
+		regex: new RegExp(`(${URLregexPattern})`, "ig"),
+		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$1">$1</a>',
 	},
 	namedLink: {
 		regex: new RegExp(`\[(.+?)\]\((${URLregexPattern})\)`, 'gi'),
