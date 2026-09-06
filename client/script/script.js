@@ -3662,7 +3662,7 @@ var TIMING_TARGET = 1000;
 				}
 			},
 
-			receive: function (msg) {
+			receive: async function (msg) {
 				if (msg.m === "dm") {
 					if (gChatMutes.indexOf(msg.sender._id) != -1) return;
 				} else {
@@ -3794,8 +3794,13 @@ var TIMING_TARGET = 1000;
 					);
 				}
 
+				// TODO:
+				// · Translate to website locale
+				// · Communicate that the message was translated in a better way
+				const translatedMessage = `[TRANSLATED] ${await smartTranslate(msg.a, 'en')}`;
+
 				const message =
-					parseMarkdown(msg.a)
+					parseMarkdown(translatedMessage)
 					.replace(/@([\da-f]{24})/g, (match, id) => {
 						const user = gClient.ppl[id];
 						if (!user) return match;
@@ -3935,7 +3940,7 @@ var TIMING_TARGET = 1000;
 				//Reply button click event listener
 				li.find(".reply").on("click", (evt) => {
 					if (msg.m !== "dm") {
-						MPP.chat.startReply(msg.p, msg.id, msg.a);
+						MPP.chat.startReply(msg.p, msg.id, translatedMessage);
 						setTimeout(() => {
 							$(`#msg-${msg.id}`).css({
 								border: `1px solid ${msg?.m === "dm"
