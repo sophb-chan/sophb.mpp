@@ -284,13 +284,13 @@ const URLregexPattern =
 // resource path (optional)
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
+	link: {
+		regex: new RegExp(`((?<!\\[.+?\]\\()${URLregexPattern})`, "ig"),
+		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$1">$1</a>',
+	},
 	namedLink: {
 		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)`, 'gi'),
 		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$2">$1</a>',
-	},
-	link: {
-		regex: new RegExp(`(${URLregexPattern})`, "ig"),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$1">$1</a>',
 	},
 	strikethrough: {
 		regex: /~~(.+?)~~/ig,
