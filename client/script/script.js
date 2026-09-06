@@ -3795,7 +3795,7 @@ var TIMING_TARGET = 1000;
 				}
 
 				const message =
-					betterParseMarkdown(msg.a)
+					parseMarkdown(msg.a)
 					.replace(/@([\da-f]{24})/g, (match, id) => {
 						const user = gClient.ppl[id];
 						if (!user) return match;
