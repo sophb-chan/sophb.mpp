@@ -302,8 +302,8 @@ const markdownPatterns = {
 		replacer: '<b class="markdown">$1</b>',
 	},
 	italic: {
-		regex: /\*(.+?)\*/ig,
-		replacer: '<i class="markdown">$1</i>',
+		regex: /([*_])(.+?)\1/ig,
+		replacer: '<i class="markdown">$2</i>',
 	},
 	spoiler: {
 		regex: /\|\|(.+?)\|\|/ig,
@@ -311,8 +311,12 @@ const markdownPatterns = {
 	},
 	code: {
 		regex: /(`{1,3})(.+?)\1/gi,
-		replacer: '<code class="markdown">$1</code>',
+		replacer: '<code class="markdown">$2</code>',
 	},
+	underline: {
+		regex: /__(.+?)__/gi,
+		replacer: '<u class="markdown">$1</u>'
+	}
 }
 function escapeHTML(text) {
 	const entities = {
