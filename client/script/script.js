@@ -3663,7 +3663,7 @@ var TIMING_TARGET = 1000;
 				}
 			},
 
-			receive: async function (msg) {
+			receive: function (msg) {
 				if (msg.m === "dm") {
 					if (gChatMutes.indexOf(msg.sender._id) != -1) return;
 				} else {
@@ -3795,14 +3795,7 @@ var TIMING_TARGET = 1000;
 					);
 				}
 
-				// TODO:
-				// · Translate to website locale
-				// · Convey that the message was translated in a better way
-				const translatedContent = await smartTranslate(msg.a, 'en');
-				const translatedMessage = ['[TRANSLATED] ', ''][+(translatedContent === msg.a)] + translatedContent;
-
-				const message =
-					parseMarkdown(translatedMessage)
+				const constructMessage = content => parseMarkdown(content)
 					.replace(/@([\da-f]{24})/g, (match, id) => {
 						const user = gClient.ppl[id];
 						if (!user) return match;
@@ -3821,7 +3814,22 @@ var TIMING_TARGET = 1000;
 
 
 				//apply names, colors, ids
+				const message = constructMessage(msg.a);
 				li.find(".message").html(message);
+
+
+				// Translate message
+				// TODO:
+				// · Translate to website locale
+				// · Convey that the message was translated in a better way
+				const translatedContent = smartTranslate(msg.a, 'en')
+					.then(translatedContent => {
+						const wasTranslated = (translatedContent !== msg.a);
+						const translatedMessage = ['', '[TRANSLATED] '][+wasTranslated] + translatedContent;
+						li.find(".message").html(message);
+						li.find(".message").attr('title', `Original content: ${msg.a}`);
+					});
+
 
 				if (msg.m === "dm") {
 					if (!gNoChatColors)
