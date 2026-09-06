@@ -296,6 +296,10 @@ const markdownPatterns = {
 		regex: /~~(.+?)~~/ig,
 		replacer: '<del class="markdown">$1</del>',
 	},
+	underline: {
+		regex: /__(.+?)__/gi,
+		replacer: '<u class="markdown">$1</u>'
+	},
 	boldItalic: {
 		regex: /\*\*\*(.+?)\*\*\*/ig,
 		replacer: '<i class="markdown"><b class="markdown">$1</b></i>',
@@ -315,10 +319,6 @@ const markdownPatterns = {
 	code: {
 		regex: /(`{1,3})(.+?)\1/gi,
 		replacer: '<code class="markdown">$2</code>',
-	},
-	underline: {
-		regex: /__(.+?)__/gi,
-		replacer: '<u class="markdown">$1</u>'
 	},
 }
 function escapeHTML(text) {
