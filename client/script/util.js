@@ -281,7 +281,7 @@ const URLregexPattern =
 	")" +
 	// port number (optional)
 	"(?::\\d{2,5})?" +
-// resource path (optional)
+	// resource path (optional)
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
 	link: {
