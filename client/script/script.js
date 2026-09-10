@@ -3822,6 +3822,7 @@ var TIMING_TARGET = 1000;
 				// TODO:
 				// · Translate to website locale
 				// · Convey that the message was translated in a better way
+				/*
 				const translatedContent = smartTranslate(msg.a, localStorage.i18nextLng)
 					.then(translatedContent => {
 						const wasTranslated = (translatedContent !== msg.a);
@@ -3829,6 +3830,7 @@ var TIMING_TARGET = 1000;
 						li.find(".message").html(translatedMessage);
 						li.find(".message").attr('title', `Original content: ${msg.a}`);
 					});
+				*/
 
 
 				if (msg.m === "dm") {
