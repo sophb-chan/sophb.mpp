@@ -285,15 +285,11 @@ const URLregexPattern =
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
 	link: {
-		regex: new RegExp(`((?<!\\[.+?\]\\()${URLregexPattern})`, "ig"),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$1">$1</a>',
-	},
-	namedLink: {
-		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)`, 'gi'),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$2">$1</a>',
+		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)|(${URLregexPattern})`, "gi"),
+		replacer: ($0, $1, $2, $3) => `<a rel="noreferer noopener" target="_blank" class="chatLink" href="${$2 ?? $3}">${$1 ?? $3}</a>`,
 	},
 	strikethrough: {
-		regex: /~~(.+?)~~/ig,
+		regex: /~~(.+?)~~/gi,
 		replacer: '<del class="markdown">$1</del>',
 	},
 	underline: {
@@ -301,15 +297,15 @@ const markdownPatterns = {
 		replacer: '<u class="markdown">$1</u>'
 	},
 	bold: {
-		regex: /\*\*(.+?)\*\*/ig,
+		regex: /\*\*(.+?)\*\*/gi,
 		replacer: '<b class="markdown">$1</b>',
 	},
 	italic: {
-		regex: /([*_])(.+?)\1/ig,
+		regex: /([*_])(.+?)\1/gi,
 		replacer: '<i class="markdown">$2</i>',
 	},
 	spoiler: {
-		regex: /\|\|(.+?)\|\|/ig,
+		regex: /\|\|(.+?)\|\|/gi,
 		replacer: '<span class="markdown spoiler">$1</span>',
 	},
 	code: {
@@ -334,7 +330,7 @@ function escapeHTML(text) {
 function parseMarkdown(text) {
 	let parsedText = escapeHTML(text);
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		parsedText = parsedText.replaceAll(info.regex, info.replacer);
+		parsedText = parsedText.replace(info.regex, info.replacer);
 	}
 	return parsedText;
 }
