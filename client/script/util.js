@@ -1,8 +1,8 @@
 function mixin(obj1, obj2) {
 	for (var i in obj2) {
-	if (obj2.hasOwnProperty(i)) {
+		if (obj2.hasOwnProperty(i)) {
 			obj1[i] = obj2[i];
-	}
+		}
 	}
 }
 
@@ -30,17 +30,17 @@ EventEmitter.prototype.emit = function (evtn) {
 function hashFnv32a(str, asString, seed) {
 	/*jshint bitwise:false */
 	var i,
-	l,
-	hval = seed === undefined ? 0x811c9dc5 : seed;
+		l,
+		hval = seed === undefined ? 0x811c9dc5 : seed;
 
 	for (i = 0, l = str.length; i < l; i++) {
-	hval ^= str.charCodeAt(i);
-	hval +=
+		hval ^= str.charCodeAt(i);
+		hval +=
 			(hval << 1) + (hval << 4) + (hval << 7) + (hval << 8) + (hval << 24);
 	}
 	if (asString) {
-	// Convert to 8 digit hex string
-	return ("0000000" + (hval >>> 0).toString(16)).substr(-8);
+		// Convert to 8 digit hex string
+		return ("0000000" + (hval >>> 0).toString(16)).substr(-8);
 	}
 	return hval >>> 0;
 }
@@ -84,11 +84,11 @@ var Knob = function (canvas, min, max, step, value, name, unit) {
 	ctx.shadowOffsetY = this.canvas.width * 0.02;
 	ctx.beginPath();
 	ctx.arc(
-	this.canvas.width / 2,
-	this.canvas.height / 2,
-	this.radius,
-	0,
-	Math.PI * 2,
+		this.canvas.width / 2,
+		this.canvas.height / 2,
+		this.radius,
+		0,
+		Math.PI * 2,
 	);
 	ctx.fill();
 
@@ -97,86 +97,86 @@ var Knob = function (canvas, min, max, step, value, name, unit) {
 	var dragging = false;
 	// dragging
 	(function () {
-	function mousemove(evt) {
+		function mousemove(evt) {
 			if (evt.screenY !== self.dragY) {
-		var delta = -(evt.screenY - self.dragY);
-		var scale = 0.0075;
-		if (evt.ctrlKey) scale *= 0.05;
-		self.setKnobValue(self.knobValue + delta * scale);
-		self.dragY = evt.screenY;
-		self.redraw();
+				var delta = -(evt.screenY - self.dragY);
+				var scale = 0.0075;
+				if (evt.ctrlKey) scale *= 0.05;
+				self.setKnobValue(self.knobValue + delta * scale);
+				self.dragY = evt.screenY;
+				self.redraw();
 			}
 			evt.preventDefault();
 			showTip();
-	}
-	function mouseout(evt) {
+		}
+		function mouseout(evt) {
 			if (evt.toElement === null && evt.relatedTarget === null) {
-		mouseup();
+				mouseup();
 			}
-	}
-	function mouseup() {
+		}
+		function mouseup() {
 			document.removeEventListener("mousemove", mousemove);
 			document.removeEventListener("mouseout", mouseout);
 			document.removeEventListener("mouseup", mouseup);
 			self.emit("release", self);
 			dragging = false;
 			if (!self.mouse_over) removeTip();
-	}
-	canvas.addEventListener("mousedown", function (evt) {
+		}
+		canvas.addEventListener("mousedown", function (evt) {
 			var pos = self.translateMouseEvent(evt);
 			if (self.contains(pos.x, pos.y)) {
-		dragging = true;
-		self.dragY = evt.screenY;
-		showTip();
-		document.addEventListener("mousemove", mousemove);
-		document.addEventListener("mouseout", mouseout);
-		document.addEventListener("mouseup", mouseup);
+				dragging = true;
+				self.dragY = evt.screenY;
+				showTip();
+				document.addEventListener("mousemove", mousemove);
+				document.addEventListener("mouseout", mouseout);
+				document.addEventListener("mouseup", mouseup);
 			}
-	});
-	canvas.addEventListener("keydown", function (evt) {
+		});
+		canvas.addEventListener("keydown", function (evt) {
 			if (evt.keyCode == 38) {
-		self.setValue(self.value + self.step);
-		showTip();
+				self.setValue(self.value + self.step);
+				showTip();
 			} else if (evt.keyCode == 40) {
-		self.setValue(self.value - self.step);
-		showTip();
+				self.setValue(self.value - self.step);
+				showTip();
 			}
-	});
+		});
 	})();
 	// tooltip
 	function showTip() {
-	var div = document.getElementById("tooltip");
-	if (!div) {
+		var div = document.getElementById("tooltip");
+		if (!div) {
 			div = document.createElement("div");
 			document.body.appendChild(div);
 			div.id = "tooltip";
 			var rect = self.canvas.getBoundingClientRect();
 			div.style.left = rect.left + "px";
 			div.style.top = rect.bottom + "px";
-	}
-	div.textContent = self.name;
-	if (self.name) div.textContent += ": ";
-	div.textContent += self.valueString() + self.unit;
+		}
+		div.textContent = self.name;
+		if (self.name) div.textContent += ": ";
+		div.textContent += self.valueString() + self.unit;
 	}
 	function removeTip() {
-	var div = document.getElementById("tooltip");
-	if (div) {
+		var div = document.getElementById("tooltip");
+		if (div) {
 			div.parentElement.removeChild(div);
-	}
+		}
 	}
 	function ttmousemove(evt) {
-	var pos = self.translateMouseEvent(evt);
-	if (self.contains(pos.x, pos.y)) {
+		var pos = self.translateMouseEvent(evt);
+		if (self.contains(pos.x, pos.y)) {
 			self.mouse_over = true;
 			showTip();
-	} else {
+		} else {
 			self.mouse_over = false;
 			if (!dragging) removeTip();
-	}
+		}
 	}
 	function ttmouseout(evt) {
-	self.mouse_over = false;
-	if (!dragging) removeTip();
+		self.mouse_over = false;
+		if (!dragging) removeTip();
 	}
 	self.canvas.addEventListener("mousemove", ttmousemove);
 	self.canvas.addEventListener("mouseout", ttmouseout);
@@ -214,10 +214,10 @@ Knob.prototype.setValue = function (value) {
 	if (value < this.min) value = this.min;
 	else if (value > this.max) value = this.max;
 	if (this.value !== value) {
-	this.value = value;
-	this.knobValue = (value - this.min) / (this.max - this.min);
-	this.redraw();
-	this.emit("change", this);
+		this.value = value;
+		this.knobValue = (value - this.min) / (this.max - this.min);
+		this.redraw();
+		this.emit("change", this);
 	}
 };
 Knob.prototype.valueString = function () {
@@ -231,16 +231,16 @@ Knob.prototype.contains = function (x, y) {
 Knob.prototype.translateMouseEvent = function (evt) {
 	var element = evt.target;
 	return {
-	x:
+		x:
 			evt.clientX -
 			element.getBoundingClientRect().left -
 			element.clientLeft +
 			element.scrollLeft,
-	y:
+		y:
 			evt.clientY -
 			(element.getBoundingClientRect().top -
-		element.clientTop +
-		element.scrollTop),
+				element.clientTop +
+				element.scrollTop),
 	};
 };
 
@@ -281,19 +281,15 @@ const URLregexPattern =
 	")" +
 	// port number (optional)
 	"(?::\\d{2,5})?" +
-// resource path (optional)
+	// resource path (optional)
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
 	link: {
-		regex: new RegExp(`((?<!\\[.+?\]\\()${URLregexPattern})`, "ig"),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$1">$1</a>',
-	},
-	namedLink: {
-		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)`, 'gi'),
-		replacer: '<a rel="noreferer noopener" target="_blank" class="chatLink" href="$2">$1</a>',
+		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)|(${URLregexPattern})`, "gi"),
+		replacer: ($0, $1, $2, $3) => `<a rel="noreferer noopener" target="_blank" class="chatLink" href="${$2 ?? $3}">${$1 ?? $3}</a>`,
 	},
 	strikethrough: {
-		regex: /~~(.+?)~~/ig,
+		regex: /~~(.+?)~~/gi,
 		replacer: '<del class="markdown">$1</del>',
 	},
 	underline: {
@@ -301,15 +297,15 @@ const markdownPatterns = {
 		replacer: '<u class="markdown">$1</u>'
 	},
 	bold: {
-		regex: /\*\*(.+?)\*\*/ig,
+		regex: /\*\*(.+?)\*\*/gi,
 		replacer: '<b class="markdown">$1</b>',
 	},
 	italic: {
-		regex: /([*_])(.+?)\1/ig,
+		regex: /([*_])(.+?)\1/gi,
 		replacer: '<i class="markdown">$2</i>',
 	},
 	spoiler: {
-		regex: /\|\|(.+?)\|\|/ig,
+		regex: /\|\|(.+?)\|\|/gi,
 		replacer: '<span class="markdown spoiler">$1</span>',
 	},
 	code: {
@@ -334,7 +330,7 @@ function escapeHTML(text) {
 function parseMarkdown(text) {
 	let parsedText = escapeHTML(text);
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		parsedText = parsedText.replaceAll(info.regex, info.replacer);
+		parsedText = parsedText.replace(info.regex, info.replacer);
 	}
 	return parsedText;
 }
