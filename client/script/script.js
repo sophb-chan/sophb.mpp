@@ -3800,7 +3800,7 @@ var TIMING_TARGET = 1000;
 						const user = gClient.ppl[id];
 						if (!user) return match;
 
-						const nick = parseContent(user.name);
+						const nick = escapeHTML(user.name);
 						if (user.id !== gClient.getOwnParticipant().id) return `@${nick}`;
 
 						if (!tabIsActive && !dontCheckMention) {
