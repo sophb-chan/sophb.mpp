@@ -20,6 +20,7 @@ function refreshThemes() {
 		option.value = value;
 		themeSelect.append(option);
 	}
+	themeSelect.onchange = () => setTheme(themeSelect.value);
 }
 refreshThemes();
 setTheme();
