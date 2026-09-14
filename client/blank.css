@@ -1,0 +1,12 @@
+body {
+	display: none;
+}
+html {
+	background: linear-gradient(0deg, #f08, #52ff4c);
+}
+
+@media (prefers-color-scheme: light) {
+	html {
+		background: linear-gradient(from 0deg, #888, #444);
+	}
+}
