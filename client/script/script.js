@@ -1,12 +1,3 @@
-localStorage.i18nextLng ??= 'en';
-const translation = window.i18nextify.init({
-	lng: 'en',
-	fallbackLng: 'en',
-	autorun: false,
-});
-if (!i18nextify.i18next.hasResourceBundle(localStorage.i18nextLng, 'translation'))
-	localStorage.i18nextLng = 'en';
-
 if (location.host === "multiplayerpiano.com") {
 	const url = new URL("https://sophb-mpp.vercel.app/" + location.search);
 	if (localStorage.token) url.searchParams.set("token", localStorage.token);
@@ -81,7 +72,9 @@ var TIMING_TARGET = 1000;
 // Utility
 
 ////////////////////////////////////////////////////////////////
-(function () {
+(async function () {
+	await Lexis.init();
+
 	var Rect = function (x, y, w, h) {
 		this.x = x;
 		this.y = y;
@@ -1335,7 +1328,7 @@ var TIMING_TARGET = 1000;
 					'<span class="number" translated>' +
 					count +
 					"</span> " +
-					window.i18nextify.i18next.t("people are playing", {
+					Lexis.translate("people are playing", {
 						count,
 					}),
 				);
@@ -2506,7 +2499,7 @@ var TIMING_TARGET = 1000;
 			// add menu items
 			if (gPianoMutes.indexOf(part._id) == -1) {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Mute Notes",
 					)}</div>`,
 				)
@@ -2519,7 +2512,7 @@ var TIMING_TARGET = 1000;
 					});
 			} else {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Unmute Notes",
 					)}</div>`,
 				)
@@ -2535,7 +2528,7 @@ var TIMING_TARGET = 1000;
 			}
 			if (gChatMutes.indexOf(part._id) == -1) {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Mute Chat",
 					)}</div>`,
 				)
@@ -2548,7 +2541,7 @@ var TIMING_TARGET = 1000;
 					});
 			} else {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Unmute Chat",
 					)}</div>`,
 				)
@@ -2567,7 +2560,7 @@ var TIMING_TARGET = 1000;
 				!(gChatMutes.indexOf(part._id) >= 0)
 			) {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Mute Completely",
 					)}</div>`,
 				)
@@ -2588,7 +2581,7 @@ var TIMING_TARGET = 1000;
 				gChatMutes.indexOf(part._id) >= 0
 			) {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Unmute Completely",
 					)}</div>`,
 				)
@@ -2609,7 +2602,7 @@ var TIMING_TARGET = 1000;
 			}
 			if (gIsDming && gDmParticipant._id === part._id) {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"End Direct Message",
 					)}</div>`,
 				)
@@ -2619,7 +2612,7 @@ var TIMING_TARGET = 1000;
 					});
 			} else {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Direct Message",
 					)}</div>`,
 				)
@@ -2631,8 +2624,8 @@ var TIMING_TARGET = 1000;
 							new Notification({
 								target: "#piano",
 								duration: 20000,
-								title: window.i18nextify.i18next.t("How to DM"),
-								text: window.i18nextify.i18next.t(
+								title: Lexis.translate("How to DM"),
+								text: Lexis.translate(
 									"After you click the button to direct message someone, future chat messages will be sent to them instead of to everyone. To go back to talking in public chat, send a blank chat message, or click the button again.",
 								),
 							});
@@ -2642,7 +2635,7 @@ var TIMING_TARGET = 1000;
 			}
 			if (gCursorHides.indexOf(part._id) == -1) {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Hide Cursor",
 					)}</div>`,
 				)
@@ -2655,7 +2648,7 @@ var TIMING_TARGET = 1000;
 					});
 			} else {
 				$(
-					`<div class="menu-item">${window.i18nextify.i18next.t(
+					`<div class="menu-item">${Lexis.translate(
 						"Show Cursor",
 					)}</div>`,
 				)
@@ -2671,7 +2664,7 @@ var TIMING_TARGET = 1000;
 			}
 
 			$(
-				`<div class="menu-item">${window.i18nextify.i18next.t(
+				`<div class="menu-item">${Lexis.translate(
 					"Mention",
 				)}</div>`,
 			)
@@ -2686,7 +2679,7 @@ var TIMING_TARGET = 1000;
 			if (gClient.isOwner() || gClient.permissions.chownAnywhere) {
 				if (!gClient.channel.settings.lobby) {
 					$(
-						`<div class="menu-item give-crown">${window.i18nextify.i18next.t(
+						`<div class="menu-item give-crown">${Lexis.translate(
 							"Give Crown",
 						)}</div>`,
 					)
@@ -2703,7 +2696,7 @@ var TIMING_TARGET = 1000;
 						});
 				}
 				$(
-					`<div class="menu-item kickban">${window.i18nextify.i18next.t(
+					`<div class="menu-item kickban">${Lexis.translate(
 						"Kickban",
 					)}</div>`,
 				)
@@ -2720,7 +2713,7 @@ var TIMING_TARGET = 1000;
 			}
 			if (gClient.permissions.siteBan) {
 				$(
-					`<div class="menu-item site-ban">${window.i18nextify.i18next.t(
+					`<div class="menu-item site-ban">${Lexis.translate(
 						"Site Ban",
 					)}</div>`,
 				)
@@ -2763,7 +2756,7 @@ var TIMING_TARGET = 1000;
 			}
 			if (gClient.permissions.usersetOthers) {
 				$(
-					`<div class="menu-item set-color">${window.i18nextify.i18next.t(
+					`<div class="menu-item set-color">${Lexis.translate(
 						"Set Color",
 					)}</div>`,
 				)
@@ -2778,7 +2771,7 @@ var TIMING_TARGET = 1000;
 			}
 			if (gClient.permissions.usersetOthers) {
 				$(
-					`<div class="menu-item set-name">${window.i18nextify.i18next.t(
+					`<div class="menu-item set-name">${Lexis.translate(
 						"Set Name",
 					)}</div>`,
 				)
@@ -2890,8 +2883,8 @@ var TIMING_TARGET = 1000;
 		window.gKnowsYouCanUseKeyboardTimeout = setTimeout(function () {
 			window.gKnowsYouCanUseKeyboardNotification = new Notification({
 				id: "play",
-				title: window.i18nextify.i18next.t("Did you know!?!"),
-				text: window.i18nextify.i18next.t(
+				title: Lexis.translate("Did you know!?!"),
+				text: Lexis.translate(
 					"You can play the piano with your keyboard, too.  Try it!",
 				),
 				target: "#piano",
@@ -2905,7 +2898,7 @@ var TIMING_TARGET = 1000;
 			volume_slider.value = localStorage.volume;
 			gPiano.audio.setVolume(localStorage.volume);
 			$("#volume-label").html(
-				window.i18nextify.i18next.t("Volume") +
+				Lexis.translate("Volume") +
 				"<span translated>: " +
 				Math.floor(gPiano.audio.volume * 100) +
 				"%</span>",
@@ -3032,7 +3025,7 @@ var TIMING_TARGET = 1000;
 		setTimeout(function () {
 			new Notification({
 				id: "share",
-				title: window.i18nextify.i18next.t("You're playing alone"),
+				title: Lexis.translate("You're playing alone"),
 				html:
 					'<p>' +
 					"You're in a room by yourself now, but you can always invite friends by sending them this link: "
@@ -3124,9 +3117,9 @@ var TIMING_TARGET = 1000;
 			setTimeout(function () {
 				new Notification({
 					id: "share",
-					title: window.i18nextify.i18next.t("Created a Room"),
+					title: Lexis.translate("Created a Room"),
 					html:
-						window.i18nextify.i18next.t(
+						Lexis.translate(
 							"You can invite friends to your room by sending them the link.",
 						) +
 						'<br><a href="' +
@@ -3529,7 +3522,7 @@ var TIMING_TARGET = 1000;
 
 			endDM: function () {
 				gIsDming = false;
-				$("#chat-input")[0].placeholder = window.i18nextify.i18next.t(
+				$("#chat-input")[0].placeholder = Lexis.translate(
 					"You can chat with this thing.",
 				);
 			},
@@ -3565,7 +3558,7 @@ var TIMING_TARGET = 1000;
 					"background-color": "unset",
 					border: "1px solid #00000000",
 				});
-				$("#chat-input")[0].placeholder = window.i18nextify.i18next.t(
+				$("#chat-input")[0].placeholder = Lexis.translate(
 					gIsDming
 						? `Direct messaging ${part.name}`
 						: `You can chat with this thing.`,
@@ -3803,12 +3796,12 @@ var TIMING_TARGET = 1000;
 						const user = gClient.ppl[id];
 						if (!user) return match;
 
-						const nick = parseContent(user.name);
+						const nick = escapeHTML(user.name);
 						if (user.id !== gClient.getOwnParticipant().id) return `@${nick}`;
 
 						if (!tabIsActive && !dontCheckMention) {
 							youreMentioned = true;
-							document.title = window.i18nextify.i18next.t(
+							document.title = Lexis.translate(
 								"You were mentioned!",
 							);
 						}
@@ -4614,7 +4607,7 @@ var TIMING_TARGET = 1000;
 				var button = document.createElement("input");
 				mixin(button, {
 					type: "button",
-					value: window.i18nextify.i18next.t("ON/OFF"),
+					value: Lexis.translate("ON/OFF"),
 					className: enableSynth ? "switched-on" : "switched-off",
 				});
 				button.addEventListener("click", function (evt) {
@@ -4661,7 +4654,7 @@ var TIMING_TARGET = 1000;
 				var button = document.createElement("input");
 				mixin(button, {
 					type: "button",
-					value: window.i18nextify.i18next.t(
+					value: Lexis.translate(
 						osc_types[osc_type_index],
 					),
 				});
@@ -4669,7 +4662,7 @@ var TIMING_TARGET = 1000;
 					if (++osc_type_index >= osc_types.length)
 						osc_type_index = 0;
 					osc1_type = osc_types[osc_type_index];
-					button.value = window.i18nextify.i18next.t(osc1_type);
+					button.value = Lexis.translate(osc1_type);
 				});
 				html.appendChild(button);
 			})();
@@ -5593,8 +5586,7 @@ var TIMING_TARGET = 1000;
 	})();
 
 	(async () => {
-		// prettier-ignore
-		const translationIdsWithNames = [{ "code": "bg", "name": "Bulgarian", "native": "Български" }, { "code": "cs", "name": "Czech", "native": "Česky" }, { "code": "de", "name": "German", "native": "Deutsch" }, { "code": "en", "name": "English", "native": "English" }, { "code": "es", "name": "Spanish", "native": "Español" }, { "code": "fr", "name": "French", "native": "Français" }, { "code": "hu", "name": "Hungarian", "native": "Magyar" }, { "code": "is", "name": "Icelandic", "native": "Íslenska" }, { "code": "ja", "name": "Japanese", "native": "日本語" }, { "code": "ko", "name": "Korean", "native": "한국어" }, { "code": "lv", "name": "Latvian", "native": "Latviešu" }, { "code": "nb", "name": "Norwegian Bokmål", "native": "Norsk bokmål" }, { "code": "nl", "name": "Dutch", "native": "Nederlands" }, { "code": "pl", "name": "Polish", "native": "Polski" }, { "code": "pt", "name": "Portuguese", "native": "Português" }, { "code": "ru", "name": "Russian", "native": "Русский" }, { "code": "sk", "name": "Slovak", "native": "Slovenčina" }, { "code": "sv", "name": "Swedish", "native": "Svenska" }, { "code": "tr", "name": "Turkish", "native": "Türkçe" }, { "code": "zh", "name": "Chinese", "native": "中文" }]
+		const translationIdsWithNames = [{ "code": "cs", "name": "Czech", "native": "Česky" }, { "code": "de", "name": "German", "native": "Deutsch" }, { "code": "en", "name": "English", "native": "English" }, { "code": "es", "name": "Spanish", "native": "Español" }, { "code": "fr", "name": "French", "native": "Français" }, { "code": "hu", "name": "Hungarian", "native": "Magyar" }, { "code": "is", "name": "Icelandic", "native": "Íslenska" }, { "code": "ja", "name": "Japanese", "native": "日本語" }, { "code": "ko", "name": "Korean", "native": "한국어" }, { "code": "lv", "name": "Latvian", "native": "Latviešu" }, { "code": "nb", "name": "Norwegian Bokmål", "native": "Norsk bokmål" }, { "code": "nl", "name": "Dutch", "native": "Nederlands" }, { "code": "pl", "name": "Polish", "native": "Polski" }, { "code": "pt", "name": "Portuguese", "native": "Português" }, { "code": "ru", "name": "Russian", "native": "Русский" }, { "code": "sk", "name": "Slovak", "native": "Slovenčina" }, { "code": "sv", "name": "Swedish", "native": "Svenska" }, { "code": "tr", "name": "Turkish", "native": "Türkçe" }, { "code": "zh", "name": "Chinese", "native": "中文" }]
 
 		const languages = document.getElementById("languages");
 
