@@ -81,6 +81,7 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 	}
 	async function translateElement(root = document.body) {
 		if (root.getAttribute('translated') != null) return false;
+		console.log(root, root.children);
 		for (const [index, element] in [...root.children].entries()) {
 			console.log(index, element, root);
 			if (element.getAttribute('translated') != null) continue;
