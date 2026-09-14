@@ -86,6 +86,7 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		getLocaleJSON,
 		translate,
 		loadLocale,
+		translateElement,
 	});
 
 	// Set initiialized status to true and execute onload callback
