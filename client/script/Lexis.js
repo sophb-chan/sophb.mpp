@@ -69,14 +69,26 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		console.log(Lexis.prefix, `Loaded locale "${languageCode}".`);
 		return Lexis.translations
 	}
+	async function translateElement(root = document.body) {
+		if (root.getAttribute('translated') != null) return false;
+		for (const element in root.children) {
+			if (element.getAttribute('translated') != null) continue;
+			if (element.children.length > 0)
+				translateElement(element);
+			else {
+				if (element.getAttribute('original') == null) element.setAttribute('original', element.innerHTML):
+				element.innerHTML = translate(element.getAttribute('original') ?? element.innerHTML);
+			}
+		}
+	}
+	await loadLocale(Lexis.locale);
 	Object.assign(Lexis, {
 		getLocaleJSON,
 		translate,
 		loadLocale,
 	});
 
-	// Load locale, then set initiialized status to true and execute onload callback
-	await loadLocale(Lexis.locale);
+	// Set initiialized status to true and execute onload callback
 	Lexis.isInitialized = true;
 	if (Object.typeOf(Lexis.on.init) === 'function')
 		Lexis.on.init(structuredClone(Lexis));

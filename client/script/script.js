@@ -5588,29 +5588,48 @@ var TIMING_TARGET = 1000;
 	})();
 
 	(async () => {
-		const translationIdsWithNames = [{ "code": "cs", "name": "Czech", "native": "Česky" }, { "code": "de", "name": "German", "native": "Deutsch" }, { "code": "en", "name": "English", "native": "English" }, { "code": "es", "name": "Spanish", "native": "Español" }, { "code": "fr", "name": "French", "native": "Français" }, { "code": "hu", "name": "Hungarian", "native": "Magyar" }, { "code": "is", "name": "Icelandic", "native": "Íslenska" }, { "code": "ja", "name": "Japanese", "native": "日本語" }, { "code": "ko", "name": "Korean", "native": "한국어" }, { "code": "lv", "name": "Latvian", "native": "Latviešu" }, { "code": "nb", "name": "Norwegian Bokmål", "native": "Norsk bokmål" }, { "code": "nl", "name": "Dutch", "native": "Nederlands" }, { "code": "pl", "name": "Polish", "native": "Polski" }, { "code": "pt", "name": "Portuguese", "native": "Português" }, { "code": "ru", "name": "Russian", "native": "Русский" }, { "code": "sk", "name": "Slovak", "native": "Slovenčina" }, { "code": "sv", "name": "Swedish", "native": "Svenska" }, { "code": "tr", "name": "Turkish", "native": "Türkçe" }, { "code": "zh", "name": "Chinese", "native": "中文" }]
-
+		const translationCodes = [
+			"cs",
+			"de",
+			"en",
+			"es",
+			"fr",
+			"hu",
+			"is",
+			"ja",
+			"ko",
+			"lv",
+			"nb",
+			"nl",
+			"pl",
+			"pt",
+			"ru",
+			"sk",
+			"sv",
+			"tr",
+			"zh",
+		];
 		const languages = document.getElementById("languages");
 
 		function createTranslationOptions() {
-			translationIdsWithNames.forEach((z) => {
+			translationCodes.forEach(async code => {
+				const localeJSON = await translationCodes(code);
 				const option = document.createElement("option");
-				option.value = z.code;
-				option.innerText = z.native;
-				if (z.code == i18nextify.i18next.language.split("-")[0]) {
+				option.value = code;
+				option.innerText = localeJSON.l_native;
+				if (code === Lexis.locale.split('-')[0])
 					option.selected = true;
-				}
 				option.setAttribute("translated", "");
 				languages.appendChild(option);
 			});
 		}
 
-		if (i18nextify.i18next.isInitialized) {
+		if (Lexis.isInitialized) {
 			createTranslationOptions();
 		} else {
-			i18nextify.i18next.on("initialized", (options) => {
+			Lexis.on.init = (options) => {
 				createTranslationOptions();
-			});
+			};
 		}
 
 		document.getElementById("lang-btn").addEventListener("click", () => {
@@ -5620,11 +5639,11 @@ var TIMING_TARGET = 1000;
 		document
 			.querySelector("#language > button")
 			.addEventListener("click", async (e) => {
-				await i18nextify.i18next.changeLanguage(
+				await Lexis.loadLocale(
 					document.querySelector("#languages").selectedOptions[0]
 						.value,
 				);
-				i18nextify.forceRerender();
+				await Lexis.translateElement(document.body);
 				closeModal();
 			});
 	})();
