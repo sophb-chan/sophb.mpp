@@ -5613,7 +5613,7 @@ var TIMING_TARGET = 1000;
 
 		function createTranslationOptions() {
 			translationCodes.forEach(async code => {
-				const localeJSON = await translationCodes(code);
+				const localeJSON = await Lexis.getLocaleJSON(code);
 				const option = document.createElement("option");
 				option.value = code;
 				option.innerText = localeJSON.l_native;
