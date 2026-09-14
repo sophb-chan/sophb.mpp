@@ -134,8 +134,7 @@ table {
 	max-width: -webkit-calc(100% - 110px);
 	max-width: -moz-calc(100% - 110px);
 	max-width: calc(100% - 110px);
-	backdrop-filter: blur(4px);
-	background: #0008;
+	background: #0006;
 	border-radius: 0px 5px 5px 5px;
 }
 
@@ -168,11 +167,9 @@ table {
 }
 
 #names .name:hover {
-	transform: translateY(-3px);
+	transform: translateY(-2px);
 	box-shadow: #000 0px 3px 5px;
-	transition:
-		transform 0.1s ease-out,
-		box-shadow 0.1s ease-out;
+	transition: box-shadow 0.1s ease-out;
 }
 
 #names .name.me:after {
@@ -596,14 +593,12 @@ body:has(#names:hover) #cursors {
 	border: 1px solid #cdc;
 	cursor: pointer;
 	border-radius: 10px;
-	transition: border-radius 1s ease-in;
 	margin: 4px 24px;
 	font-size: 12px;
 }
 
 body:has(#room .more[style*="display: block"]) #room {
 	border-radius: 0px 0px 10px 10px;
-	transition: border-radius 0.5s ease;
 }
 
 #room .info {
@@ -650,7 +645,6 @@ body:has(#room .more[style*="display: block"]) #room {
 	right: 0;
 	top: 0;
 	border-radius: 0px 10px 10px 0px;
-	transition: border-radius 1s ease-in;
 	background: #232;
 }
 
@@ -664,12 +658,10 @@ body:has(#room .more[style*="display: block"]) #room {
 	z-index: 1;
 
 	background: url(/arrow.svg) no-repeat center 50%;
-	transition: transform 0.5s ease;
 }
 
 body:has(#room .more[style*="display: block"]) #room .expand {
 	border-radius: 0px 0px 10px 0px;
-	transition: border-radius 0.5s ease;
 }
 
 body:has(#room .more[style*="display: block"]) #room .expand::before {
@@ -687,8 +679,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	/* screen height - height lifted from botton - clearance */
 	overflow: hidden;
 	overflow-y: scroll;
-	background: #4548;
-	backdrop-filter: blur(4px) saturate(200%);
+	background: #565;
 	border: 1px solid #cdc;
 	border-radius: 10px 10px 0 0;
 }
@@ -701,11 +692,9 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	text-overflow: clip;
 	width: 100%;
 	height: 20px;
-	transition: font-weight 3s ease;
 }
 
 #room .more>div:hover {
-	transition: font-weight 0.25s ease-out;
 	font-weight: bold;
 }
 
@@ -726,14 +715,13 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 #room .more .new {
-	background: #1318;
+	background: #131;
 	font-family: inter-italic;
 	font-weight: bold;
 	width: 100%;
 	text-wrap: nowrap;
 	position: sticky;
 	top: 0;
-	backdrop-filter: blur(4px);
 }
 
 #room .more .new:hover {
@@ -755,16 +743,12 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border-radius: 10px;
 	overflow: hidden;
 	white-space: pre;
-	transition:
-		border-radius 1s ease-in,
-		background 0.25s ease;
 	text-align: center;
 }
 
 .ugly-button:hover {
-	background: #2a4a2abb;
-	border-radius: 5px;
-	transition: border-radius 0.25s ease-out;
+	background: #363;
+	border-color: #1a1;
 }
 
 .ugly-button.stuck {
@@ -902,7 +886,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	height: 100%;
 	background: #52ff4c;
 	will-change: width;
-	transition: width 0.5s ease;
 }
 
 .relative {
@@ -978,13 +961,11 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	font-family: monospace;
 	text-shadow: none;
 	transition:
-		color 0.5s ease,
-		transform 0.5s ease;
+		color 0.5s ease, filter 0.1s ease;
 }
 
 .notification .x:hover {
-	color: #ff44a0;
-	transform: translate(-4px, 4px) scale(1.25);
+	filter: saturate(200%);
 }
 
 .notification.classic .notification-body {
@@ -1012,10 +993,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border: 1px dashed #ff0080;
 	border-radius: 12px;
 	cursor: pointer;
-	transition:
-		border 0.25s ease,
-		background 0.1s ease,
-		font-weight 0.25s ease;
 }
 
 .notification .connection.enabled {
@@ -1028,7 +1005,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	font-size: 10px;
 	color: #ff0080;
 	float: right;
-	transition: color 0.1s ease;
 }
 
 .notification .connection.enabled:after {
@@ -1039,7 +1015,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 .notification .connection:hover {
-	font-weight: 700;
+	filter: saturate(2);
 }
 
 .notification ul {
@@ -1065,17 +1041,19 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	margin: 1px;
 	padding: 4px;
 	background: 0 0;
-	border: 1px solid #565;
+	border: 1px solid #575;
 	border-radius: 4px;
 	cursor: pointer;
-	transition: font-weight 0.5s ease;
+}
+
+.notification .pack:hover {
+	background: #0f02;
 }
 
 .notification .pack.enabled {
-	background: #2b562b;
+	background: #0f04;
 	cursor: not-allowed;
-	font-weight: bolder;
-	transition: font-weight 0.25s ease;
+	font-weight: 800;
 }
 
 .notification .pack:after {
@@ -1090,10 +1068,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	font-size: 10px;
 	color: #fff;
 	float: right;
-}
-
-.notification .pack:hover {
-	font-weight: 700;
 }
 
 #modal {
@@ -1160,20 +1134,17 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	padding: 7px 40px 20px 30px;
 	font-size: 20px;
 	color: #000;
-	text-shadow: #874 2px 2px 2px;
-	border-radius: 4px;
+	text-shadow: #0008 2px 2px 2px;
+	border-radius: 2px;
 	box-shadow: inset 0 0 4px#000;
-	transition: all 0.25s;
 	position: absolute;
 	bottom: -10px;
 	right: -10px;
 }
 
 .dialog .submit:hover {
-	border-radius: 8px;
+	border-radius: 6px;
 	background: #ff8;
-	box-shadow: inset 0 0 4px 1px #000;
-	text-shadow: #a91 4px 4px 3px;
 }
 
 #motd {
@@ -1231,7 +1202,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 
 #client-settings div {
 	float: left;
-	margin-left: 2px;
+	margin-left: 4px;
 }
 
 .client-settings-tablink {
@@ -1242,7 +1213,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	background-color: #343;
 	border: 1px solid #565;
 	font-weight: bold;
-	border-radius: 2px;
 }
 
 .client-settings-button {
@@ -1258,13 +1228,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	overflow: hidden;
 	white-space: nowrap;
 	text-align: center;
-	transition: all .25s ease;
 }
 
 .client-settings-button:hover {
 	background: #232;
-	font-weight: 200;
-	border-radius: 4px;
 }
 
 .client-settings-button.stuck {
@@ -1318,9 +1285,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 #chat li {
 	padding: 2px;
 	opacity: 0;
-	transition:
-		border 0.5s,
-		background 0.5s;
 	border: 1px solid #00000000;
 }
 
@@ -1333,6 +1297,11 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	border-radius: 8px;
 	user-select: none;
 	cursor: pointer;
+}
+
+#chat li .reply:hover {
+	background-color: #232;
+	border: 1px solid #565;
 }
 
 #chat li .replyLink {
@@ -1364,14 +1333,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	margin-right: 8px;
 	cursor: pointer;
 	font-family: monospace;
-	transition:
-		padding 0.5s ease,
-		border-radius 0.5s ease;
 }
 
 #chat li .id:hover {
-	padding: 3px;
-	border-radius: 8px;
+	background: #343;
 }
 
 #chat li .id2 {
@@ -1438,7 +1403,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	background: rgba(64, 80, 80, 0.75);
 	border-radius: 5px;
 	box-shadow: 1px 1px 5px #888;
-	transition: all 0.1s;
 }
 
 #chat.chatting li {
