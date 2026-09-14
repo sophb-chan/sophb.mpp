@@ -44,8 +44,18 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		const parsed = JSON.parse(text);
 		return parsed;
 	}
-	function translate(key) {
-		return Lexis.translations[key];
+	function translate(key, info) {
+		if (info.count) {
+			const count =
+				info.count === 1
+					? 'once'
+					: info.count === 0 && Lexis.translations[key + '_zero'] != null
+						? 'zero'
+						: 'other';
+			return Lexis.translations[key + '_' + count];
+		} else {
+			return Lexis.translations[key];
+		}
 	}
 	async function loadLocale(languageCode) {
 		Lexis.isLoaded = false; // Set loaded status to false
