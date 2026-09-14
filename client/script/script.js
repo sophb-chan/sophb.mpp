@@ -21,12 +21,14 @@ if (location.host === "multiplayerpiano.net") {
 
 // 钢琴
 
-translation.start();
-
 console.log("%cMPP Developer Console", "color: #0066ff; font-size:20px;");
 console.log(
-	"%cCheck out the client source : https://github.com/mppnet/frontend/tree/main/client\nGuide for developers: https://docs.google.com/document/d/1OrxwdLD1l1TE8iau6ToETVmnLuLXyGBhA0VfAY1Lf14/edit?usp=sharing",
-	"color:gray; font-size:12px;",
+	`
+%cCheck out sophb.mpp's source: https://github.com/sophb-chan/sophb.mpp
+Check out the official client source: https://github.com/mppnet/frontend/tree/main/client
+Official guide for developers: https://docs.google.com/document/d/1OrxwdLD1l1TE8iau6ToETVmnLuLXyGBhA0VfAY1Lf14/edit?usp=sharing
+	`.trim(),
+	"color: gray; font-size: 12px;",
 );
 
 var test_mode =
