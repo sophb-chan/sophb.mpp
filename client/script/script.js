@@ -1,3 +1,4 @@
+localStorage.i18nextLng ??= 'en';
 const translation = window.i18nextify.init({
 	lng: 'en',
 	fallbackLng: 'en',
