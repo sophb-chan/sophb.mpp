@@ -8,6 +8,7 @@ function setTheme(theme = localStorage.theme) {
 		throw new ReferenceError(`Unknown theme "${theme}"`);
 
 	const style = document.getElementById('stylesheet');
-	style.src = `themes/${themes[theme]}.css`;
+	style.href = `themes/${themes[theme]}.css`;
+	localStorage.theme = theme;
 }
 setTheme();
