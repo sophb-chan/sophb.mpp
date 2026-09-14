@@ -15,12 +15,12 @@
 
 @font-face {
 	font-family: inter;
-	src: url("./fonts/Inter.ttf") format("truetype");
+	src: url("/fonts/Inter.ttf") format("truetype");
 }
 
 @font-face {
 	font-family: inter-italic;
-	src: url("./fonts/InterItalic.ttf") format("truetype");
+	src: url("/fonts/InterItalic.ttf") format("truetype");
 }
 
 body,
