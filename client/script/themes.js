@@ -11,4 +11,15 @@ function setTheme(theme = localStorage.theme) {
 	style.href = `themes/${themes[theme]}.css`;
 	localStorage.theme = theme;
 }
+function refreshThemes() {
+	const themeSelect = document.getElementById('site-theme-select');
+	themeSelect.innerHTML = '';
+	for (const [name, value] of Object.entries(themes)) {
+		const option = document.createElement('option');
+		option.textContent = name;
+		option.value = value;
+		themeSelect.append(option);
+	}
+}
+refreshThemes();
 setTheme();
