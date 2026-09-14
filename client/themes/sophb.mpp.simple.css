@@ -1554,7 +1554,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 #email:before {
-	content: url(envelope.png);
+	content: url(/envelope.png);
 	margin: 4px;
 }
 
