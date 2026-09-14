@@ -35,10 +35,10 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		url.search = '';
 		const localeURL = url.toString();
 		const r = await fetch(localeURL);
-		if (r.code === 404) {
+		if (r.status === 404) {
 			return null;
-		} else if (r.code !== 200)
-			throw new Error(`HTTP error code ${r.code} when fetching translation JSON`);
+		} else if (r.status !== 200)
+			throw new Error(`HTTP Status ${r.status} when fetching translation JSON`);
 
 		const text = await r.text();
 		const parsed = JSON.parse(text);
