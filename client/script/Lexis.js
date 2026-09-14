@@ -76,7 +76,7 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 			if (element.children.length > 0)
 				translateElement(element);
 			else {
-				if (element.getAttribute('original') == null) element.setAttribute('original', element.innerHTML):
+				if (element.getAttribute('original') == null) element.setAttribute('original', element.innerHTML);
 				element.innerHTML = translate(element.getAttribute('original') ?? element.innerHTML);
 			}
 		}
