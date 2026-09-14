@@ -3,12 +3,14 @@ const translation = window.i18nextify.init({
 	fallbackLng: 'en',
 	autorun: false,
 });
+if (!i18nextify.i18next.hasResourceBundle(localStorage.i18nextLng, 'translation'))
+	localStorage.i18nextLng = 'en';
 
 if (location.host === "multiplayerpiano.com") {
-	const url = new URL("https://multiplayerpiano.net/" + location.search);
+	const url = new URL("https://sophb-mpp.vercel.app/" + location.search);
 	if (localStorage.token) url.searchParams.set("token", localStorage.token);
 	location.replace(url);
-	throw new Error("Redirecting to multiplayerpiano.net");
+	throw new Error("Redirecting to sophb.mpp");
 }
 
 if (location.host === "multiplayerpiano.net") {
@@ -21,7 +23,7 @@ if (location.host === "multiplayerpiano.net") {
 
 		location.replace(url);
 
-		throw new Error("Finalizing redirect.");
+		throw new Error("Finalizing redirect from mpp.com.");
 	}
 }
 
@@ -3816,21 +3818,6 @@ var TIMING_TARGET = 1000;
 				//apply names, colors, ids
 				const message = constructMessage(msg.a);
 				li.find(".message").html(message);
-
-
-				// Translate message
-				// TODO:
-				// · Translate to website locale
-				// · Convey that the message was translated in a better way
-				/*
-				const translatedContent = smartTranslate(msg.a, localStorage.i18nextLng)
-					.then(translatedContent => {
-						const wasTranslated = (translatedContent !== msg.a);
-						const translatedMessage = ['', '[TRANSLATED] '][+wasTranslated] + translatedContent;
-						li.find(".message").html(translatedMessage);
-						li.find(".message").attr('title', `Original content: ${msg.a}`);
-					});
-				*/
 
 
 				if (msg.m === "dm") {
