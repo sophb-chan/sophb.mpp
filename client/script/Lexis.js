@@ -11,7 +11,7 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		throw new Error('Lexis has already been initialized.');
 
 	// Try target locale and fallback locales
-	const locales = [Lexis.targetLanguage, ...(Lexis.fallbackLanguages ?? [])].map(Boolean);
+	const locales = [Lexis.targetLanguage, ...(Lexis.fallbackLanguages ?? [])].filter(Boolean);
 	for (const locale of locales) {
 		try {
 			const json = await getLocaleJSON(locale);
