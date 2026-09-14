@@ -42,8 +42,10 @@ if (
 		translate,
 		detectLanguage,
 		smartTranslate,
+		translationSupported: true
 	});
 	console.log('Translator APIs loaded!');
 } else {
-	console.log('Your browser does not support live translator features.');
+	console.warn('Your browser does not support live translator features.');
+	globalThis.translationSupported = false;
 }

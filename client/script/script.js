@@ -1,7 +1,6 @@
 const translation = window.i18nextify.init({
 	autorun: false,
 });
-protoplus.expand();
 
 if (location.host === "multiplayerpiano.com") {
 	const url = new URL("https://multiplayerpiano.net/" + location.search);
