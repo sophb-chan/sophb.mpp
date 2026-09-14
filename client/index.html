@@ -23,7 +23,7 @@
 		content="Smoother, faster, cleaner, 'n' better than MPP.net. (Don't use MPP.com!!)" />
 	<meta property="twitter:image" content="https://sophb-mpp.vercel.app/screenshot.png" />
 
-	<link rel="stylesheet" href="/screen.css" />
+	<link rel="stylesheet" id="stylesheet" href="blank.css" />
 </head>
 
 <body>
@@ -348,6 +348,11 @@
 								title="Please enter a valid hexadecimal unicode index (0-9, A-F)" required size="4"
 								id="filter-bypass-joiner" class="setting" />
 						</p>
+						<p>
+							<span data-i18n="Theme:">Theme:</span>
+							<select id="site-theme-select"></select>
+						</p>
+						<br>
 						<button class="ugly-button" onclick="MPP.client.restart()">Reconnect</button>
 					</div>
 					<div class="client-settings-tab" data-name="Chat">
@@ -438,14 +443,15 @@
 		</div>
 	</div>
 
+	<script src="/script/themes.js"></script>
 	<script src="/script/jquery.min.js"></script>
 	<script src="/script/util.js"></script>
 	<script src="/script/Client.js"></script>
 	<script src="/script/NoteQuota.js"></script>
 	<script src="/script/Color.js"></script>
 	<script src="/script/translator.js"></script>
-	<script src="https://raw.githack.com/sophb-ccjt/developermonkey/main/core.js"></script>
-	<script src="https://rawcdn.githack.com/sophb-ccjt/protoplus/refs/heads/main/protoplus.js"></script>
+	<script src="https://raw.githack.com/sophb-chan/developermonkey/main/core.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/protoplus@latest/protoplus.js"></script>
 	<!-- fix it then ship it
 		<script src="/script/addons.js"></script>
 	-->
