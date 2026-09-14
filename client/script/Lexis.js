@@ -48,10 +48,10 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		if (info.count) {
 			const count =
 				info.count === 1
-					? 'once'
-					: info.count === 0 && Lexis.translations[key + '_zero'] != null
+					? 'one'
+					: (info.count === 0 && Lexis.translations[key + '_zero'] != null
 						? 'zero'
-						: 'other';
+						: 'other');
 			return Lexis.translations[key + '_' + count];
 		} else {
 			return Lexis.translations[key];
