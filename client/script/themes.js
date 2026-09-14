@@ -14,10 +14,10 @@ function setTheme(theme = localStorage.theme) {
 function refreshThemes() {
 	const themeSelect = document.getElementById('site-theme-select');
 	themeSelect.innerHTML = '';
-	for (const [name, value] of Object.entries(themes)) {
+	for (const name of Object.keys(themes)) {
 		const option = document.createElement('option');
 		option.textContent = name;
-		option.value = value;
+		option.value = name;
 		themeSelect.append(option);
 	}
 	themeSelect.onchange = () => setTheme(themeSelect.value);
