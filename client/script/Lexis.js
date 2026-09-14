@@ -44,7 +44,7 @@ Lexis.init = async (fallbackLanguage = 'en') => {
 		const parsed = JSON.parse(text);
 		return parsed;
 	}
-	function translate(key, info) {
+	function translate(key, info = {}) {
 		if (info.count) {
 			const count =
 				info.count === 1
