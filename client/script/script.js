@@ -5129,7 +5129,7 @@ var TIMING_TARGET = 1000;
 			document
 				.getElementById('site-theme-select')
 				.addEventListener('change', (evt) => {
-					setTheme(themeSelect.value);
+					setTheme(evt.target.value);
 				});
 
 
