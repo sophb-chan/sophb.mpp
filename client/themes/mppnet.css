@@ -336,7 +336,7 @@ input[type="range"]:hover {
 .cursor {
 	width: 18px;
 	height: 24px;
-	background: url(/cursor.svg);
+	background: url(/cursor.svg) no-repeat top left;
 	position: absolute;
 	pointer-events: none;
 	margin-left: -2px;
@@ -590,7 +590,9 @@ input[type="range"]:hover {
 	overflow-y: scroll;
 	background: #444;
 	border: 1px solid #ccc;
-	max-height: 600px;
+	height: fit-content;
+	max-height: calc(100vh - 60px - 5px);
+	/* screen height - height lifted from botton - clearance */
 }
 
 #room .more>div {
@@ -606,6 +608,8 @@ input[type="range"]:hover {
 
 #room .more .new {
 	background: #111;
+	position: sticky;
+	top: 0;
 }
 
 #room .more .new:hover {
@@ -645,6 +649,17 @@ input[type="range"]:hover {
 	grid-template-rows: repeat(2, 1fr);
 	grid-column-gap: 2px;
 	grid-row-gap: 2px;
+}
+
+#client-settings-content .client-settings-tab * {
+	font-size: 13px;
+	margin-bottom: -4px;
+}
+
+#client-settings-content .client-settings-tab .ugly-button {
+	margin-top: 12px;
+	padding-bottom: 15px;
+	color: #fff;
 }
 
 #client-settings-ok-btn {
@@ -1040,16 +1055,43 @@ input[type="range"]:hover {
 	margin-top: -150px;
 }
 
+#account h3 {
+	font-weight: normal;
+	font-size: 20px;
+	margin-bottom: 10px;
+	margin-left: 11px;
+}
+
 #account-info {
 	position: absolute;
 	top: 8px;
 	right: 8px;
 }
 
+#account .logged-in-text {
+	font-size: 0;
+}
+
+#account .logged-in-text:after {
+	font-size: 20px;
+	content: "Logged in as";
+	margin-left: 9px;
+}
+
+#account #logout-btn {
+	padding-bottom: 6px;
+}
+
+#account #avatar-image {
+	margin-left: 9px;
+}
+
 #client-settings {
 	height: 300px;
 	margin-top: -150px;
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 #client-settings div {
