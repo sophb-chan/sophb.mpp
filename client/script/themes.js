@@ -1,6 +1,7 @@
 const themes = {
 	"sophb.mpp (simplified)": "sophb.mpp.simple",
-	"sophb.mpp": "sophb.mpp"
+	"sophb.mpp": "sophb.mpp",
+	"MPPNet": "mppnet"
 };
 localStorage.theme ??= 'sophb.mpp (simplified)';
 function setTheme(theme = localStorage.theme) {
