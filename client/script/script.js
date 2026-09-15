@@ -5126,6 +5126,12 @@ var TIMING_TARGET = 1000;
 					gBloatJoiner = String.fromCharCode(parseInt(evt.target.value, 16));
 					localStorage.bloatJoiner = gBloatJoiner.charCodeAt(0).toString(16).toUpperCase();
 				});
+			document
+				.getElementById('site-theme-select')
+				.addEventListener('change', (evt) => {
+					setTheme(themeSelect.value);
+				});
+
 
 			// Setup Chat tab event listeners
 			document
