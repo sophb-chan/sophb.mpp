@@ -20,8 +20,7 @@ function refreshThemes() {
 		option.value = name;
 		themeSelect.append(option);
 	}
-	themeSelect.value = localStorage.thene;
-	themeSelect.onchange = () => setTheme(themeSelect.value);
+	themeSelect.value = localStorage.theme;
 }
 refreshThemes();
 setTheme();
