@@ -773,6 +773,15 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
+	flex-shrink: 0;
+}
+
+.client-settings-tabs {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	overflow-x: scroll;
 }
 
 #client-settings-content .client-settings-tab * {

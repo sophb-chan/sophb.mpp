@@ -80,9 +80,8 @@ body {
 }
 
 body {
-	background: linear-gradient(
-			var(--bg-angle),
-				var(--color) 0%,
+	background: linear-gradient(var(--bg-angle),
+			var(--color) 0%,
 			var(--color2) 100%);
 	animation: swing-bg 15s ease-in-out alternate infinite;
 	transition:
@@ -259,12 +258,12 @@ input[type="range"] {
 	position: relative;
 
 	background-image: -webkit-gradient(linear,
-				left top,
-				right top,
-				color-stop(0, hsla(254, 100%, 25%, 0.8)),
-				color-stop(0.08, hsla(254, 100%, 13%, 0.8)),
-				color-stop(0.5, hsl(200, 80%, 0%)),
-				color-stop(0.92, hsl(200, 80%, 15%)),
+			left top,
+			right top,
+			color-stop(0, hsla(254, 100%, 25%, 0.8)),
+			color-stop(0.08, hsla(254, 100%, 13%, 0.8)),
+			color-stop(0.5, hsl(200, 80%, 0%)),
+			color-stop(0.92, hsl(200, 80%, 15%)),
 			color-stop(1, hsl(200, 80%, 45%)));
 
 	-webkit-background-clip: padding-box;
@@ -285,15 +284,15 @@ input[type="range"]::-webkit-slider-thumb {
 	border-radius: 1px / 2px;
 
 	background-image: -webkit-gradient(linear,
-				left top,
-				right top,
-				color-stop(0, hsl(0, 0%, 15%)),
-				color-stop(0.16, hsl(0, 0%, 22%)),
-				color-stop(0.18, hsl(0, 0%, 30%)),
-				color-stop(0.2, hsl(0, 0%, 26%)),
-				color-stop(0.8, hsl(0, 0%, 26%)),
-				color-stop(0.82, hsl(0, 0%, 30%)),
-				color-stop(0.84, hsl(0, 0%, 22%)),
+			left top,
+			right top,
+			color-stop(0, hsl(0, 0%, 15%)),
+			color-stop(0.16, hsl(0, 0%, 22%)),
+			color-stop(0.18, hsl(0, 0%, 30%)),
+			color-stop(0.2, hsl(0, 0%, 26%)),
+			color-stop(0.8, hsl(0, 0%, 26%)),
+			color-stop(0.82, hsl(0, 0%, 30%)),
+			color-stop(0.84, hsl(0, 0%, 22%)),
 			color-stop(1, hsl(0, 0%, 15%)));
 
 	-webkit-box-shadow:
@@ -314,12 +313,12 @@ input[type="range"]::-webkit-slider-thumb {
 
 input[type="range"]:hover {
 	background-image: -webkit-gradient(linear,
-				left top,
-				right top,
-				color-stop(0, hsla(284, 100%, 25%, 0.8)),
-				color-stop(0.08, hsla(284, 100%, 13%, 0.8)),
-				color-stop(0.5, hsl(200, 80%, 0%)),
-				color-stop(0.92, hsl(200, 80%, 15%)),
+			left top,
+			right top,
+			color-stop(0, hsla(284, 100%, 25%, 0.8)),
+			color-stop(0.08, hsla(284, 100%, 13%, 0.8)),
+			color-stop(0.5, hsl(200, 80%, 0%)),
+			color-stop(0.92, hsl(200, 80%, 15%)),
 			color-stop(1, hsl(200, 80%, 45%)));
 
 	box-shadow:
@@ -613,7 +612,7 @@ body:has(#room .more[style*="display: block"]) #room {
 	overflow: hidden;
 	height: 20px;
 	max-width: calc(240px - 24px);
-		/* room picker width - expand icon width */
+	/* room picker width - expand icon width */
 	text-overflow: ellipsis;
 }
 
@@ -685,7 +684,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	width: 100%;
 	height: fit-content;
 	max-height: calc(100vh - 60px - 5px);
-		/* screen height - height lifted from botton - clearance */
+	/* screen height - height lifted from botton - clearance */
 	overflow: hidden;
 	overflow-y: scroll;
 	background: #4548;
@@ -697,13 +696,14 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 #room .more>div {
 	margin: 0;
 	padding: 10px calc(infinity * 1px) 0px 5px;
-		/* actual black magic btw */
+	/* actual black magic btw */
 	border-bottom: solid 1px #8988;
 	text-overflow: clip;
 	width: 100%;
 	height: 20px;
 	transition: font-weight 3s ease;
 }
+
 #room .more>div:hover {
 	transition: font-weight 0.25s ease-out;
 	font-weight: bold;
@@ -789,6 +789,15 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
+	flex-shrink: 0;
+}
+
+.client-settings-tabs {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	overflow-x: scroll;
 }
 
 #client-settings-content .client-settings-tab * {
