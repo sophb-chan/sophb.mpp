@@ -591,8 +591,8 @@ input[type="range"]:hover {
 	background: #444;
 	border: 1px solid #ccc;
 	height: fit-content;
-	max-height: calc(100vh - 60px - 5px);
-	/* screen height - height lifted from botton - clearance */
+		max-height: calc(100vh - 60px - 5px);
+		/* screen height - height lifted from botton - clearance */
 }
 
 #room .more>div {
@@ -609,7 +609,7 @@ input[type="range"]:hover {
 #room .more .new {
 	background: #111;
 	position: sticky;
-	top: 0;
+		top: 0;
 }
 
 #room .more .new:hover {
@@ -661,7 +661,6 @@ input[type="range"]:hover {
 	padding-bottom: 15px;
 	color: #fff;
 }
-
 #client-settings-ok-btn {
 	position: absolute;
 	right: 8px;
@@ -1061,7 +1060,6 @@ input[type="range"]:hover {
 	margin-bottom: 10px;
 	margin-left: 11px;
 }
-
 #account-info {
 	position: absolute;
 	top: 8px;
@@ -1085,13 +1083,12 @@ input[type="range"]:hover {
 #account #avatar-image {
 	margin-left: 9px;
 }
-
 #client-settings {
 	height: 300px;
 	margin-top: -150px;
 	overflow: hidden;
 	display: flex;
-	flex-direction: column;
+		flex-direction: column;
 }
 
 #client-settings div {
