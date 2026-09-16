@@ -3,7 +3,7 @@
 // @name:ru            TealMIDIPlayer
 // @name:pt-BR         TealMIDIPlayer
 // @homepage           <gone>
-// @version            2.11.0
+// @version            2.12.0
 // @description        MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
 // @description:ru     Бот-MIDI-плеер для MPP. (Основан на MIDI-плеере, встроенном в Teal)
@@ -1290,7 +1290,7 @@ const cmds = {
 		aliases: ['h'],
 		category: 'info',
 		about: "Shows a list of categories, a list of commands inside a category, or the info of a specific command.",
-		func: (...args) => {
+		func({ args } = {}) {
 			let ogcmd = args[0];
 			if (args.length == 1)
 				send(
@@ -1364,7 +1364,7 @@ const cmds = {
 		aliases: ['ab'],
 		category: 'info',
 		about: "Shows you basic information about this script.",
-		func: () => {
+		func({ } = {}) {
 			send(`${name} v${version} by ${author}`, `JMIDIPlayer module originally made by seq.wtf`, `Get this userscript at https://greasyfork.org/en/scripts/554578-tealmidiplayer`)
 		}
 	},
@@ -1372,7 +1372,7 @@ const cmds = {
 		aliases: ['p'],
 		category: 'midi',
 		about: "Clears the queue and plays a MIDI file from the internet via a link.",
-		func: (...args) => {
+		func({ args } = {}) {
 			let ogcmd = args[0]
 			if (args.length === 1)
 				send(`Please specify a direct download URL to the desired MIDI file to play.`, `Usage: \`${ogcmd} <URL>\``);
@@ -1396,7 +1396,7 @@ const cmds = {
 		aliases: ['addtoqueue', 'queuenext', 'next', 'qa', 'qu', 'up', 'addnext', 'nextup', 'nu'],
 		category: 'midi',
 		about: "Adds a MIDI file link to the track queue.",
-		func: async (...args) => {
+		func: async ({ args }) => {
 			let ogcmd = args[0];
 			if (args.length === 1)
 				send(`Please specify a direct download URL to the desired MIDI file to add to the queue.`, `Usage: \`${ogcmd} <URL>\``);
@@ -1416,7 +1416,7 @@ const cmds = {
 						queue[name] = arrayBuf;
 					} catch {}
 				} else {
-					cmds.play.func(...args);
+					cmds.play.func({ args });
 				}
 			}
 		}
@@ -1425,7 +1425,7 @@ const cmds = {
 		aliases: ['s'],
 		category: 'midi',
 		about: "Stops the current track and clears the queue.",
-		func: () => {
+		func({ } = {}) {
 			if (!player.isLoaded() && !player.isPlaying) {
 				send("Nothing to stop.");
 				return;
@@ -1443,7 +1443,7 @@ const cmds = {
 		aliases: ['sk'],
 		category: 'midi',
 		about: "Skips to the next track in the queue.",
-		func: () => {
+		func({ } = {}) {
 			if (Object.keys(queue).length === 0)
 				send('The queue is already empty!');
 
@@ -1472,7 +1472,7 @@ const cmds = {
 		aliases: ['sus'],
 		category: 'midi',
 		about: 'Toggles sustain on or off.',
-		func: () => {
+		func({ } = {}) {
 			sustain = !sustain
 			send(`Sustain is now ${sustain ? 'on' : 'off'}.`);
 			if (!sustain) stopNotes(key);
@@ -1482,7 +1482,7 @@ const cmds = {
 		aliases: ['vol', 'v'],
 		category: 'midi',
 		about: "Adjusts the track's volume.",
-		func: (...args) => {
+		func({ args } = {}) {
 			let ogcmd = args[0];
 			const minVol = 0, maxVol = 3;
 			if (args.length === 1) {
@@ -1507,7 +1507,7 @@ const cmds = {
 		aliases: ['sp', 'ps'],
 		category: 'midi',
 		about: "Changes the playback speed.",
-		func: (...args) => {
+		func({ args } = {}) {
 			let ogcmd = args[0];
 			const minSpeed = 0.1, maxSpeed = 2;
 			if (args.length === 1) {
@@ -1527,7 +1527,7 @@ const cmds = {
 		aliases: ['to', 'pause', 'pa'],
 		category: 'midi',
 		about: "Switches between pausing and playing a track.",
-		func: () => {
+		func({ } = {}) {
 			if (player.isLoaded()) {
 				if (player.isPlaying) {
 					player.pause();
@@ -1544,7 +1544,7 @@ const cmds = {
 		aliases: ['re'],
 		category: 'midi',
 		about: "Resumes a track.",
-		func: () => {
+		func({ } = {}) {
 			if (player.isLoaded()) {
 				player.play();
 				send("Resumed track.");
@@ -1555,7 +1555,7 @@ const cmds = {
 		aliases: ['tr'],
 		category: 'midi',
 		about: "Changes the transposition (key) of the current track.",
-		func: (...args) => {
+		func({ args } = {}) {
 			let ogcmd = args[0];
 			if (args.length === 1)
 				send(`Transposition (key) is currently set to \`${transpose}\`.`, `Please specify a value between \`-24\` and \`36\`.`, `Usage: \`${ogcmd} <value>\``);
@@ -1577,7 +1577,7 @@ const cmds = {
 		aliases: ['l'],
 		category: 'midi',
 		about: "Toggles between looping and not looping.",
-		func: () => {
+		func({ } = {}) {
 			looping = !looping;
 			if (looping) send("Now looping track.");
 			else send("Stopped looping track.");
@@ -1587,7 +1587,7 @@ const cmds = {
 		aliases: ["t"],
 		category: 'info',
 		about: "Shows info about the track that's currently playing.",
-		func: () => {
+		func({ } = {}) {
 			if (player.isLoaded()) {
 				// format progress bar
 				let remaining = ((currenttick * (60 * 1000 / (player.currentTempo * player.ppqn)) / 1000) / player.songTime) * 100;
@@ -1640,7 +1640,7 @@ const cmds = {
 		aliases: ['nq'],
 		category: 'info',
 		about: "Shows NoteQuota status.",
-		func: () => {
+		func({ } = {}) {
 			send(`Maximum points: ${MPP.noteQuota.max}\nCurrent points: ${MPP.noteQuota.points} (${Math.trunc((MPP.noteQuota.points / MPP.noteQuota.max) * 100)}%)`);
 		}
 	},
@@ -1648,7 +1648,7 @@ const cmds = {
 		aliases: ['q'],
 		category: 'info',
 		about: "Shows the list of queued tracks.",
-		func: () => {
+		func({ } = {}) {
 			const qFormatted = [];
 			for (const queued of Object.keys(queue)) {
 				qFormatted.push(queued);
@@ -1661,7 +1661,7 @@ const cmds = {
 		aliases: ['pre'],
 		category: 'pref',
 		about: "Defines the prefix of the MIDI player.",
-		func: (...args) => {
+		func({ args } = {}) {
 			if (args.length <= 1) {
 				send(`Prefix is currently set to \`${prefix}\`.`, "Please specify a prefix to set to. (Note: anything in the prefix that's after a space is ignored.)");
 			} else {
@@ -1670,7 +1670,7 @@ const cmds = {
 					return;
 				}
 				localStorage.tmp_prefix = prefix = args[1].toLowerCase();
-				send(`Prefix is now set to ${prefix === '' ? 'nothing' : `\`${prefix}\``}. Use \`${prefix}help\` to see commands.`);
+				send(`Prefix is now set to \`${prefix}\`. Use \`${prefix}help\` to see commands.`);
 			}
 		}
 	},
@@ -1679,7 +1679,7 @@ const cmds = {
 		category: 'pref',
 		aliases: ['pub', 'pu'],
 		about: "Toggles between commands being public or private.",
-		func: () => {
+		func({ } = {}) {
 			if (clientside) {
 				send('You cannot make the bot public while it is client-side only.');
 				return;
@@ -1693,7 +1693,7 @@ const cmds = {
 		category: 'pref',
 		aliases: ['cs', 'client'],
 		about: "Toggles between commands and notes only being visible to you or being visible to everyone.",
-		func: () => {
+		func({ } = {}) {
 			if (public) {
 				send("Please make the bot private before changing it to client-side only.");
 				return;
@@ -1802,7 +1802,7 @@ const defaultMsgs = {
 }
 const chatMessageHandler = async data => {
 	if (!public && data.p._id !== MPP.client.getOwnParticipant()._id) return;
-	const args = data.a.split(' ');
+	const args = data.a.trimEnd().split(' ');
 	let cmd = args[0].toLowerCase();
 
 	if (cmd.startsWith(prefix)) {
@@ -1824,7 +1824,10 @@ const chatMessageHandler = async data => {
 			send(defaultMsgs.cmd.noperms);
 			return;
 		}
-		await targetCmd.func(...args);
+		await targetCmd.func({
+			args,
+			user: data.p,
+		});
 	}
 }
 MPP.client.on('a', chatMessageHandler);
