@@ -1964,7 +1964,7 @@ async function checkUpdate(isInterval, silent = false) {
 							notifMsg = `You are using an unreleased version of <b>${name}</b>.\nExpect instability and bugs.`;
 						break;
 					case 'unknown': case 'devtools':
-						if (!isInterval)
+						if (!isInterval && false)
 							notifMsg = `You are using ${name} on a non-userscript environment.\nSome features may be broken.`;
 						break;
 					default: notifMsg = null; break;
