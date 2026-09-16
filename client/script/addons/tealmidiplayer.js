@@ -1819,7 +1819,7 @@ const chatMessageHandler = async data => {
 				send(defaultMsgs.cmd.notfound.replace('{cmd}', prefix + cmd));
 			else if (!public && data.p._id === MPP.client.getOwnParticipant()._id)
 				// Pipe messages back if the sender is talking
-				send(data.a);
+				MPP.chat.send(data.a);
 			return;
 		}
 
