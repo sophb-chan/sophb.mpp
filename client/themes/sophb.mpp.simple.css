@@ -712,7 +712,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 #client-settings {
-	max-width: 50vw;
+	min-width: 50vw;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -724,7 +724,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	flex-direction: row;
 	justify-content: center;
 	flex-wrap: wrap;
-	overflow-x: scroll;
 }
 
 #client-settings-content .client-settings-tab * {
