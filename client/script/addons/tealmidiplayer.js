@@ -38,7 +38,7 @@ const GMinfo = (() => {
 			script: {
 				name: "TealMIDIPlayer",
 				author: "sophb.chan",
-				version: "Unknown (no `GM_info` accessible, running from DevTools?)",
+				version: "ersion unknown (no `GM_info` accessible, running from DevTools?)",
 				homepage: "<gone>",
 				embedded: true,
 			},

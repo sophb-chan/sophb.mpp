@@ -284,13 +284,6 @@ const URLregexPattern =
 	// resource path (optional)
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
-	link: {
-		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)|(${URLregexPattern})`, "gi"),
-		replacer: ($0, $1, $2, $3) => {
-			if (new RegExp(URLregexPattern).test($1)) return $0; // Mitigate link fooling
-			return `<a rel="noreferer noopener" target="_blank" class="chatLink" href="${$2 ?? $3}">${$1 ?? $3}</a>`
-		},
-	},
 	strikethrough: {
 		regex: /~~(.+?)~~/gi,
 		replacer: '<del class="markdown">$1</del>',
@@ -303,10 +296,6 @@ const markdownPatterns = {
 		regex: /\*\*(.+?)\*\*/gi,
 		replacer: '<b class="markdown">$1</b>',
 	},
-	italic: {
-		regex: /([*_])(.+?)\1/gi,
-		replacer: '<i class="markdown">$2</i>',
-	},
 	spoiler: {
 		regex: /\|\|(.+?)\|\|/gi,
 		replacer: '<span class="markdown spoiler">$1</span>',
@@ -314,6 +303,17 @@ const markdownPatterns = {
 	code: {
 		regex: /(`{1,3})(.+?)\1/gi,
 		replacer: '<code class="markdown">$2</code>',
+	},
+	italic: {
+		regex: /([*_])(.+?)\1/gi,
+		replacer: '<i class="markdown">$2</i>',
+	},
+	link: {
+		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)|(${URLregexPattern})`, "gi"),
+		replacer: ($0, $1, $2, $3) => {
+			if (new RegExp(URLregexPattern).test($1)) return $0; // Mitigate link fooling
+			return `<a rel="noreferer noopener" target="_blank" class="chatLink" href="${$2 ?? $3}">${$1 ?? $3}</a>`
+		},
 	},
 }
 function escapeHTML(text) {
