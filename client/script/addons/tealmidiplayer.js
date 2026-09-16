@@ -3,7 +3,7 @@
 // @name:ru            TealMIDIPlayer
 // @name:pt-BR         TealMIDIPlayer
 // @homepage           <gone>
-// @version            2.11.0
+// @version            2.11.1
 // @description        MIDI Player bot for MPP. (Based off of Teal's MIDI player)
 // @description:pt-BR  Bot tocador de MIDIs para MPP. (Baseado no tocador de MIDIs do Teal)
 // @description:ru     Бот-MIDI-плеер для MPP. (Основан на MIDI-плеере, встроенном в Teal)
@@ -1814,7 +1814,12 @@ const chatMessageHandler = async data => {
 		if (cmds[targetCmd] == null)
 			targetCmd = Object.entries(cmds).find(([c, m]) => (m.aliases ?? []).includes(cmd))?.[0];
 		if (cmds[targetCmd] == null) {
-			send(defaultMsgs.cmd.notfound.replace('{cmd}', prefix + cmd));
+			if (prefix)
+			// Only send if prefix is enabled
+				send(defaultMsgs.cmd.notfound.replace('{cmd}', prefix + cmd));
+			else if (!public && data.p._id === MPP.client.getOwnParticipant()._id)
+				// Pipe messages back if the sender is talking
+				send(data.a);
 			return;
 		}
 
