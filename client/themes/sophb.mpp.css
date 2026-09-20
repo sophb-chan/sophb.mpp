@@ -544,13 +544,14 @@ body:has(#names:hover) #cursors {
 	padding: 5px;
 	width: 240px;
 	height: 12px;
-	background: #454;
+	background: #454d;
 	border: 1px solid #cdc;
 	cursor: pointer;
 	border-radius: 10px;
 	transition: border-radius 1s ease-in;
 	margin: 4px 24px;
 	font-size: 12px;
+	backdrop-filter: blur(2px);
 }
 
 body:has(#room .more[style*="display: block"]) #room {
@@ -603,7 +604,7 @@ body:has(#room .more[style*="display: block"]) #room {
 	top: 0;
 	border-radius: 0px 10px 10px 0px;
 	transition: border-radius 1s ease-in;
-	background: #232;
+	background: #232a;
 }
 
 #room .expand::before {
@@ -640,9 +641,9 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	overflow: hidden;
 	overflow-y: scroll;
 	background: #4548;
-	backdrop-filter: blur(4px) saturate(200%);
 	border: 1px solid #cdc;
 	border-radius: 10px 10px 0 0;
+	backdrop-filter: saturate(200%) blur(16px);
 }
 
 #room .more>div {
@@ -875,8 +876,8 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 .notification-body {
-	background: #232;
-	border-color: #565;
+	background: #2328;
+	border: solid 2px #565;
 	padding: 10px;
 	position: relative;
 	left: 0;
@@ -886,6 +887,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	text-shadow: #454 1px 1px;
 	border-radius: 8px;
 	box-shadow: 2px 2px 5px #0004;
+	backdrop-filter: blur(5px) hue-rotate(-5deg) brightness(90%) saturate(125%);
 }
 
 .notification-body .text {
@@ -900,7 +902,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	left: 50%;
 	margin-left: -3px;
 	border-top: 10px solid transparent;
-	border-top-color: #232;
+	border-top-color: #565d;
 	border-left: 6px solid transparent;
 	border-right: 6px solid transparent;
 }
@@ -946,8 +948,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 
 .notification.classic .notification-body {
 	width: 400px;
-	background: #232;
-	border-color: #565;
 }
 
 .notification.short .title {
@@ -1079,7 +1079,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 }
 
 .dialog {
-	background: #232;
+	background: #232a;
 	width: fit-content;
 	height: fit-content;
 	position: fixed;
@@ -1091,6 +1091,7 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	overflow: hidden;
 	border-radius: 4px;
 	box-shadow: 0 0 8px 2px #000;
+	backdrop-filter: saturate(2) blur(6px);
 }
 
 .dialog p {
@@ -1547,6 +1548,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	z-index: 402;
 }
 
+#cursors .cursor {
+	z-index: 450;
+}
+
 #bottom {
 	z-index: 500;
 }
@@ -1555,12 +1560,17 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	z-index: 600;
 }
 
-.notification {
-	z-index: 700;
+.ugly-button, .top-button, .icon-button, .discord-button, .github-button, .reddit-button, .mpp-rules-button {
+	z-index: 650;
+	backdrop-filter: blur(2px);
 }
 
-#cursors .cursor {
+.notification {
 	z-index: 800;
+}
+
+#room .more * {
+	z-index: 850;
 }
 
 #chat.chatting {
@@ -1607,7 +1617,6 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 .icon-button {
 	position: fixed;
 	top: 6px;
-	z-index: 200;
 	width: 26px;
 	padding: 0;
 }
@@ -1622,14 +1631,12 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 
 .reddit-button {
 	right: 66px;
-	z-index: 500;
 }
 
 .mpp-rules-button {
 	position: fixed;
 	right: 6px;
 	top: 32px;
-	z-index: 200;
 }
 
 code {
