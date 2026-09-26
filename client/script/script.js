@@ -3475,17 +3475,18 @@ var TIMING_TARGET = 1000;
 				console.log(selectStart, selectEnd);
 				if (selectStart === selectEnd) return; // No text selected
 				const format = formattingAliases[key],
+					markdown = markdownPatterns[format],
 					selected = chatInput.value.slice(selectStart, selectEnd),
-					formatted = getMarkdown(selected, format),
+					formatted = markdown.format,
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
 				console.log(format);
 				console.log(selected);
 				console.log(formatted);
 				console.log(newValue);
-				if (markdownPatterns[format].regex.test(selected))
+				if (markdown.regex.test(selected))
 					// The selected text is already formatted with this markdown
 					return;
-				if (!markdownPatterns[format].regex.test(formatted))
+				if (!markdown.regex.test(formatted))
 					// The formatted text does not match its pattern
 					// This is likely due to no content, hence why this returns early
 					return;

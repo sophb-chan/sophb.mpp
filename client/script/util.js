@@ -355,10 +355,3 @@ function parseMarkdown(text) {
 	}
 	return parsedText;
 }
-function getMarkdown(text, format) {
-	const pattern = markdownPatterns[format];
-	if (pattern == null)
-		throw new ReferenceError(`Unknown format "${format}"`);
-	if (pattern.format == null) return text;
-	return pattern.format.replaceAll('{{text}}', text);
-}
