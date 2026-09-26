@@ -300,6 +300,7 @@ const markdownPatterns = {
 		regex: /\|\|(.+?)\|\|/gi,
 		replacer: '<span class="markdown spoiler">$1</span>',
 	},
+	// TODO: Make code blocks escape all markdown within them
 	code: {
 		regex: /(`{1,3})(.+?)\1/gi,
 		replacer: '<code class="markdown">$2</code>',
@@ -333,7 +334,17 @@ function escapeHTML(text) {
 function parseMarkdown(text) {
 	let parsedText = escapeHTML(text);
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		parsedText = parsedText.replace(info.regex, info.replacer);
+		const matches = parsedText.matchAll(info.regex);
+		if (matches == null) continue;
+		for (const match of matches) {
+			const replacer = info.replacer.replaceAll(/\$(\d|[1-9]\d+)/g, ($0, $1) => match[$1]);
+			if (parsedText[match.index - 1] === '\\' && parsedText[match.index - 2] !== '\\')
+				// This markdown is escaped, remove the preceding backslash
+				parsedText = parsedText.slice(0, match.index - 1) + parsedText.slice(match.index);
+			else
+				// This markdown is not escaped, replace the content
+				parsedText = parsedText.slice(0, match.index) + replacer + parsedText.slice(match.index + match[0].length);
+		}
 	}
 	return parsedText;
 }
