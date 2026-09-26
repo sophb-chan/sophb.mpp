@@ -3476,7 +3476,11 @@ var TIMING_TARGET = 1000;
 					selected = chatInput.value.slice(selectStart, selectEnd),
 					formatted = getMarkdown(selected, format),
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
+				console.log(selectStart, selectEnd)
 				console.log(format);
+				console.log(selected);
+				console.log(formatted);
+				console.log(newValue);
 				if (markdownPatterns[format].regex.test(selected))
 					// The selected text is already formatted with this markdown
 					return;
