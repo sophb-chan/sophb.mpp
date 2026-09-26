@@ -3477,12 +3477,10 @@ var TIMING_TARGET = 1000;
 				const format = formattingAliases[key],
 					markdown = markdownPatterns[format],
 					selected = chatInput.value.slice(selectStart, selectEnd),
-					formatted = markdown.format,
+					formatted = markdown.format.replaceAll('{{text}}', selected),
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
 				console.log(format);
 				console.log(selected);
-				console.log(formatted);
-				console.log(newValue);
 				if (markdown.regex.test(selected))
 					// The selected text is already formatted with this markdown
 					return;
@@ -3490,6 +3488,8 @@ var TIMING_TARGET = 1000;
 					// The formatted text does not match its pattern
 					// This is likely due to no content, hence why this returns early
 					return;
+				console.log(formatted);
+				console.log(newValue);
 
 				chatInput.value = newValue;
 				chatInput.setSelectionRange(selectStart, selectStart + formatted.length);
