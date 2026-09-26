@@ -3476,8 +3476,9 @@ var TIMING_TARGET = 1000;
 				if (selectStart === selectEnd) return; // No text selected
 
 				const format = formattingAliases[key],
-					markdown = markdownPatterns[format],
-					selected = chatInput.value.slice(selectStart, selectEnd),
+					markdown = markdownPatterns[format];
+				if (markdown == null) return;
+				const selected = chatInput.value.slice(selectStart, selectEnd),
 					formatted = markdown.format.replaceAll('{{text}}', selected),
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
 
