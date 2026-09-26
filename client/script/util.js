@@ -297,7 +297,7 @@ const markdownPatterns = {
 		replacer: '<b class="markdown">$1</b>',
 	},
 	spoiler: {
-		regex: /\|\|(.+?)\|\|/gi,
+		regex: /\|\|([^|]+?.*?)\|\|/gi,
 		replacer: '<span class="markdown spoiler">$1</span>',
 	},
 	// TODO: Make code blocks escape all markdown within them
