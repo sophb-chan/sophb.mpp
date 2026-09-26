@@ -304,6 +304,7 @@ const markdownPatterns = {
 	code: {
 		regex: /(`{1,3})(.+?)\1/gi,
 		replacer: '<code class="markdown">$2</code>',
+		escapesMarkdown: true,
 	},
 	italic: {
 		regex: /([*_])(.+?)\1/gi,
