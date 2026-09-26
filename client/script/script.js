@@ -3472,9 +3472,19 @@ var TIMING_TARGET = 1000;
 					d: 'strikethrough', // (D)elete
 				}
 				const selectStart = chatInput.selectionStart, selectEnd = chatInput.selectionEnd,
+					format = formattingAliases[key],
 					selected = chatInput.value.slice(selectStart, selectEnd),
-					formatted = getMarkdown(selected, formattingAliases[key]),
+					formatted = getMarkdown(selected, format),
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
+
+				if (markdownPatterns.regex.test(selected))
+					// This text is already formatted with this regex
+					return;
+				if (!markdownPatterns.regex.test(formatted))
+					// The formatted text does not match its pattern
+					// This is likely due to no content, hence why this returns early
+					return;
+
 				chatInput.value = newValue;
 				chatInput.setSelectionRange(selectStart, formatted.length);
 			} else if (evt.keyCode == 13) {
