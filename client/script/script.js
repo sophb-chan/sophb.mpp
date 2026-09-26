@@ -3471,12 +3471,13 @@ var TIMING_TARGET = 1000;
 					u: 'underline',
 					d: 'strikethrough', // (D)elete
 				}
-				const selectStart = chatInput.selectionStart, selectEnd = chatInput.selectionEnd,
-					format = formattingAliases[key],
+				const selectStart = chatInput.selectionStart, selectEnd = chatInput.selectionEnd;
+				console.log(selectStart, selectEnd);
+				if (selectStart === selectEnd) return; // No text selected
+				const format = formattingAliases[key],
 					selected = chatInput.value.slice(selectStart, selectEnd),
 					formatted = getMarkdown(selected, format),
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
-				console.log(selectStart, selectEnd)
 				console.log(format);
 				console.log(selected);
 				console.log(formatted);
