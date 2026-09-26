@@ -3477,10 +3477,10 @@ var TIMING_TARGET = 1000;
 					formatted = getMarkdown(selected, format),
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
 
-				if (markdownPatterns.regex.test(selected))
+				if (markdownPatterns[format].regex.test(selected))
 					// This text is already formatted with this regex
 					return;
-				if (!markdownPatterns.regex.test(formatted))
+				if (!markdownPatterns[format].regex.test(formatted))
 					// The formatted text does not match its pattern
 					// This is likely due to no content, hence why this returns early
 					return;
