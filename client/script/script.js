@@ -1,3 +1,4 @@
+protoplus.expand();
 const translation = window.i18nextify.init({
 	autorun: false,
 });
@@ -3795,21 +3796,21 @@ var TIMING_TARGET = 1000;
 
 				const message =
 					parseMarkdown(msg.a)
-					.replace(/@([\da-f]{24})/g, (match, id) => {
-						const user = gClient.ppl[id];
-						if (!user) return match;
+						.replace(/@([\da-f]{24})/g, (match, id) => {
+							const user = gClient.ppl[id];
+							if (!user) return match;
 
-						const nick = escapeHTML(user.name);
-						if (user.id !== gClient.getOwnParticipant().id) return `@${nick}`;
+							const nick = escapeHTML(user.name);
+							if (user.id !== gClient.getOwnParticipant().id) return `@${nick}`;
 
-						if (!tabIsActive && !dontCheckMention) {
-							youreMentioned = true;
-							document.title = window.i18nextify.i18next.t(
-								"You were mentioned!",
-							);
-						}
-						return `<span class="mention" style="background-color: ${user.color};">${nick}</span>`;
-					});
+							if (!tabIsActive && !dontCheckMention) {
+								youreMentioned = true;
+								document.title = window.i18nextify.i18next.t(
+									"You were mentioned!",
+								);
+							}
+							return `<span class="mention" style="background-color: ${user.color};">${nick}</span>`;
+						});
 
 
 				//apply names, colors, ids
@@ -4639,7 +4640,7 @@ var TIMING_TARGET = 1000;
 				className: "knob",
 			});
 			html.appendChild(knob);
-			knob = new Knob(knob, 0, 100, 0.1, 50, "mix", "%");
+			knob = new Knob(knob, 0, 100, 0.1, (audio.synthGain.gain.value * 100).fix(1), "mix", "%");
 			knob.canvas.style.width = "32px";
 			knob.canvas.style.height = "32px";
 			knob.on("change", function (k) {
