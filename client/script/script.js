@@ -78,6 +78,8 @@ var TIMING_TARGET = 1000;
 
 ////////////////////////////////////////////////////////////////
 (function () {
+	const chatInput = document.getElementById('chat-input');
+
 	var Rect = function (x, y, w, h) {
 		this.x = x;
 		this.y = y;
@@ -1241,7 +1243,7 @@ var TIMING_TARGET = 1000;
 	//html/css overrides for multiplayerpiano.com
 	if (window.location.hostname === "multiplayerpiano.com") {
 		//disable autocomplete
-		$("#chat-input")[0].autocomplete = "off";
+		chatInput.autocomplete = "off";
 		//add rules button
 		let aElement = document.createElement("a");
 		aElement.href =
@@ -2398,7 +2400,7 @@ var TIMING_TARGET = 1000;
 				});
 				if (!localStorage.hasSeenDMWarning) gHasSeenDMWarning = true;
 				localStorage.hasSeenDMWarning = true;
-				$("#chat-input").blur();
+				chatInput.blur();
 			}
 			if (gCancelDMs) {
 				chat.blur();
@@ -2673,9 +2675,9 @@ var TIMING_TARGET = 1000;
 			)
 				.appendTo(menu)
 				.on("mousedown touchstart", function (evt) {
-					$("#chat-input")[0].value += "@" + part.id + " ";
+					chatInput.value += "@" + part.id + " ";
 					setTimeout(() => {
-						$("#chat-input").focus();
+						chatInput.focus();
 					}, 1);
 				});
 
@@ -3459,7 +3461,23 @@ var TIMING_TARGET = 1000;
 			}
 		});
 		$("#chat input").on("keydown", function (evt) {
-			if (evt.keyCode == 13) {
+			if (evt.altKey) {
+				const key = evt.key === ' ' ? 'space' : evt.key.toLowerCase();
+				const formattingAliases = {
+					i: 'italic',
+					b: 'bold',
+					s: 'spoiler',
+					c: 'code',
+					u: 'underline',
+					d: 'strikethrough', // (D)elete
+				}
+				const selectStart = chatInput.selectionStart, selectEnd = chatInput.selectionEnd,
+					selected = chatInput.value.slice(selectStart, selectEnd),
+					formatted = getMarkdown(selected, formattingAliases[key]),
+					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
+				chatInput.value = newValue;
+				chatInput.setSelectionRange(selectStart, formatted.length);
+			} else if (evt.keyCode == 13) {
 				if (MPP.client.isConnected()) {
 					var message = $(this).val();
 					if (message.length == 0) {
@@ -3519,13 +3537,13 @@ var TIMING_TARGET = 1000;
 			startDM: function (part) {
 				gIsDming = true;
 				gDmParticipant = part;
-				$("#chat-input")[0].placeholder =
+				chatInput.placeholder =
 					"Direct messaging " + part.name + ".";
 			},
 
 			endDM: function () {
 				gIsDming = false;
-				$("#chat-input")[0].placeholder = window.i18nextify.i18next.t(
+				chatInput.placeholder = window.i18nextify.i18next.t(
 					"You can chat with this thing.",
 				);
 			},
@@ -3538,7 +3556,7 @@ var TIMING_TARGET = 1000;
 				gIsReplying = true;
 				gReplyParticipant = part;
 				gMessageId = id;
-				$("#chat-input")[0].placeholder = `Replying to ${part.name}`;
+				chatInput.placeholder = `Replying to ${part.name}`;
 			},
 
 			startDmReply: function (part, id) {
@@ -3551,7 +3569,7 @@ var TIMING_TARGET = 1000;
 				gMessageId = id;
 				gReplyParticipant = part;
 				gDmParticipant = part;
-				$("#chat-input")[0].placeholder =
+				chatInput.placeholder =
 					`Replying to ${part.name} in a DM.`;
 			},
 
@@ -3561,7 +3579,7 @@ var TIMING_TARGET = 1000;
 					"background-color": "unset",
 					border: "1px solid #00000000",
 				});
-				$("#chat-input")[0].placeholder = window.i18nextify.i18next.t(
+				chatInput.placeholder = window.i18nextify.i18next.t(
 					gIsDming
 						? `Direct messaging ${part.name}`
 						: `You can chat with this thing.`,
@@ -3741,7 +3759,7 @@ var TIMING_TARGET = 1000;
 								}`,
 						});
 						li.find(".replyLink").on("click", (evt) => {
-							$("#chat-input").focus();
+							chatInput.focus();
 							document
 								.getElementById(`msg-${repliedMsg?.id}`)
 								.scrollIntoView({ behavior: "smooth" });
@@ -3949,7 +3967,7 @@ var TIMING_TARGET = 1000;
 							});
 						}, 100);
 						setTimeout(() => {
-							$("#chat-input").focus();
+							chatInput.focus();
 						}, 100);
 					} else {
 						if (msg.m === "dm") {
@@ -3972,7 +3990,7 @@ var TIMING_TARGET = 1000;
 									});
 								}, 100);
 								setTimeout(() => {
-									$("#chat-input").focus();
+									chatInput.focus();
 								}, 100);
 							} else {
 								new Notification({

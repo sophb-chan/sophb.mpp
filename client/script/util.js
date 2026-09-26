@@ -287,28 +287,34 @@ const markdownPatterns = {
 	strikethrough: {
 		regex: /~~(.+?)~~/gi,
 		replacer: '<del class="markdown">$1</del>',
+		format: '~~{{text}}~~',
 	},
 	underline: {
 		regex: /__(.+?)__/gi,
-		replacer: '<u class="markdown">$1</u>'
+		replacer: '<u class="markdown">$1</u>',
+		format: '__{{text}}__',
 	},
 	bold: {
 		regex: /\*\*(.+?)\*\*/gi,
 		replacer: '<b class="markdown">$1</b>',
+		format: '**{{text}}**',
 	},
 	spoiler: {
 		regex: /\|\|([^|]+?.*?)\|\|/gi,
 		replacer: '<span class="markdown spoiler">$1</span>',
+		format: '||{{text}}||',
 	},
 	// TODO: Make code blocks escape all markdown within them
 	code: {
 		regex: /(`{1,3})(.+?)\1/gi,
 		replacer: '<code class="markdown">$2</code>',
 		escapesMarkdown: true,
+		format: '`{{text}}`',
 	},
 	italic: {
 		regex: /([*_])(.+?)\1/gi,
 		replacer: '<i class="markdown">$2</i>',
+		format: '*{{text}}*',
 	},
 	link: {
 		regex: new RegExp(`\\[(.+?)\]\\((${URLregexPattern})\\)|(${URLregexPattern})`, "gi"),
@@ -348,4 +354,11 @@ function parseMarkdown(text) {
 		}
 	}
 	return parsedText;
+}
+function getMarkdown(text, format) {
+	const pattern = markdownPatterns[format];
+	if (pattern == null)
+		throw new ReferenceError(`Unknown format "${format}"`);
+	if (pattern.format == null) return text;
+	return pattern.format.replaceAll('{{text}}', text);
 }
