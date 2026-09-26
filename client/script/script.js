@@ -3483,16 +3483,20 @@ var TIMING_TARGET = 1000;
 					newValue = chatInput.value.slice(0, selectStart) + formatted + chatInput.value.slice(selectEnd);
 
 				console.log(selected);
+				console.log(markdown);
+				console.log(markdown.regex);
+				console.log(markdown.regex.test(selected));
+
 				if (markdown.regex.test(selected))
 					// The selected text is already formatted with this markdown
 					return;
 
-				console.log(markdown);
-					if (!markdown.regex.test(formatted))
+				console.log(formatted);
+				if (!markdown.regex.test(formatted))
 					// The formatted text does not match its pattern
 					// This is likely due to no content, hence why this returns early
 					return;
-				console.log(formatted);
+
 				console.log(newValue);
 
 				chatInput.value = newValue;
