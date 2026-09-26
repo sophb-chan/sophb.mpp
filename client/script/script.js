@@ -3486,7 +3486,7 @@ var TIMING_TARGET = 1000;
 					return;
 
 				chatInput.value = newValue;
-				chatInput.setSelectionRange(selectStart, formatted.length);
+				chatInput.setSelectionRange(selectStart, selectStart + formatted.length);
 			} else if (evt.keyCode == 13) {
 				if (MPP.client.isConnected()) {
 					var message = $(this).val();
