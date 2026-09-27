@@ -342,10 +342,6 @@ function parseMarkdown(text) {
 	let textToBeParsed = escapeHTML(text), parsedText = '';
 	for (const [name, info] of Object.entries(markdownPatterns)) {
 		let match = textToBeParsed.match(info.regex);
-		if (match == null) {
-			parsedText = textToBeParsed;
-			break;
-		}
 		while (match != null) {
 			const replacer = (() => {
 				switch (Object.typeOf(info.replacer)) {
@@ -359,16 +355,18 @@ function parseMarkdown(text) {
 				}
 			})();
 
-			parsedText += textToBeParsed.slice(0, match.index);
-			if (textToBeParsed[match.index - 1] === '\\' && textToBeParsed[match.index - 2] !== '\\')
+			if (textToBeParsed[match.index - 1] === '\\' && textToBeParsed[match.index - 2] !== '\\') {
 				// This markdown is escaped, remove the preceding backslash
+				parsedText += textToBeParsed.slice(1, match.index);
 				parsedText += textToBeParsed.slice(match.index, match.index + match[0].length);
-			else
+			} else {
 				// This markdown is not escaped, replace the content
+				parsedText += textToBeParsed.slice(0, match.index);
 				parsedText += replacer;
+			}
 			textToBeParsed = textToBeParsed.slice(match.index + match[0].length)
 			match = textToBeParsed.match(info.regex);
 		}
 	}
-	return parsedText;
+	return parsedText || textToBeParsed;
 }
