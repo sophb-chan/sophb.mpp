@@ -10,7 +10,7 @@ if (location.host === "multiplayerpiano.com") {
 	throw new Error("Redirecting to multiplayerpiano.net");
 }
 
-if (location.host === "multiplayerpiano.net") {
+if (location.host === "sophb-mpp.vercel.app") {
 	const url = new URL(location.href);
 	const token = url.searchParams.get("token");
 	if (token) {
