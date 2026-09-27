@@ -591,8 +591,8 @@ input[type="range"]:hover {
 	background: #444;
 	border: 1px solid #ccc;
 	height: fit-content;
-		max-height: calc(100vh - 60px - 5px);
-		/* screen height - height lifted from botton - clearance */
+	max-height: calc(100vh - 60px - 5px);
+	/* screen height - height lifted from botton - clearance */
 }
 
 #room .more>div {
@@ -609,7 +609,7 @@ input[type="range"]:hover {
 #room .more .new {
 	background: #111;
 	position: sticky;
-		top: 0;
+	top: 0;
 }
 
 #room .more .new:hover {
@@ -1038,6 +1038,21 @@ input[type="range"]:hover {
 #room-settings {
 	height: 400px;
 	margin-top: -200px;
+}
+
+#room-settings p label:has(input[name=color]),
+#room-settings p label:has(input[name=color2]) {
+	font-size: 0;
+}
+
+#room-settings p label:has(input[name=color2]):before {
+	font-size: 20px;
+	content: "Outer color: ";
+}
+
+#room-settings p label:has(input[name=color]):before {
+	font-size: 20px;
+	content: "Inner color: ";
 }
 
 #siteban {

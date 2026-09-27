@@ -285,34 +285,34 @@ const URLregexPattern =
 	"(?:[/?#]\\S*)?";
 const markdownPatterns = {
 	strikethrough: {
-		regex: /~~(.+?)~~/gi,
+		regex: /~~(.+?)~~/i,
 		replacer: '<del class="markdown">$1</del>',
 		format: '~~{{text}}~~',
 	},
 	underline: {
-		regex: /__(.+?)__/gi,
+		regex: /__(.+?)__/i,
 		replacer: '<u class="markdown">$1</u>',
 		format: '__{{text}}__',
 	},
 	bold: {
-		regex: /\*\*(.+?)\*\*/gi,
+		regex: /\*\*(.+?)\*\*/i,
 		replacer: '<b class="markdown">$1</b>',
 		format: '**{{text}}**',
 	},
 	spoiler: {
-		regex: /\|\|([^|]+?.*?)\|\|/gi,
+		regex: /\|\|([^|]+?.*?)\|\|/i,
 		replacer: '<span class="markdown spoiler">$1</span>',
 		format: '||{{text}}||',
 	},
 	// TODO: Make code blocks escape all markdown within them
 	code: {
-		regex: /(`{1,3})(.+?)\1/gi,
+		regex: /(`{1,3})(.+?)\1/i,
 		replacer: '<code class="markdown">$2</code>',
 		escapesMarkdown: true,
 		format: '`{{text}}`',
 	},
 	italic: {
-		regex: /([*_])(.+?)\1/gi,
+		regex: /([*_])(.+?)\1/i,
 		replacer: '<i class="markdown">$2</i>',
 		format: '*{{text}}*',
 	},
@@ -341,9 +341,8 @@ function escapeHTML(text) {
 function parseMarkdown(text) {
 	let parsedText = escapeHTML(text);
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		const matches = parsedText.matchAll(info.regex);
-		if (matches == null) continue;
-		for (const match of matches) {
+		let match = parsedText.match(info.regex);
+		while (match != null) {
 			const replacer = (() => {
 				switch (Object.typeOf(info.replacer)) {
 					case 'string':
@@ -359,6 +358,8 @@ function parseMarkdown(text) {
 			else
 				// This markdown is not escaped, replace the content
 				parsedText = parsedText.slice(0, match.index) + replacer + parsedText.slice(match.index + match[0].length);
+
+			match = parsedText.match(info.regex);
 		}
 	}
 	return parsedText;
