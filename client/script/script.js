@@ -1360,10 +1360,10 @@ var TIMING_TARGET = 1000;
 					"This site makes a lot of sound! You may want to adjust the volume before continuing.";
 				gClient.motd = msg.motd;
 			}
-			document.getElementById("motd-text").innerHTML = msg.motd;
+			document.getElementById("motd-text").innerHTML = escapeHTML(msg.motd);
 			openModal("#motd");
-			$(document).on("keydown", modalHandleEsc);
-			var user_interact = function (evt) {
+			document.addEventListener("keydown", modalHandleEsc);
+			document.getElementById("motd").addEventListener("click", (evt) => {
 				if (
 					(
 						evt.path ||
@@ -1375,8 +1375,8 @@ var TIMING_TARGET = 1000;
 				}
 				document.removeEventListener("click", user_interact);
 				gPiano.audio.resume();
-			};
-			document.addEventListener("click", user_interact);
+			}, { once: true });
+
 			if (gClient.permissions.clearChat) {
 				$("#clearchat-btn").show();
 			}
@@ -1418,6 +1418,7 @@ var TIMING_TARGET = 1000;
 			nameDiv.style.backgroundColor = part.color || "#777";
 			var tagText =
 				typeof part.tag === "object" ? part.tag.text : part.tag;
+
 			if (tagText === "BOT") nameDiv.title = "This is an authorized bot.";
 			if (tagText === "MOD")
 				nameDiv.title =
