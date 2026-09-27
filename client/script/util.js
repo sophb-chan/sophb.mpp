@@ -342,6 +342,10 @@ function parseMarkdown(text) {
 	let textToBeParsed = escapeHTML(text), parsedText = '';
 	for (const [name, info] of Object.entries(markdownPatterns)) {
 		let match = textToBeParsed.match(info.regex);
+		if (match == null) {
+			parsedText = textToBeParsed;
+			break;
+		}
 		while (match != null) {
 			const replacer = (() => {
 				switch (Object.typeOf(info.replacer)) {
