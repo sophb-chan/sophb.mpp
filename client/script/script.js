@@ -1373,7 +1373,6 @@ var TIMING_TARGET = 1000;
 				) {
 					closeModal();
 				}
-				document.removeEventListener("click", user_interact);
 				gPiano.audio.resume();
 			}, { once: true });
 
