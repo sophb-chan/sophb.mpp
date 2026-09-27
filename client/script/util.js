@@ -331,7 +331,7 @@ function escapeHTML(text) {
 		'>': '&gt;',
 		'"': '&quot;',
 		"'": '&#39;',
-	}
+	};
 	let escapedText = text;
 	for (const [raw, entity] of Object.entries(entities)) {
 		escapedText = escapedText.replaceAll(raw, entity);
@@ -339,27 +339,31 @@ function escapeHTML(text) {
 	return escapedText;
 }
 function parseMarkdown(text) {
-	let parsedText = escapeHTML(text);
+	let textToBeParsed = escapeHTML(text), parsedText = '';
 	for (const [name, info] of Object.entries(markdownPatterns)) {
-		let match = parsedText.match(info.regex);
+		let match = textToBeParsed.match(info.regex);
 		while (match != null) {
 			const replacer = (() => {
 				switch (Object.typeOf(info.replacer)) {
 					case 'string':
-						return info.replacer.replaceAll(/\$(\d|[1-9]\d+)/g, ($0, $1) => match[$1]);
+						return info.replacer.replaceAll(/\$(&|[1-9]\d*)/g, ($0, $1) => $1 === '&' ? match[0] : match[$1]);
 					case 'function':
 						return info.replacer(...match);
+
+					default:
+						throw new TypeError(`Unsupported replacer type '${Object.typeOf(info.replacer)}'.`);
 				}
 			})();
 
-			if (parsedText[match.index - 1] === '\\' && parsedText[match.index - 2] !== '\\')
+			parsedText += textToBeParsed.slice(0, match.index);
+			if (textToBeParsed[match.index - 1] === '\\' && textToBeParsed[match.index - 2] !== '\\')
 				// This markdown is escaped, remove the preceding backslash
-				parsedText = parsedText.slice(0, match.index - 1) + parsedText.slice(match.index);
+				parsedText += textToBeParsed.slice(match.index, match.index + match[0].length);
 			else
 				// This markdown is not escaped, replace the content
-				parsedText = parsedText.slice(0, match.index) + replacer + parsedText.slice(match.index + match[0].length);
-
-			match = parsedText.match(info.regex);
+				parsedText += replacer;
+			textToBeParsed = textToBeParsed.slice(match.index + match[0].length)
+			match = textToBeParsed.match(info.regex);
 		}
 	}
 	return parsedText;
