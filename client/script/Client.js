@@ -293,10 +293,10 @@ class Client extends EventEmitter {
 	}
 
 	offlineParticipant = {
-		_id: "you're offline",
-		id: "no internet eh?",
-		name: "that must suck",
-		color: "#52ff4c",
+		_id: "nointernetconnection",
+		id: "youareofflineandthereforecannotconnecttothemppservers",
+		name: "you're offline",
+		color: "#88aa88",
 	};
 
 	getOwnParticipant() {

@@ -3386,9 +3386,11 @@ var TIMING_TARGET = 1000;
 			logout();
 		});
 		$("#account .login-discord").click(function (evt) {
+			alert('Discord logins are not supported right now. Sorry!');
+			return;
 			location.replace(
 				encodeURI(
-					`https://discord.com/api/oauth2/authorize?client_id=926633278100877393&redirect_uri=${location.origin}/?callback=discord&response_type=code&scope=identify email`,
+					`https://discord.com/api/oauth2/authorize?client_id=926633278100877393&redirect_uri=multiplayerpiano.net/?callback=discord&response_type=code&scope=identify email`,
 				),
 			);
 		});
