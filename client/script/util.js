@@ -344,7 +344,15 @@ function parseMarkdown(text) {
 		const matches = parsedText.matchAll(info.regex);
 		if (matches == null) continue;
 		for (const match of matches) {
-			const replacer = info.replacer.replaceAll(/\$(\d|[1-9]\d+)/g, ($0, $1) => match[$1]);
+			const replacer = (() => {
+				switch (Object.typeOf(info.replacer)) {
+					case 'string':
+						return info.replacer.replaceAll(/\$(\d|[1-9]\d+)/g, ($0, $1) => match[$1]);
+					case 'function':
+						return info.replacer(...match);
+				}
+			})();
+
 			if (parsedText[match.index - 1] === '\\' && parsedText[match.index - 2] !== '\\')
 				// This markdown is escaped, remove the preceding backslash
 				parsedText = parsedText.slice(0, match.index - 1) + parsedText.slice(match.index);
