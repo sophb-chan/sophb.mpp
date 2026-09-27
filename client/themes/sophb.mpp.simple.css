@@ -1314,6 +1314,10 @@ body:has(#room .more[style*="display: block"]) #room .expand::before {
 	text-shadow: #444 1px 1px;
 }
 
+#chat li .message .emote-stack img.base {
+	min-height: 18pt;
+}
+
 #chat input {
 	margin: 4px;
 	width: 99%;
